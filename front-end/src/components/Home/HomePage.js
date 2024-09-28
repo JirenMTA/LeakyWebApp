@@ -8,6 +8,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import { useSelector } from "react-redux";
+import { useMediaQuery } from 'react-responsive';
 
 const HomePage = (props) => {
     const importAll = (r) => {
@@ -16,6 +17,9 @@ const HomePage = (props) => {
         return imagesArray;
     };
     const images = importAll(require.context('../../assets/image_products', false, /\.(png|jpe?g|svg)$/));
+    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+    const { colapseOnMobile, setColapseOnMobile } = props;
+    console.log(props);
 
     let clone = []
     for (let i = 0; i < 21; i++) {
@@ -63,36 +67,42 @@ const HomePage = (props) => {
 
 
     return (
-        <div className="home-page-container">
-            <div className='label-homepage'>
-                <div className="label-text">
-                    {searchTerm === '' ? "All product" : `Search for word: "${searchTerm}"`}
+        <>
+            {
+                <div className="home-page-container">
+                    <div className='label-homepage'>
+                        {!isMobile &&
+                            <div className="label-text">
+                                {searchTerm === '' ? "All product" : `Search for word: "${searchTerm}"`}
+                            </div>
+                        }
+                        <div className="search-product"  >
+                            <TextField
+                                id="standard-basic"
+                                label="Search product"
+                                variant="standard"
+                                value={searchTerm}
+                                onChange={handleSearchChange}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <SearchIcon sx={{
+                                                cursor: 'pointer'
+                                            }} />
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className="list-product">
+                        {filteredProducts && filteredProducts.length > 0 && filteredProducts.map((item) => {
+                            return <Product product={item} key={item.id}></Product>
+                        })}
+                    </div>
                 </div>
-                <div className="search-product"  >
-                    <TextField
-                        id="standard-basic"
-                        label="Search product"
-                        variant="standard"
-                        value={searchTerm}
-                        onChange={handleSearchChange}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <SearchIcon sx={{
-                                        cursor: 'pointer'
-                                    }} />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                </div>
-            </div>
-            <div className="list-product">
-                {filteredProducts && filteredProducts.length > 0 && filteredProducts.map((item) => {
-                    return <Product product={item} key={item.id}></Product>
-                })}
-            </div>
-        </div>
+            }
+        </>
     );
 }
 

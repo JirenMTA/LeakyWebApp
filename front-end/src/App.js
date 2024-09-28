@@ -1,14 +1,17 @@
 import './App.scss';
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import Header from './components/Header/Header';
 import { Outlet } from 'react-router-dom';
 import SideBar from './components/SideBar/SideBar';
 import { YMaps } from '@pbe/react-yandex-maps';
+import { useMediaQuery } from 'react-responsive';
 
-const App = () => {
+const App = (props) => {
   const isAuth = true;
+  const [colapseOnMobile, setColapseOnMobile] = useState(true);
+
 
   return (
     <div className='app-container'>
@@ -18,11 +21,11 @@ const App = () => {
       <div className='main-container'>
         <div className='sidebar-container'>
           {isAuth &&
-            <SideBar></SideBar>
+            <SideBar colapseOnMobile={colapseOnMobile} setColapseOnMobile={setColapseOnMobile}></SideBar>
           }
         </div>
         <div className='app-content'>
-          <Outlet></Outlet>
+          <Outlet colapseOnMobile={colapseOnMobile} setColapseOnMobile={setColapseOnMobile}></Outlet>
         </div>
       </div>
     </div>
