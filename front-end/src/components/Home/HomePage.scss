@@ -1,0 +1,32 @@
+.home-page-container {
+    padding: 30px;
+
+    .label-homepage {
+        display: flex;
+        align-items: center;
+        gap: 50px;
+
+
+        .label-text {
+            font-size: 30px;
+            width: 500px;
+        }
+
+        .search-product {
+            margin-bottom: 10px;
+
+        }
+
+
+
+    }
+
+    .list-product {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 10px;
+
+    }
+
+}

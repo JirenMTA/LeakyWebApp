@@ -1,0 +1,98 @@
+.body-container {
+    display: flex;
+    flex-direction: row;
+
+    .description {
+        margin-left: 10px;
+        display: flex;
+        flex-direction: column;
+        font-weight: 300;
+        gap: 20px;
+        font-size: 20px;
+    }
+}
+
+
+
+.review-container {
+    height: 100px;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin: 10px;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    .user {
+        font-weight: bold;
+        width: 100%;
+    }
+
+    .review {
+        color: gray;
+        width: 100%;
+
+    }
+
+}
+
+.add-review-container {
+    padding: 10px;
+
+    .input-add-review {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+
+        .input-field {
+            width: 100%;
+
+            textarea {
+                height: 120px;
+                resize: none;
+            }
+
+            ::-webkit-scrollbar {
+                width: 5px;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background-color: #888;
+                border-radius: 10px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background-color: #555;
+            }
+
+            ::-webkit-scrollbar-track {
+                background-color: #f1f1f1;
+            }
+        }
+
+        .btn-send-review {
+            cursor: pointer;
+            color: #007bff;
+
+            &:hover {
+                color: #0056b3;
+            }
+        }
+    }
+}
