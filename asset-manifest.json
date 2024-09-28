@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/LeakyWebApp/static/css/main.ac1d9227.css",
-    "main.js": "/LeakyWebApp/static/js/main.52c140f0.js",
+    "main.js": "/LeakyWebApp/static/js/main.4c85dd69.js",
     "static/media/snakes_ladders_m.jpg": "/LeakyWebApp/static/media/snakes_ladders_m.d9620c57bab5e4ffbda2.jpg",
     "static/media/snakes_ladders.jpg": "/LeakyWebApp/static/media/snakes_ladders.f7809f6357a338f9ce0d.jpg",
     "static/media/artwork2.jpg": "/LeakyWebApp/static/media/artwork2.8464048904e1c15167c9.jpg",
@@ -16,10 +16,10 @@
     "static/media/strawberry_juice.jpeg": "/LeakyWebApp/static/media/strawberry_juice.a801a90f0475b55849e5.jpeg",
     "index.html": "/LeakyWebApp/index.html",
     "main.ac1d9227.css.map": "/LeakyWebApp/static/css/main.ac1d9227.css.map",
-    "main.52c140f0.js.map": "/LeakyWebApp/static/js/main.52c140f0.js.map"
+    "main.4c85dd69.js.map": "/LeakyWebApp/static/js/main.4c85dd69.js.map"
   },
   "entrypoints": [
     "static/css/main.ac1d9227.css",
-    "static/js/main.52c140f0.js"
+    "static/js/main.4c85dd69.js"
   ]
 }
