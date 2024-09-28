@@ -1,0 +1,57 @@
+.btn-login {
+    width: 100px;
+    height: 40px;
+}
+
+.btn-sign-up {
+    width: 100px;
+    height: 40px;
+}
+
+.logo-header {
+    img {
+        height: 60px;
+        width: 100px;
+        cursor: pointer;
+    }
+}
+
+.header-authenticated-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .container-purchased {
+        display: flex;
+        gap: 3px;
+
+        :hover {
+            cursor: pointer;
+        }
+    }
+
+    .container-basket {
+        position: relative;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        gap: 3px;
+
+        .basket-count {
+            position: absolute;
+            top: -8px;
+            right: -20px;
+            background-color: #f44336;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 18px;
+        }
+    }
+}
