@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/basket/static/css/main.ac1d9227.css",
-    "main.js": "/basket/static/js/main.fe2a8a85.js",
-    "static/media/snakes_ladders_m.jpg": "/basket/static/media/snakes_ladders_m.d9620c57bab5e4ffbda2.jpg",
-    "static/media/snakes_ladders.jpg": "/basket/static/media/snakes_ladders.f7809f6357a338f9ce0d.jpg",
-    "static/media/artwork2.jpg": "/basket/static/media/artwork2.8464048904e1c15167c9.jpg",
-    "static/media/apple_pressings.jpg": "/basket/static/media/apple_pressings.ce0f2b613d8d5106913d.jpg",
-    "static/media/melon_bike.jpeg": "/basket/static/media/melon_bike.88e3da2258bcfed09cb9.jpeg",
-    "static/media/banana_juice.jpg": "/basket/static/media/banana_juice.d542f380a6460ebb865c.jpg",
-    "static/media/carrot_juice.jpeg": "/basket/static/media/carrot_juice.9974be44a315726ab352.jpeg",
-    "static/media/raspberry_juice.jpg": "/basket/static/media/raspberry_juice.5feabfc88b8aac114ca2.jpg",
-    "static/media/lemon_juice.jpg": "/basket/static/media/lemon_juice.7627292953ffc8b444d5.jpg",
-    "static/media/logo.png": "/basket/static/media/logo.f85628498bae58871e90.png",
-    "static/media/apple_juice.jpg": "/basket/static/media/apple_juice.cd173e5a6b5906c2f77b.jpg",
-    "static/media/strawberry_juice.jpeg": "/basket/static/media/strawberry_juice.a801a90f0475b55849e5.jpeg",
-    "index.html": "/basket/index.html",
-    "main.ac1d9227.css.map": "/basket/static/css/main.ac1d9227.css.map",
-    "main.fe2a8a85.js.map": "/basket/static/js/main.fe2a8a85.js.map"
+    "main.css": "/LeakyWebApp/front-end/static/css/main.ac1d9227.css",
+    "main.js": "/LeakyWebApp/front-end/static/js/main.2b619579.js",
+    "static/media/snakes_ladders_m.jpg": "/LeakyWebApp/front-end/static/media/snakes_ladders_m.d9620c57bab5e4ffbda2.jpg",
+    "static/media/snakes_ladders.jpg": "/LeakyWebApp/front-end/static/media/snakes_ladders.f7809f6357a338f9ce0d.jpg",
+    "static/media/artwork2.jpg": "/LeakyWebApp/front-end/static/media/artwork2.8464048904e1c15167c9.jpg",
+    "static/media/apple_pressings.jpg": "/LeakyWebApp/front-end/static/media/apple_pressings.ce0f2b613d8d5106913d.jpg",
+    "static/media/melon_bike.jpeg": "/LeakyWebApp/front-end/static/media/melon_bike.88e3da2258bcfed09cb9.jpeg",
+    "static/media/banana_juice.jpg": "/LeakyWebApp/front-end/static/media/banana_juice.d542f380a6460ebb865c.jpg",
+    "static/media/carrot_juice.jpeg": "/LeakyWebApp/front-end/static/media/carrot_juice.9974be44a315726ab352.jpeg",
+    "static/media/raspberry_juice.jpg": "/LeakyWebApp/front-end/static/media/raspberry_juice.5feabfc88b8aac114ca2.jpg",
+    "static/media/lemon_juice.jpg": "/LeakyWebApp/front-end/static/media/lemon_juice.7627292953ffc8b444d5.jpg",
+    "static/media/logo.png": "/LeakyWebApp/front-end/static/media/logo.f85628498bae58871e90.png",
+    "static/media/apple_juice.jpg": "/LeakyWebApp/front-end/static/media/apple_juice.cd173e5a6b5906c2f77b.jpg",
+    "static/media/strawberry_juice.jpeg": "/LeakyWebApp/front-end/static/media/strawberry_juice.a801a90f0475b55849e5.jpeg",
+    "index.html": "/LeakyWebApp/front-end/index.html",
+    "main.ac1d9227.css.map": "/LeakyWebApp/front-end/static/css/main.ac1d9227.css.map",
+    "main.2b619579.js.map": "/LeakyWebApp/front-end/static/js/main.2b619579.js.map"
   },
   "entrypoints": [
     "static/css/main.ac1d9227.css",
-    "static/js/main.fe2a8a85.js"
+    "static/js/main.2b619579.js"
   ]
 }
