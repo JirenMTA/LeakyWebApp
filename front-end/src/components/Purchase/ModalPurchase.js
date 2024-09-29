@@ -1,33 +1,30 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { YMaps, Map } from '@pbe/react-yandex-maps';
 import YandexMapComponent from './YandexMapComponent';
 import "./ModalPurchase.scss"
-
 
 const ModalPurchase = (props) => {
     const { show, setShow } = props;
     const handleClose = () => setShow(false);
     const [address, setAddress] = useState('');
+    const { item } = props
 
     return (
         <>
             <Modal show={show} onHide={handleClose} size='xl' backdrop="static">
                 <Modal.Header closeButton>
-                    <Modal.Title>Choose delivery address </Modal.Title>
+                    <Modal.Title>Purchase for {` "${item?.name}" (${item?.price})`} </Modal.Title>
                 </Modal.Header>
-                <div >
-                    <Modal.Body className='yandexmap-container'>
-                        <YandexMapComponent address={address} setAddress={setAddress} />
-                    </Modal.Body>
-                </div>
+                <Modal.Body className='yandexmap-container'>
+                    <YandexMapComponent address={address} setAddress={setAddress} />
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
                     <Button variant="primary" onClick={handleClose}>
-                        Save Changes
+                        Purchase
                     </Button>
                 </Modal.Footer>
             </Modal>

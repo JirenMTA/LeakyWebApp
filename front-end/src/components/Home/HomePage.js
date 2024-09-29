@@ -18,8 +18,6 @@ const HomePage = (props) => {
     };
     const images = importAll(require.context('../../assets/image_products', false, /\.(png|jpe?g|svg)$/));
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-    const { colapseOnMobile, setColapseOnMobile } = props;
-    console.log(props);
 
     let clone = []
     for (let i = 0; i < 21; i++) {
@@ -35,7 +33,7 @@ const HomePage = (props) => {
                 },
                 {
                     user: "bender@juice-sh.op",
-                    review: "Just when my opinion of humans couldn't get any lower, along comes Stanewqceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+                    review: "Just when my opinion of humans couldn't get any lower, along comes Stanewqceee eeeeeeeeeeeee eeeeeeeeeeee eeeeeee"
                 }
 
 

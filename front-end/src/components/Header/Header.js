@@ -13,12 +13,11 @@ import "./Header.scss";
 
 const Header = (props) => {
     const navigate = useNavigate();
-    const listProduct = useSelector(state => state.orderListState.orderList);
+    const listProductAddedToBasket = useSelector(state => state.orderListState.orderList);
     const userState = useSelector(state => state.userState);
     const dispatch = useDispatch();
     const { colapseOnMobile, setColapseOnMobile } = props
-
-    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 1000px)' });
 
     const handleUserLogout = () => {
         dispatch(doLogout());
@@ -58,8 +57,8 @@ const Header = (props) => {
                                         <div className='container-basket' onClick={() => navigate("/basket")}>
                                             <ShoppingBasketIcon />
                                             <div>My basket</div>
-                                            {listProduct && listProduct.length > 0 && (
-                                                <span className='basket-count'>{listProduct.length}</span>
+                                            {listProductAddedToBasket && listProductAddedToBasket.length > 0 && (
+                                                <span className='basket-count'>{listProductAddedToBasket.length}</span>
                                             )}
                                         </div>
                                         <NavDropdown title="Setting" id="basic-nav-dropdown">

@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { doLogin } from "../../redux/action/userActions";
+import { useMediaQuery } from 'react-responsive';
 
 const Login = (props) => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('1@gmail.com');
     const [password, setPassword] = useState('1');
     const dispatch = useDispatch();
+    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
     const validateEmail = (email) => {
         return String(email)
@@ -42,7 +44,7 @@ const Login = (props) => {
 
     return <div className="login-container">
         <div className='header'>
-            <span>Don't have account yet?</span>
+            <div>Don't have account yet?</div>
             <button onClick={() => navigate('/signup')}>Sign up</button>
         </div>
         <div className='title col-4'>

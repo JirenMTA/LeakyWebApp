@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sidebar, Menu, MenuItem, SubMenu, SidebarProvider } from 'react-pro-sidebar';
+import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,14 +11,16 @@ import LoginIcon from '@mui/icons-material/Login';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import CheckIcon from '@mui/icons-material/Check';
+import "./SideBar.scss"
 
 const SideBar = (props) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const userState = useSelector(state => state.userState);
     const dispatch = useDispatch();
-    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 1000px)' });
     const { colapseOnMobile, setColapseOnMobile } = props;
     const navigate = useNavigate();
+    const listProductAddedToBasket = useSelector(state => state.orderListState.orderList);
 
     const handleUserLogout = () => {
         dispatch(doLogout());
@@ -44,7 +46,7 @@ const SideBar = (props) => {
             {!isMobile &&
                 <>
                     <div className="side-bar-menu" style={{ position: "fixed" }}>
-                        <Sidebar collapsed={isCollapsed} className="app" style={{ height: "100%" }}>
+                        <Sidebar collapsed={isCollapsed} className="app">
                             <Menu>
                                 <MenuItem className="menu1" icon={<MenuRoundedIcon />} onClick={handleToggle}>
                                     <h3> Information</h3>
@@ -68,30 +70,44 @@ const SideBar = (props) => {
                 {
                     isMobile && !colapseOnMobile &&
                     <>
-                        <Sidebar collapsed={false} className="app" style={{ width: "100vw", position: "fixed" }}>
-                            <Menu>
-                                <MenuItem icon={<GitHubIcon />} component={<Link to="https://github.com/JirenMTA/LeakyWebApp" />}> Our repository </MenuItem>
-                                {
-                                    !userState.isAuthenticated ?
-                                        <>
-                                            <MenuItem icon={<LoginIcon />} component={<Link to="/login" />}> Login </MenuItem>
-                                            <MenuItem icon={<BorderColorIcon />} component={<Link to="/login" />}> Signup </MenuItem>
-                                        </> :
-                                        <>
-                                            <MenuItem icon={<ShoppingBasketIcon />} onClick={handleClickBasket}>
-                                                Basket
-                                            </MenuItem>
-                                            <MenuItem icon={<CheckIcon />} onClick={handleClickPurchased}>
-                                                Purchased
-                                            </MenuItem>
-                                            <MenuItem icon={<LogoutRoundedIcon />} onClick={handleUserLogout}>
-                                                Logout
-                                            </MenuItem>
-                                        </>
-                                }
-                            </Menu>
-                        </Sidebar>
-                        <div className="side-bar-menu" style={{ width: "100vw", visibility: "hidden" }}>
+                        <div className="side-bar-menu" >
+                            <Sidebar collapsed={false} className="app" style={{ position: "fixed" }}>
+                                <Menu>
+                                    <MenuItem icon={<GitHubIcon />} component={<Link to="https://github.com/JirenMTA/LeakyWebApp" />}> Our repository </MenuItem>
+                                    {
+                                        !userState.isAuthenticated ?
+                                            <>
+                                                <MenuItem icon={<LoginIcon />} component={<Link to="/login" />}> Login </MenuItem>
+                                                <MenuItem icon={<BorderColorIcon />} component={<Link to="/login" />}> Signup </MenuItem>
+                                            </> :
+                                            <>
+                                                <MenuItem
+                                                    icon={
+                                                        <div className="basket-icon-wrapper">
+                                                            <ShoppingBasketIcon />
+                                                            {listProductAddedToBasket && listProductAddedToBasket.length > 0 && (
+                                                                <span className="basket-count">
+                                                                    {listProductAddedToBasket.length}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    }
+                                                    onClick={handleClickBasket}
+                                                >
+                                                    Basket
+                                                </MenuItem>
+                                                <MenuItem icon={<CheckIcon />} onClick={handleClickPurchased}>
+                                                    Purchased
+                                                </MenuItem>
+                                                <MenuItem icon={<LogoutRoundedIcon />} onClick={handleUserLogout}>
+                                                    Logout
+                                                </MenuItem>
+                                            </>
+                                    }
+                                </Menu>
+                            </Sidebar>
+                        </div>
+                        <div className="side-bar-menu" style={{ visibility: "hidden" }}>
                             <Sidebar collapsed={false} className="app"  >
                             </Sidebar>
                         </div>

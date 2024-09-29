@@ -13,6 +13,8 @@ const YandexMapComponent = (props) => {
     const [placemark, setPlacemark] = useState(null);
     const [mapCenter, setMapCenter] = useState([55.75, 37.57]);
     const [zoom, setZoom] = useState(9);
+    const [error, setError] = useState(null);
+
 
     const handleMapClick = async (e) => {
         const clickedCoords = e.get('coords');
@@ -68,12 +70,14 @@ const YandexMapComponent = (props) => {
             query={{ load: "package.full", apikey: '1d89ceef-3bdf-4e95-9ad8-cb9169d831cf' }}
             onLoad={(ymaps) => setYmapsInstance(ymaps)}
         >
-            <div className='map-container'>
+            <div>
                 <Map
+                    className='map-content'
                     state={{ center: mapCenter, zoom: zoom }}
                     width={"100%"}
                     onClick={handleMapClick}
-                    height={"50vh"}
+                    height={"400px"}
+
                 >
                     {placemark && (
                         <Placemark
@@ -86,6 +90,7 @@ const YandexMapComponent = (props) => {
                         />
                     )}
                 </Map>
+
             </div>
             <div style={{ width: "50%" }}>
                 <h4>Address:</h4>
@@ -111,5 +116,6 @@ const YandexMapComponent = (props) => {
             </div>
         </YMaps >
     );
+
 };
 export default YandexMapComponent;

@@ -10,6 +10,8 @@
         height: 45px;
         font-size: 17px;
         padding: 0 100px;
+        align-items: center;
+        display: flex;
 
         button {
             border: none;
@@ -70,6 +72,56 @@
             &:hover {
                 color: blue;
                 cursor: pointer;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        width: 100%;
+
+        .header {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+            gap: 10px;
+
+            span {
+                width: 100%;
+                display: block;
+                word-wrap: break-word;
+            }
+        }
+
+        .title {
+            width: 100%;
+        }
+
+        .welcome {
+            width: 100%;
+        }
+
+        .content-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .form-group {
+                width: 95%;
+            }
+
+            .forgot-password {
+                margin: 10px;
+            }
+
+            .btn-submit {
+                margin: 5px;
+                width: 95%;
+                padding: 0px;
             }
         }
     }

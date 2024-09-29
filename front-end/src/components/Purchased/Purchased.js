@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useSelector } from 'react-redux';
 import ModalPurchase from '../Purchase/ModalPurchase';
-
+import { useMediaQuery } from "react-responsive";
 
 const Purchased = (props) => {
     const importAll = (r) => {
@@ -40,40 +40,70 @@ const Purchased = (props) => {
 
     const [listProductPurchased, setListProductPurchased] = useState(clone);
     const [show, setShow] = useState(false);
+    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+
 
     return <div className="basket-container">
-        <Table striped bordered hover size="sm">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Name</th>
-                    <th>Image</th>
-                    <th>Price</th>
-                    <th>Address delivery</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    listProductPurchased && listProductPurchased.length > 0 && listProductPurchased.map((item, key) => {
-                        return <tr key={key + ' product-in-basket'}>
-                            <td>{key}</td>
-                            <td>{item.name}</td>
-                            <td>
-                                <img src={item.image}></img>
-                            </td>
-                            <td>{item.price}</td>
-                            <td>
-                                {item.address}
-                            </td>
+        {
+            isMobile ?
+                <Table striped bordered hover size="sm">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Product</th>
+                            <th>Address delivery</th>
                         </tr>
-                    })
-                }
-            </tbody>
-        </Table>
+                    </thead>
+                    <tbody>
+                        {
+                            listProductPurchased && listProductPurchased.length > 0 && listProductPurchased.map((item, key) => {
+                                return <tr key={key + ' product-in-basket'}>
+                                    <td>{key}</td>
+                                    <td>
+                                        <div className="product-container-purchased">
+                                            <span>{item.name}</span>
+                                            <img src={item.image}></img>
+                                            <span>{item.price}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {item.address}
+                                    </td>
+                                </tr>
+                            })
+                        }
+                    </tbody>
+                </Table> :
+                <Table striped bordered hover size="sm">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Price</th>
+                            <th>Address delivery</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            listProductPurchased && listProductPurchased.length > 0 && listProductPurchased.map((item, key) => {
+                                return <tr key={key + ' product-in-basket'}>
+                                    <td>{key}</td>
+                                    <td>{item.name}</td>
+                                    <td>
+                                        <img src={item.image}></img>
+                                    </td>
+                                    <td>{item.price}</td>
+                                    <td>
+                                        {item.address}
+                                    </td>
+                                </tr>
+                            })
+                        }
+                    </tbody>
+                </Table>
+        }
         <ModalPurchase show={show} setShow={setShow} ></ModalPurchase>
-    </div>
-    return <div>
-        Purchased here
     </div>
 }
 

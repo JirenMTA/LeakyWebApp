@@ -10,7 +10,7 @@ const Basket = (props) => {
     const listProduct = useSelector(state => state.orderListState.orderList)
     const [show, setShow] = useState(false);
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-
+    const [item, setItem] = useState(null);
 
     return <div className="basket-container">
         {!isMobile ?
@@ -36,7 +36,7 @@ const Basket = (props) => {
                                 <td>{item.price}</td>
                                 <td>
                                     <div className='action-content'>
-                                        <Button variant="outline-primary" onClick={() => setShow(true)}>Puschare</Button>
+                                        <Button variant="outline-primary" onClick={() => { setShow(true); setItem(item) }}>Purchase</Button>
                                         <Button variant="outline-warning">Delete</Button>
                                     </div>
                                 </td>
@@ -59,7 +59,7 @@ const Basket = (props) => {
                             return <tr key={key + ' product-in-basket'}>
                                 <td>{key}</td>
                                 <td>
-                                    <div className='product-container'>
+                                    <div className='product-in-basket-container'>
                                         <span>{item.name}</span>
                                         <img src={item.image}></img>
                                         <span>{item.price}</span>
@@ -67,7 +67,7 @@ const Basket = (props) => {
                                 </td>
                                 <td>
                                     <div className='action-content'>
-                                        <Button variant="outline-primary" onClick={() => setShow(true)}>Puschare</Button>
+                                        <Button variant="outline-primary" onClick={() => { setShow(true); setItem(item) }}>Purchase</Button>
                                         <Button variant="outline-warning">Delete</Button>
                                     </div>
                                 </td>
@@ -77,7 +77,7 @@ const Basket = (props) => {
                 </tbody>
             </Table>
         }
-        <ModalPurchase show={show} setShow={setShow} ></ModalPurchase>
+        <ModalPurchase show={show} setShow={setShow} item={item} ></ModalPurchase>
     </div>
 
 }

@@ -35,14 +35,13 @@ const Signup = (props) => {
             toast.error("Password is not the same!")
             return;
         }
-
         navigate('/login')
         toast.success("Successfully Signup to JuiceShop")
     }
 
     return <div className="signup-container">
         <div className='title col-4'>
-            Juice Shop
+            Electronic Shop
         </div>
         <div className='welcome col-4'>
             Hello, who is this?

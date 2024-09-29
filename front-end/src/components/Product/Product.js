@@ -30,7 +30,7 @@ const Product = (props) => {
     }
 
     return (
-        <div className='product-container' style={{ width: isMobile ? '100%' : "undefined" }}>
+        <div className='product-container'>
             <Card >
                 <div className='img-product' onClick={handleShowDetail}>
                     <Card.Img variant="top" src={product?.image} />
