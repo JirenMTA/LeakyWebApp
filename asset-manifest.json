@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/LeakyWebApp/static/css/main.9b068f5f.css",
-    "main.js": "/LeakyWebApp/static/js/main.c52330a5.js",
+    "main.css": "/LeakyWebApp/static/css/main.e095b8fd.css",
+    "main.js": "/LeakyWebApp/static/js/main.c2355fa0.js",
     "static/media/snakes_ladders_m.jpg": "/LeakyWebApp/static/media/snakes_ladders_m.d9620c57bab5e4ffbda2.jpg",
     "static/media/snakes_ladders.jpg": "/LeakyWebApp/static/media/snakes_ladders.f7809f6357a338f9ce0d.jpg",
     "static/media/artwork2.jpg": "/LeakyWebApp/static/media/artwork2.8464048904e1c15167c9.jpg",
@@ -15,11 +15,11 @@
     "static/media/apple_juice.jpg": "/LeakyWebApp/static/media/apple_juice.cd173e5a6b5906c2f77b.jpg",
     "static/media/strawberry_juice.jpeg": "/LeakyWebApp/static/media/strawberry_juice.a801a90f0475b55849e5.jpeg",
     "index.html": "/LeakyWebApp/index.html",
-    "main.9b068f5f.css.map": "/LeakyWebApp/static/css/main.9b068f5f.css.map",
-    "main.c52330a5.js.map": "/LeakyWebApp/static/js/main.c52330a5.js.map"
+    "main.e095b8fd.css.map": "/LeakyWebApp/static/css/main.e095b8fd.css.map",
+    "main.c2355fa0.js.map": "/LeakyWebApp/static/js/main.c2355fa0.js.map"
   },
   "entrypoints": [
-    "static/css/main.9b068f5f.css",
-    "static/js/main.c52330a5.js"
+    "static/css/main.e095b8fd.css",
+    "static/js/main.c2355fa0.js"
   ]
 }
