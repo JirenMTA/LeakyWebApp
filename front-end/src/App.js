@@ -9,23 +9,19 @@ import { YMaps } from '@pbe/react-yandex-maps';
 import { useMediaQuery } from 'react-responsive';
 
 const App = (props) => {
-  const isAuth = true;
   const [colapseOnMobile, setColapseOnMobile] = useState(true);
-
 
   return (
     <div className='app-container'>
       <div className='header-container'>
-        <Header></Header>
+        <Header colapseOnMobile={colapseOnMobile} setColapseOnMobile={setColapseOnMobile}></Header>
       </div>
       <div className='main-container'>
         <div className='sidebar-container'>
-          {isAuth &&
-            <SideBar colapseOnMobile={colapseOnMobile} setColapseOnMobile={setColapseOnMobile}></SideBar>
-          }
+          <SideBar colapseOnMobile={colapseOnMobile} setColapseOnMobile={setColapseOnMobile}></SideBar>
         </div>
         <div className='app-content'>
-          <Outlet colapseOnMobile={colapseOnMobile} setColapseOnMobile={setColapseOnMobile}></Outlet>
+          <Outlet></Outlet>
         </div>
       </div>
     </div>

@@ -1,8 +1,18 @@
 .product-container {
+    width: "200px";
+
     .img-product {
         :hover {
             cursor: pointer;
         }
+
+        @media (max-width: 768px) {
+            width: 100%;
+        }
+
+
+        width: 300px;
+
     }
 
 

@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { YMaps, Map } from '@pbe/react-yandex-maps';
 import YandexMapComponent from './YandexMapComponent';
+import "./ModalPurchase.scss"
 
 
 const ModalPurchase = (props) => {
@@ -16,9 +17,11 @@ const ModalPurchase = (props) => {
                 <Modal.Header closeButton>
                     <Modal.Title>Choose delivery address </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    <YandexMapComponent address={address} setAddress={setAddress} />
-                </Modal.Body>
+                <div >
+                    <Modal.Body className='yandexmap-container'>
+                        <YandexMapComponent address={address} setAddress={setAddress} />
+                    </Modal.Body>
+                </div>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close

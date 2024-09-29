@@ -7,11 +7,12 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { doFetchListOrder } from '../../redux/action/orderListAction';
 import { toast } from 'react-toastify';
+import { useMediaQuery } from 'react-responsive';
 
 const Product = (props) => {
     const { product } = props;
     const [show, setShow] = useState(false);
-
+    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
     const dispatch = useDispatch();
     const userState = useSelector(state => state.userState);
     const listProduct = useSelector(state => state.orderListState.orderList);
@@ -29,8 +30,8 @@ const Product = (props) => {
     }
 
     return (
-        <div className='product-container'>
-            <Card style={{ width: '15rem' }} >
+        <div className='product-container' style={{ width: isMobile ? '100%' : "undefined" }}>
+            <Card >
                 <div className='img-product' onClick={handleShowDetail}>
                     <Card.Img variant="top" src={product?.image} />
                 </div>

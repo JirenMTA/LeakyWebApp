@@ -16,6 +16,7 @@ const Header = (props) => {
     const listProduct = useSelector(state => state.orderListState.orderList);
     const userState = useSelector(state => state.userState);
     const dispatch = useDispatch();
+    const { colapseOnMobile, setColapseOnMobile } = props
 
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
@@ -32,9 +33,10 @@ const Header = (props) => {
                     <img src={logo} onClick={() => navigate("/")} alt="logo" />
                 </div>
                 <NavLink to='/' className='navbar-brand'>Electronic Shop</NavLink>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => { setColapseOnMobile(!colapseOnMobile) }} />
+
                 {!isMobile &&
                     <>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav className="me-auto">
                                 {(

@@ -72,8 +72,8 @@ const YandexMapComponent = (props) => {
                 <Map
                     state={{ center: mapCenter, zoom: zoom }}
                     width={"100%"}
-                    height={"450px"}
                     onClick={handleMapClick}
+                    height={"50vh"}
                 >
                     {placemark && (
                         <Placemark
