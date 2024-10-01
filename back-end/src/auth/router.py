@@ -7,20 +7,28 @@ from src.repository.AuthRepository import AuthRepository
 
 router = APIRouter(prefix="/auth", tags=["Авторизация"])
 
+# TODO create module for application settings
 APP_SECRET = "ArtemD is clown"
 
 
-@router.post("/sign_up", response_model_exclude_unset=True)
+@router.post(
+    "/sign_up", response_model=SResult, response_model_exclude_unset=True
+)
 async def sign_up(data: SLocalSignUp) -> SResult:
     user = await AuthRepository.local_register(data)
+
     if user is None:  # TODO Более понятная обработка ошибок
         return SResult(status="Fail", error="Failed to add user")
+
     return SResult(status="Ok")
 
 
-@router.post("/sign_in", response_model_exclude_unset=True)
+@router.post(
+    "/sign_in", response_model=SResult, response_model_exclude_unset=True
+)
 async def sign_in(data: SSignIn, response: Response) -> SResult:
     user = await AuthRepository.get_user_by_email(data.email)
+
     if user is None:
         return SResult(status="Fail", error="Invalid username or password")
 

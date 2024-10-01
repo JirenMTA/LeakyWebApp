@@ -1,4 +1,9 @@
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from typing import AsyncGenerator
+from sqlalchemy.ext.asyncio import (
+    create_async_engine,
+    async_sessionmaker,
+    AsyncSession,
+)
 from sqlalchemy.orm import DeclarativeBase
 
 db_engine = create_async_engine(
@@ -20,3 +25,8 @@ async def create_tables():
 async def drop_tables():
     async with db_engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
+
+
+async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
+    async with async_sessionmaker() as session:
+        yield session

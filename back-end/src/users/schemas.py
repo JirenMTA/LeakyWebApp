@@ -1,16 +1,16 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 # TODO secure validation
 class SUserPub(BaseModel):
     username: str | None
-    email: str
+    email: EmailStr
 
 
 class SUserPriv(BaseModel):
     id: int
     username: str | None
-    email: str
+    email: EmailStr
     hash: str | None  # TODO delete
     is_external: bool
 
@@ -19,9 +19,9 @@ class SUserPriv(BaseModel):
 
 class SLocalUserAdd(BaseModel):
     username: str | None
-    email: str
+    email: EmailStr
     hash: str  # TODO rename password
 
 
 class SExternalUserAdd(BaseModel):
-    email: str
+    email: EmailStr
