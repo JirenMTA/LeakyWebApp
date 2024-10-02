@@ -5,8 +5,6 @@ import './App.scss';
 import Header from './components/Header/Header';
 import { Outlet } from 'react-router-dom';
 import SideBar from './components/SideBar/SideBar';
-import { YMaps } from '@pbe/react-yandex-maps';
-import { useMediaQuery } from 'react-responsive';
 
 const App = (props) => {
   const [colapseOnMobile, setColapseOnMobile] = useState(true);
