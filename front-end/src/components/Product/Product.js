@@ -35,7 +35,7 @@ const Product = (props) => {
                 <div className='img-product' onClick={handleShowDetail}>
                     <Card.Img variant="top" src={product?.image} />
                 </div>
-                <Card.Body>
+                <Card.Body className='body-product-card' >
                     <Card.Title>{product?.name}</Card.Title>
                     <div className='price-product'>
                         <Card.Title>
