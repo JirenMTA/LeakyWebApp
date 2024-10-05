@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash
 
 from src.database import new_session
 from src.auth.schemas import SLocalSignUp
-from src.users.models import User
+from src.Users.models import User
 from src.database import get_async_session, AsyncSession
 
 

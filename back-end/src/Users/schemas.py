@@ -6,6 +6,8 @@ class SUserPub(BaseModel):
     username: str | None
     email: EmailStr
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class SUserPriv(BaseModel):
     id: int

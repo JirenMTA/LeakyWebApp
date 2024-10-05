@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from src.users.schemas import SUserPriv
+from src.Users.schemas import SUserPriv
 from src.repository.UserRepository import UserRepository
 
 router = APIRouter(prefix="/users", tags=["Пользователи"])
