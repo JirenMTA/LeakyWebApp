@@ -1,10 +1,8 @@
+from __future__ import annotations
+
 from datetime import datetime
 from enum import Enum
 from pydantic import BaseModel, ConfigDict
-
-from src.Users.schemas import SUserPub
-
-# from src.Products.schemas import SProductGetShort
 
 
 class ResponseStatus(Enum):
@@ -33,7 +31,7 @@ class SCommentGetByProduct(BaseModel):
 # TODO изменить product_id на product. Для этого решить проблему с циклическими импортами
 class SCommentGetByUser(BaseModel):
     id: int
-    product_id: int
+    product: SProductGetShort
     mark: float
     comment: str
     created_at: datetime
@@ -44,3 +42,10 @@ class SCommentGetByUser(BaseModel):
 class SResult(BaseModel):
     status: ResponseStatus
     error: str | None = None
+
+
+from src.Users.schemas import SUserPub
+from src.Products.schemas import SProductGetShort
+
+SCommentGetByProduct.update_forward_refs()
+SCommentGetByUser.update_forward_refs()

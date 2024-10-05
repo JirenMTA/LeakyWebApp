@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 from pydantic import BaseModel, ConfigDict
 from enum import Enum
-from src.Comments.schemas import SCommentGetByProduct
 
 
 class ResponseStatus(Enum):
@@ -50,3 +51,7 @@ class SResult(BaseModel):
 # class SProductGetStat(BaseModel):
 #    status: ResponseStatus
 #    error: str | None
+
+from src.Comments.schemas import SCommentGetByProduct
+
+SProductGetFull.update_forward_refs()
