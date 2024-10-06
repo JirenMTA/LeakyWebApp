@@ -2,7 +2,7 @@ from fastapi import APIRouter, Response
 from src.auth.utils import generate_cookie
 from werkzeug.security import check_password_hash
 
-from src.auth.schemas import SSignIn, SLocalSignUp, SResult
+from src.auth.schemas import SSignIn, SLocalSignUp, SResult, ResponseStatus
 from src.repository.AuthRepository import AuthRepository
 
 router = APIRouter(prefix="/auth", tags=["Авторизация"])
@@ -11,9 +11,7 @@ router = APIRouter(prefix="/auth", tags=["Авторизация"])
 APP_SECRET = "ArtemD is clown"
 
 
-@router.post(
-    "/sign_up", response_model=SResult, response_model_exclude_unset=True
-)
+@router.post("/sign_up", response_model=SResult)
 async def sign_up(data: SLocalSignUp) -> SResult:
     user = await AuthRepository.local_register(data)
 

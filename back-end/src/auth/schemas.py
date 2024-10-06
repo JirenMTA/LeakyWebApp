@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 from enum import Enum
 
 
@@ -21,4 +22,4 @@ class SLocalSignUp(BaseModel):
 
 class SResult(BaseModel):
     status: ResponseStatus
-    error: str | None
+    error: str | None = None
