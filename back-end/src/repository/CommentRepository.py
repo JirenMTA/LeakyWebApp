@@ -1,9 +1,11 @@
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
+from sqlalchemy.sql import func
 
 from src.database import new_session
 from src.Comments.models import Comment
 from src.Comments.schemas import SCommentAdd
+from src.repository import ProductRepository
 
 
 class CommentRepository:
@@ -34,13 +36,26 @@ class CommentRepository:
     @classmethod
     async def post_comment(cls, data: SCommentAdd) -> Comment | None:
         async with new_session() as session:
+            # product_exists = ProductRepository.check_exists(data.product_id)
+            # if not product_exists:
+            #    return None
+
             comment = Comment(
                 author_id=data.author_id,
                 product_id=data.product_id,
                 mark=data.mark,
                 comment=data.comment,
             )
+
             session.add(comment)
             await session.flush()
             await session.commit()
+
+            # query = select(func.avg(Comment.mark).label("average")).filter(
+            #    Comment.product_id == data.product_id
+            # )
+
+            # avg_rating = await session.execute(query)
+            # print(avg_rating)
+
             return comment

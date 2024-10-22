@@ -1,34 +1,44 @@
+from typing import Tuple
+
 import jwt
 from datetime import datetime, timedelta, timezone
+from fastapi import Depends, HTTPException, status
+
+from src.auth.dependencies import get_token
+from src.repository import AuthRepository
+from src.config import get_auth_data
 
 
-def generate_cookie(id: int, role: str, secret: str) -> str:
+def generate_cookie(data: dict) -> str:
     # TODO update func args
-    cookie = jwt.encode(
-        {
-            "id": id,
-            "role": role,
-            "exp": datetime.utcnow() + timedelta(minutes=30),
-        },
-        key=secret,
-        algorithm="HS256",
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + timedelta(minutes=30)
+    to_encode.update({"exp": expire})
+    auth_data = get_auth_data()
+    encoded_jwt = jwt.encode(
+        to_encode,
+        key=auth_data["secret_key"],
+        algorithm=auth_data["algorithm"],
     )
-    return cookie
+    return encoded_jwt
 
 
-def verify_cookie(cookie: str, secret: str) -> int | None:
+async def verify_cookie(cookie: str = Depends(get_token)):
     try:
         # TODO for vuln set verify_signature on False or use weak secret for cookies
-        # cookie_data = jwt.decode(cookie, options={"verify_signature": True})["id"]
+        auth_data = get_auth_data()
         token = jwt.decode(
             cookie,
-            secret,
-            algorithms=["HS256"],
+            auth_data["secret_key"],
+            algorithms=[auth_data["algorithms"]],
             options={
                 "require": ["id", "role", "exp"],
             },
         )
-        return token["id"]
     except BaseException as ex:
         print(ex)
-        return None
+        return None, False
+    user = await AuthRepository.get_user_by_id(int(token.get("id")))
+    if not user:
+        return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    return user

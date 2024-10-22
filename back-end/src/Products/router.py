@@ -13,9 +13,7 @@ router = APIRouter(prefix="/products", tags=["Товары"])
 @router.get("")
 async def get_products() -> list[SProductGetShort]:
     products = await ProductRepository.get_all()
-    product_schemas = [
-        SProductGetShort.model_validate(product) for product in products
-    ]
+    product_schemas = [SProductGetShort.model_validate(product) for product in products]
     return product_schemas
 
 

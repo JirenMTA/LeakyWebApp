@@ -22,13 +22,18 @@ class ProductRepository:
             query = (
                 select(Product)
                 .where(Product.id == id)
-                .options(
-                    selectinload(Product.comments).joinedload(Comment.author)
-                )
+                .options(selectinload(Product.comments).joinedload(Comment.author))
             )
             result = await session.execute(query)
             product_model = result.unique().scalars().first()
             return product_model
+
+    @classmethod
+    async def check_exists(cls, id: int) -> bool:
+        async with new_session() as session:
+            query = select(Product).where(Product.id == id)
+            result = await session.execute(query).first()
+            return result is not None
 
     @classmethod
     async def add_product(cls, data: SProductAdd) -> Product | None:
