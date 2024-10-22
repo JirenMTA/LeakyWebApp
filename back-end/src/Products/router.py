@@ -6,14 +6,14 @@ from src.Products.schemas import (
     SResult,
 )
 from src.repository.ProductRepository import ProductRepository
+from src.sevices.ProductService import ProductService
 
 router = APIRouter(prefix="/products", tags=["Товары"])
 
 
 @router.get("")
 async def get_products() -> list[SProductGetShort]:
-    products = await ProductRepository.get_all()
-    product_schemas = [SProductGetShort.model_validate(product) for product in products]
+    product_schemas = await ProductService.get_all_products()
     return product_schemas
 
 
