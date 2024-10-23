@@ -47,5 +47,5 @@ class SResult(BaseModel):
 from src.Users.schemas import SUserPub
 from src.Products.schemas import SProductGetShort
 
-SCommentGetByProduct.update_forward_refs()
-SCommentGetByUser.update_forward_refs()
+SCommentGetByProduct.model_rebuild()
+SCommentGetByUser.model_rebuild()

@@ -19,6 +19,7 @@ class SProductAdd(BaseModel):
 
 
 class SProductGetShort(BaseModel):
+    id: int
     name: str
     description: str
     full_price: float
