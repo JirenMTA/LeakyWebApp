@@ -18,23 +18,9 @@ const Purchased = (props) => {
         clone.push({
             id: i,
             name: `Apple Juice (${i * 100} ml)`,
-            price: "100 rup",
+            price: 100,
             image: images[Math.floor(Math.random() * images.length)],
             address: "Революционная 46, Самара, Россия",
-            reviews: [
-                {
-                    user: "stan@juice-sh.op",
-                    review: "I'd stand on my head to make you a deal for this piece of art."
-                },
-                {
-                    user: "bender@juice-sh.op",
-                    review: "Just when my opinion of humans couldn't get any lower, along comes Stanewqceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
-                }
-
-
-            ],
-            description: "Finest pressings of apples. Allergy disclaimer: Might contain traces of worms. Can be sent back to us for recycling."
-
         })
     }
 
@@ -43,14 +29,14 @@ const Purchased = (props) => {
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
 
-    return <div className="basket-container">
+    return <div className="purchased-container">
         {
             isMobile ?
                 <Table striped bordered hover size="sm">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Product</th>
+                            <th className="no-column">No</th>
+                            <th className="product-column">Product</th>
                             <th>Address delivery</th>
                         </tr>
                     </thead>
@@ -63,7 +49,7 @@ const Purchased = (props) => {
                                         <div className="product-container-purchased">
                                             <span>{item.name}</span>
                                             <img src={item.image}></img>
-                                            <span>{item.price}</span>
+                                            <span>{`${item.price} руб.`}</span>
                                         </div>
                                     </td>
                                     <td>
@@ -74,12 +60,12 @@ const Purchased = (props) => {
                         }
                     </tbody>
                 </Table> :
-                <Table striped bordered hover size="sm">
+                <Table striped bordered hover size="sm" className="table-purchased">
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <th className="column-no">No</th>
                             <th>Name</th>
-                            <th>Image</th>
+                            <th className="column-img">Image</th>
                             <th>Price</th>
                             <th>Address delivery</th>
                         </tr>
@@ -93,7 +79,7 @@ const Purchased = (props) => {
                                     <td>
                                         <img src={item.image}></img>
                                     </td>
-                                    <td>{item.price}</td>
+                                    <td>{`${item.price} руб.`}</td>
                                     <td>
                                         {item.address}
                                     </td>

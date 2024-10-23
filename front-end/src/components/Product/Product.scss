@@ -16,6 +16,25 @@
         justify-content: center;
         text-align: center;
     }
+
+    .body-product-card {
+        .price-product {
+            font-weight: 500;
+            margin: 10px 0px;
+
+            .full-price {
+                text-decoration: line-through;
+                margin-right: '10px';
+                color: 'gray';
+            }
+
+            .sale {
+                color: red;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+        }
+    }
 }
 
 @media (max-width: 768px) {
@@ -35,5 +54,14 @@
             width: 100%;
         }
 
+        .price-product {
+            font-size: 10px;
+            display: flex;
+            flex-direction: column;
+
+            .sale {
+                margin: 0px !important;
+            }
+        }
     }
 }

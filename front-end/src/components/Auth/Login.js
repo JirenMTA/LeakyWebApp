@@ -4,14 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { doLogin } from "../../redux/action/userActions";
-import { useMediaQuery } from 'react-responsive';
+import { postLogin } from "../../service/apiService";
 
 const Login = (props) => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState('1@gmail.com');
-    const [password, setPassword] = useState('1');
+    const [email, setEmail] = useState('user@example.com');
+    const [password, setPassword] = useState('string');
     const dispatch = useDispatch();
-    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+
 
     const validateEmail = (email) => {
         return String(email)
@@ -23,17 +23,30 @@ const Login = (props) => {
     const handleBackToHomepage = (event) => {
         navigate('/');
     }
+
+    const fetchLogin = async () => {
+        let data = await postLogin({ email, password });
+        return data;
+    }
+
     const handleSubmitLogin = async (event) => {
         if (!validateEmail(email)) {
             toast.error("Invalid email");
             return;
         }
 
+        const res = await fetchLogin();
+
+        if (res.data.status != "Ok") {
+            toast.error("Wrong email or password");
+            return;
+        }
+
         dispatch(doLogin({
             account: {
-                access_token: '11',
-                refresh_token: '11',
+                token: '11',
                 username: email,
+                id: 2
             },
             isAuthenticated: true
         }));

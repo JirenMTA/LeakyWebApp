@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.orm import DeclarativeBase
 
 db_engine = create_async_engine(
-    "postgresql+asyncpg://Artem:LEAKYWEBAPPARTEMPASS@192.168.3.80:5432/LeakyWebApp"
+    "postgresql+asyncpg://postgres:hungvip2000@localhost:5432/LeakyWebApp"
 )
 
 new_session = async_sessionmaker(db_engine, expire_on_commit=False)

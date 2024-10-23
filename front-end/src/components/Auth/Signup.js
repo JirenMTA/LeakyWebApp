@@ -3,9 +3,11 @@ import "./Signup.scss"
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { postSignup } from "../../service/apiService";
 
 const Signup = (props) => {
     const navigate = useNavigate();
+    const [username, setUsername] = useState('1');
     const [email, setEmail] = useState('1@gmail.com');
     const [password, setPassword] = useState('1');
     const [showPassword, setShowPassword] = useState(false);
@@ -35,8 +37,14 @@ const Signup = (props) => {
             toast.error("Password is not the same!")
             return;
         }
-        navigate('/login')
-        toast.success("Successfully Signup to JuiceShop")
+        const res = await postSignup({ username, email, password });
+        if (res.data.status === 'Ok') {
+            navigate('/login')
+            toast.success("Successfully Signup to JuiceShop")
+        }
+        else {
+            toast.error("Something went wrong...Please try again!")
+        }
     }
 
     return <div className="signup-container">
@@ -48,6 +56,8 @@ const Signup = (props) => {
         </div>
         <div className='content-form col-4 mx-auto'>
             <div className='form-group'>
+                <label>Username</label>
+                <input type='username' value={username} className="form-control" onChange={(event) => setUsername(event.target.value)}></input>
                 <label>Email</label>
                 <input type='email' value={email} className="form-control" onChange={(event) => setEmail(event.target.value)}></input>
             </div>

@@ -14,7 +14,7 @@ const ModalPurchase = (props) => {
         <>
             <Modal show={show} onHide={handleClose} size='xl' backdrop="static">
                 <Modal.Header closeButton>
-                    <Modal.Title>Purchase for {` "${item?.name}" (${item?.price})`} </Modal.Title>
+                    <Modal.Title>Purchase for {` "${item?.name}"`} </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='yandexmap-container'>
                     <YandexMapComponent address={address} setAddress={setAddress} />

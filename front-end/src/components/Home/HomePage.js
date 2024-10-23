@@ -9,6 +9,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import { useSelector } from "react-redux";
 import { useMediaQuery } from 'react-responsive';
+import { getProducts } from '../../service/apiService';
+import axios from 'axios';
 
 const HomePage = (props) => {
     const importAll = (r) => {
@@ -17,42 +19,62 @@ const HomePage = (props) => {
         return imagesArray;
     };
     const images = importAll(require.context('../../assets/image_products', false, /\.(png|jpe?g|svg)$/));
+
+    const [listProduct, setListProduct] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredProducts, setFilteredProducts] = useState([]);
+
+    const userState = useSelector(state => state.userState);
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
 
-    let clone = []
-    for (let i = 0; i < 21; i++) {
-        clone.push({
-            id: i,
-            name: `Apple Juice (${i * 100} ml)`,
-            price: "100 rup",
-            image: images[Math.floor(Math.random() * images.length)],
-            reviews: [
-                {
-                    user: "stan@juice-sh.op",
-                    review: "I'd stand on my head to make you a deal for this piece of art."
-                },
-                {
-                    user: "bender@juice-sh.op",
-                    review: "Just when my opinion of humans couldn't get any lower, along comes Stanewqceee eeeeeeeeeeeee eeeeeeeeeeee eeeeeee"
-                }
+
+    //let clone = []
+    // for (let i = 0; i < 21; i++) {
+    //     clone.push({
+    //         id: i,
+    //         name: `Apple Juice (${i * 100} ml)`,
+    //         price: "100 rup",
+    //         image: images[Math.floor(Math.random() * images.length)],
+    //         reviews: [
+    //             {
+    //                 user: "stan@juice-sh.op",
+    //                 review: "I'd stand on my head to make you a deal for this piece of art."
+    //             },
+    //             {
+    //                 user: "bender@juice-sh.op",
+    //                 review: "Just when my opinion of humans couldn't get any lower, along comes Stanewqceee eeeeeeeeeeeee eeeeeeeeeeee eeeeeee"
+    //             }
 
 
-            ],
-            description: "Finest pressings of apples. Allergy disclaimer: Might contain traces of worms. Can be sent back to us for recycling."
+    //         ],
+    //         description: "Finest pressings of apples. Allergy disclaimer: Might contain traces of worms. Can be sent back to us for recycling."
 
-        })
-    }
-    const [listProduct, setListProduct] = useState(clone);
-    const [searchTerm, setSearchTerm] = useState('');
-    const userState = useSelector(state => state.userState);
+    //     })
+    // }
+
+
+    const fetchProducts = async () => {
+        let res = await getProducts();
+        setListProduct(res.data);
+    };
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
+
+    useEffect(() => {
+        // if listProduct
+        const filteredProducts_ = listProduct.filter((product) =>
+            product.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
+        );
+        setFilteredProducts(filteredProducts_);
+
+
+    }, [listProduct, searchTerm])
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
-
-    const filteredProducts = listProduct.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
-    );
 
     const dispatch = useDispatch();
 
@@ -62,6 +84,8 @@ const HomePage = (props) => {
     useEffect(() => {
         dispatch(doFetchListOrder({ orderList: listProductInBasket }));
     }, [listProductInBasket])
+
+
 
 
     return (
@@ -94,8 +118,8 @@ const HomePage = (props) => {
                         </div>
                     </div>
                     <div className="list-product">
-                        {filteredProducts && filteredProducts.length > 0 && filteredProducts.map((item) => {
-                            return <Product product={item} key={item.id}></Product>
+                        {filteredProducts && filteredProducts.length > 0 && filteredProducts.map((item, key) => {
+                            return <Product product={item} key={key}></Product>
                         })}
                     </div>
                 </div>

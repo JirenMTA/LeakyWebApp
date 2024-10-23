@@ -13,4 +13,51 @@ const getCoordByAddress = (address) => {
     }
 };
 
-export { getAddressByCoord, getCoordByAddress }
+
+const getProducts = () => {
+    try {
+        const response = axios.get('http://localhost:8000/products');
+        return response;
+    } catch (error) {
+        return error;
+    }
+};
+
+const getDetailProducts = (id) => {
+    try {
+        const response = axios.get(`http://localhost:8000/products/${id}`);
+        return response;
+    } catch (error) {
+        return error;
+    }
+};
+
+const postLogin = (data) => {
+    try {
+        const response = axios.post(`http://localhost:8000/auth/sign_in`, data, { withCredentials: true });
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
+
+const postSignup = (data) => {
+    try {
+        const response = axios.post(`http://localhost:8000/auth/sign_up`, data);
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
+
+
+const postComment = (data) => {
+    try {
+        const response = axios.post(`http://localhost:8000/comments`, data);
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
+
+export { getAddressByCoord, getCoordByAddress, getProducts, getDetailProducts, postLogin, postComment, postSignup }

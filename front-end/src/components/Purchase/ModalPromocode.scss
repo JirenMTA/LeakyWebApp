@@ -1,0 +1,17 @@
+.modalpromocode {
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+
+    .modal-content {
+        width: 400px;
+        margin: 0 auto;
+        display: flex;
+    }
+}
+
+@media (max-width: 768px) {
+    .modalpromocode {
+        width: 100%;
+    }
+}

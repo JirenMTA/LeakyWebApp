@@ -9,7 +9,6 @@ class ResponseStatus(Enum):
     Ok = "Ok"
     Error = "Fail"
 
-
 # TODO не принимать id автора, а доставать его из Cookie
 class SCommentAdd(BaseModel):
     author_id: int

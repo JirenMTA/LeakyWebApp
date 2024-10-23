@@ -35,7 +35,7 @@ async def sign_in(data: SSignIn, response: Response) -> SResult:
 
     cookie = generate_cookie(user.id, "admin", APP_SECRET)
     response.set_cookie(
-        key="auth", value=cookie, httponly=True, samesite="strict"
+        key="auth", value=cookie, samesite="strict"
     )
 
     return SResult(status="Ok")
