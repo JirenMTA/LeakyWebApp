@@ -8,7 +8,6 @@ from src.repository.AuthRepository import AuthRepository
 router = APIRouter(prefix="/auth", tags=["Авторизация"])
 
 # TODO create module for application settings
-APP_SECRET = "ArtemD is clown"
 
 
 @router.post("/sign_up", response_model=SResult)
@@ -21,9 +20,7 @@ async def sign_up(data: SLocalSignUp) -> SResult:
     return SResult(status="Ok")
 
 
-@router.post(
-    "/sign_in", response_model=SResult, response_model_exclude_unset=True
-)
+@router.post("/sign_in", response_model=SResult, response_model_exclude_unset=True)
 async def sign_in(data: SSignIn, response: Response) -> SResult:
     user = await AuthRepository.get_user_by_email(data.email)
 
@@ -33,9 +30,13 @@ async def sign_in(data: SSignIn, response: Response) -> SResult:
     if not check_password_hash(user.hash, data.password):
         return SResult(status="Fail", error="Invalid username or password")
 
-    cookie = generate_cookie(user.id, "admin", APP_SECRET)
-    response.set_cookie(
-        key="auth", value=cookie, samesite="strict"
-    )
+    cookie = generate_cookie({"id": user.id, "role": "admin"})
+    response.set_cookie(key="auth", value=cookie, httponly=True, samesite="strict")
 
+    return SResult(status="Ok")
+
+
+@router.get("/logout", response_model=SResult, response_model_exclude_unset=True)
+async def logout(response: Response):
+    response.delete_cookie("auth")
     return SResult(status="Ok")

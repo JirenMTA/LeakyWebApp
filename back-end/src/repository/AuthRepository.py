@@ -1,14 +1,20 @@
-from fastapi import Depends
 from sqlalchemy import select
 from werkzeug.security import generate_password_hash
 
 from src.database import new_session
 from src.auth.schemas import SLocalSignUp
 from src.Users.models import User
-from src.database import get_async_session, AsyncSession
 
 
 class AuthRepository:
+    @classmethod
+    async def get_user_by_id(cls, id: int) -> User | None:
+        async with new_session() as session:
+            query = select(User).where(User.id == id)
+            result = await session.execute(query)
+            result = result.scalars().first()
+            return result
+
     @classmethod
     async def get_user_by_email(cls, email: str) -> User | None:
         async with new_session() as session:
