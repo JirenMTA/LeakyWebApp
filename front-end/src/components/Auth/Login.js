@@ -36,23 +36,24 @@ const Login = (props) => {
         }
 
         const res = await fetchLogin();
+        console.log(res);
 
-        if (res.data.status != "Ok") {
-            toast.error("Wrong email or password");
-            return;
-        }
+        // if (res.data.status != "Ok") {
+        //     toast.error("Wrong email or password");
+        //     return;
+        // }
 
-        dispatch(doLogin({
-            account: {
-                token: '11',
-                username: email,
-                id: 2
-            },
-            isAuthenticated: true
-        }));
+        // dispatch(doLogin({
+        //     account: {
+        //         token: '11',
+        //         username: email,
+        //         id: 2
+        //     },
+        //     isAuthenticated: true
+        // }));
 
-        navigate("/");
-        toast.success("Successfully login to JuiceShop")
+        // navigate("/");
+        // toast.success("Successfully login to JuiceShop")
     }
 
     return <div className="login-container">

@@ -31,7 +31,14 @@ async def sign_in(data: SSignIn, response: Response) -> SResult:
         return SResult(status="Fail", error="Invalid username or password")
 
     cookie = generate_cookie({"id": user.id, "role": "admin"})
-    response.set_cookie(key="auth", value=cookie, httponly=True, samesite="strict")
+
+    response.set_cookie(
+        key="auth",
+        value=cookie,
+        httponly=True,
+        secure=False,
+        samesite="None"
+    )
 
     return SResult(status="Ok")
 

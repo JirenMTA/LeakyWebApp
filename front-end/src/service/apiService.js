@@ -32,14 +32,21 @@ const getDetailProducts = (id) => {
     }
 };
 
-const postLogin = (data) => {
+
+const postLogin = async (data) => {
     try {
-        const response = axios.post(`http://localhost:8000/auth/sign_in`, data, { withCredentials: true });
+        const response = await axios.post(
+            'http://localhost:8000/auth/sign_in',
+            data,
+            { withCredentials: true } // Cho phép gửi và nhận cookie
+        );
+        console.log(response);
         return response;
     } catch (error) {
-        return error;
+        console.error("Error during login:", error);
+        return error.response;
     }
-}
+};
 
 const postSignup = (data) => {
     try {

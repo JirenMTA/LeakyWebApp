@@ -27,10 +27,10 @@ origins = [
 app = FastAPI(title="Leaky Web App")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["http://localhost:3000"],  # Đảm bảo domain này là đúng
+    allow_credentials=True,                   # Cho phép cookie/credentials
+    allow_methods=["*"],                      # Cho phép tất cả phương thức
+    allow_headers=["*"],                      # Cho phép tất cả headers
 )
 app.include_router(auth_router)
 app.include_router(user_router)

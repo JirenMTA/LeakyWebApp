@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1819e659-f033-42bf-a3ea-5a142ae3a5b3" name="Changes" comment="" />
+    <list default="true" id="d604495d-4ed2-4ee2-8f20-1557e0abb0e7" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/auth/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/auth/router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/components/Auth/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/components/Auth/Login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../front-end/src/service/apiService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../front-end/src/service/apiService.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,7 +20,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectId" id="2n3dDWmvXclSczQJhChBFvDf9Yh" />
+  <component name="ProjectId" id="2npdNlQJeqx1RacTSV0jmcyMlpH" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -28,36 +35,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="1819e659-f033-42bf-a3ea-5a142ae3a5b3" name="Changes" comment="" />
-      <created>1728205575318</created>
+      <changelist id="d604495d-4ed2-4ee2-8f20-1557e0abb0e7" name="Changes" comment="" />
+      <created>1729673913750</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1728205575318</updated>
+      <updated>1729673913750</updated>
     </task>
     <servers />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="origin/front-end" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
