@@ -27,13 +27,13 @@ async def add_to_cart(data: SCartAdd) -> SResult:
     return result
 
 
-@router.put("/edit")
+@router.put("")
 async def edit_cart(data: SCartEdit) -> SResult:
     result = await CartService.edit_cart(data)
     return result
 
 
-@router.delete("/delete")
+@router.delete("")
 async def delete_cart(data: SCartDelete) -> SResult:
     result = await CartService.delete_cart(data)
     return result

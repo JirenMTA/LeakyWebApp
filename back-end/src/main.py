@@ -10,6 +10,10 @@ from src.Comments.router import router as comment_router
 from fastapi.middleware.cors import CORSMiddleware
 =======
 from src.Cart.router import router as cart_router
+<<<<<<< HEAD
+>>>>>>> back-end
+=======
+from src.Promo.router import router as promo_router
 >>>>>>> back-end
 
 
@@ -41,3 +45,4 @@ app.include_router(user_router)
 app.include_router(product_router)
 app.include_router(comment_router)
 app.include_router(cart_router)
+app.include_router(promo_router)
