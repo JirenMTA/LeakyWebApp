@@ -11,40 +11,47 @@ class ResponseStatus(Enum):
 
 
 # TODO не принимать id автора, а доставать его из Cookie
-class SCommentAdd(BaseModel):
-    author_id: int
+class SCartAdd(BaseModel):
+    user_id: int
     product_id: int
-    mark: float
-    comment: str
+    amount: int
 
 
-class SCommentGetByProduct(BaseModel):
+class SCartGet(BaseModel):
     id: int
-    author: SUserPub
-    mark: float
-    comment: str
-    created_at: datetime
+    user_id: int
+    product_id: int
+    amount: int
 
     model_config = ConfigDict(from_attributes=True)
 
 
-class SCommentGetByUser(BaseModel):
-    id: int
+class SCartGetByUser(BaseModel):
+    user_id: int
     product: SProductGetShort
-    mark: float
-    comment: str
+    amount: int
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class SCartEdit(BaseModel):
+    user_id: int
+    product_id: int
+    amount: int
+
+
+class SCartDelete(BaseModel):
+    user_id: int
+    product_id: int
 
 
 class SResult(BaseModel):
     status: ResponseStatus
     error: str | None = None
+    cart: SCartGet | None = None
 
 
-from src.Users.schemas import SUserPub
 from src.Products.schemas import SProductGetShort
 
-SCommentGetByProduct.model_rebuild()
-SCommentGetByUser.model_rebuild()
+SCartGetByUser.model_rebuild()
