@@ -1,5 +1,6 @@
-from sqlalchemy import select
-from sqlalchemy.orm import selectinload, joinedload
+from sqlalchemy import select, update
+from sqlalchemy.orm import selectinload
+from sqlalchemy.sql import func
 
 from src.Products.models import Product
 from src.Products.schemas import SProductAdd
@@ -17,7 +18,7 @@ class ProductRepository:
             return product_models
 
     @classmethod
-    async def get_one(cls, id: int):
+    async def get_one(cls, id: int) -> Product | None:
         async with new_session() as session:
             query = (
                 select(Product)
@@ -32,7 +33,8 @@ class ProductRepository:
     async def check_exists(cls, id: int) -> bool:
         async with new_session() as session:
             query = select(Product).where(Product.id == id)
-            result = await session.execute(query).first()
+            product_id = await session.execute(query)
+            result = product_id.unique().scalars().first()
             return result is not None
 
     @classmethod
@@ -49,3 +51,16 @@ class ProductRepository:
             await session.flush()
             await session.commit()
             return product
+
+    @classmethod
+    async def update_average_mark(cls, id: int) -> float:
+        async with new_session() as session:
+            query = select(func.avg(Comment.mark).label("average")).filter(
+                Comment.product_id == id
+            )
+            result = await session.execute(query)
+            new_rating = result.scalars().first()
+            update_query = update(Product).where(Product.id == id).values(rating=new_rating)
+            await session.execute(update_query)
+            await session.commit()
+            return new_rating
