@@ -1,10 +1,12 @@
-from typing import List
+from typing import List, Tuple
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
+from sqlalchemy.sql import func
 
 from src.database import new_session
 from src.Cart.models import Cart
 from src.Cart.schemas import SCartAdd, SCartEdit, SCartDelete
+from src.Products.models import Product
 
 
 class CartRepository:
@@ -23,6 +25,22 @@ class CartRepository:
             result = await session.execute(query)
             cart_models = result.scalars().first()
             return cart_models
+
+    @classmethod
+    async def get_summary(cls, user_id) -> Tuple[int, float]:
+        async with new_session() as session:
+            query = (
+                select(
+                    func.sum(Cart.amount).label("count_products"),
+                    func.sum(Cart.amount * Product.full_price).label("summary_price"),
+                )
+                .select_from(Cart)
+                .join(Product, Cart.product_id == Product.id)
+                .where(Cart.user_id == user_id)
+            )
+            result = await session.execute(query)
+            data = result.all()
+            return data
 
     @classmethod
     async def add_cart(cls, data: SCartAdd) -> Cart:

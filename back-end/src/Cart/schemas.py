@@ -26,13 +26,19 @@ class SCartGet(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class SCartGetByUser(BaseModel):
-    user_id: int
+class SCartGetByUserObj(BaseModel):
     product: SProductGetShort
     amount: int
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class SCartGetByUserFull(BaseModel):
+    user_id: int
+    products: list[SCartGetByUserObj]
+    total_products: int = 0
+    total_price: float = 0.0
 
 
 class SCartEdit(BaseModel):
@@ -54,4 +60,4 @@ class SResult(BaseModel):
 
 from src.Products.schemas import SProductGetShort
 
-SCartGetByUser.model_rebuild()
+SCartGetByUserObj.model_rebuild()

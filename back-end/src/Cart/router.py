@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter
 
 from src.Cart.schemas import (
-    SCartGetByUser,
+    SCartGetByUserFull,
     SCartAdd,
     SCartEdit,
     SCartDelete,
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/cart", tags=["Корзина"])
 
 
 @router.get("")
-async def get_cart() -> List[SCartGetByUser]:
+async def get_cart() -> SCartGetByUserFull:
     # TODO get user_id from cookie
     user_id = 1
     cart_schemas = await CartService.get_cart_for_user(user_id)

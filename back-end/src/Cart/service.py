@@ -1,6 +1,7 @@
 from typing import List
 from src.Cart.schemas import (
-    SCartGetByUser,
+    SCartGetByUserObj,
+    SCartGetByUserFull,
     SCartAdd,
     SCartEdit,
     SCartDelete,
@@ -13,10 +14,24 @@ from src.repository.ProductRepository import ProductRepository
 
 class CartService:
     @classmethod
-    async def get_cart_for_user(cls, id: int) -> List[SCartGetByUser]:
+    async def get_cart_for_user(cls, id: int) -> SCartGetByUserFull:
         cart_objects = await CartRepository.get_all_for_user(id)
-        cart_schemas = [SCartGetByUser.model_validate(cart_obj) for cart_obj in cart_objects]
-        return cart_schemas
+        cart_schemas = [
+            SCartGetByUserObj.model_validate(cart_obj) for cart_obj in cart_objects
+        ]
+
+        summary = await CartRepository.get_summary(id)
+        result = SCartGetByUserFull(user_id=id, products=[])
+        if summary:
+            summary = summary[0]
+
+            result = SCartGetByUserFull(
+                user_id=id,
+                products=cart_schemas,
+                total_products=summary[0],
+                total_price=summary[1],
+            )
+        return result
 
     @classmethod
     async def add_product(cls, data: SCartAdd) -> SResult:
