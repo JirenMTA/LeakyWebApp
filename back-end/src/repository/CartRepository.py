@@ -11,9 +11,15 @@ from src.Products.models import Product
 
 class CartRepository:
     @classmethod
-    async def get_all_for_user(cls, id: int) -> List[Cart]:
+    async def get_all_for_user(cls, id: int, paginator: dict) -> List[Cart]:
         async with new_session() as session:
-            query = select(Cart).where(Cart.user_id == id).options(joinedload(Cart.product))
+            query = (
+                select(Cart)
+                .where(Cart.user_id == id)
+                .options(joinedload(Cart.product))
+                .offset(paginator.get("skip"))
+                .limit(paginator.get("limit"))
+            )
             result = await session.execute(query)
             cart_models = result.scalars().all()
             return cart_models
@@ -27,7 +33,7 @@ class CartRepository:
             return cart_models
 
     @classmethod
-    async def get_summary(cls, user_id) -> Tuple[int, float]:
+    async def get_summary(cls, user_id: int) -> Tuple[int, float]:
         async with new_session() as session:
             query = (
                 select(
@@ -43,19 +49,19 @@ class CartRepository:
             return data
 
     @classmethod
-    async def add_cart(cls, data: SCartAdd) -> Cart:
+    async def add_cart(cls, user_id: int, data: SCartAdd) -> Cart:
         async with new_session() as session:
-            cart = Cart(user_id=data.user_id, product_id=data.product_id, amount=data.amount)
+            cart = Cart(user_id=user_id, product_id=data.product_id, amount=data.amount)
             session.add(cart)
             await session.flush()
             await session.commit()
             return cart
 
     @classmethod
-    async def edit_cart(cls, data: SCartEdit) -> Cart:
+    async def edit_cart(cls, user_id: int, data: SCartEdit) -> Cart:
         async with new_session() as session:
             query = select(Cart).where(
-                Cart.user_id == data.user_id, Cart.product_id == data.product_id
+                Cart.user_id == user_id, Cart.product_id == data.product_id
             )
             result = await session.execute(query)
             cart = result.scalar_one()
@@ -65,10 +71,10 @@ class CartRepository:
             return cart
 
     @classmethod
-    async def delete_cart(cls, data: SCartDelete) -> bool:
+    async def delete_cart(cls, user_id: int, data: SCartDelete) -> bool:
         async with new_session() as session:
             query = select(Cart).where(
-                Cart.user_id == data.user_id, Cart.product_id == data.product_id
+                Cart.user_id == user_id, Cart.product_id == data.product_id
             )
             result = await session.execute(query)
             cart = result.scalar_one()
