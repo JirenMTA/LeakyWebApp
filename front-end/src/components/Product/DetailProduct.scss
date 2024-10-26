@@ -3,7 +3,7 @@
     flex-direction: row;
 
     .img-container {
-        height: 200px;
+        height: 130px;
 
         img {
             height: 100%;
@@ -49,11 +49,12 @@
 
 
 .review-container {
-    height: 100px;
+    height: 150px;
     overflow-y: auto;
     padding-right: 10px;
     margin: 10px;
     overflow-x: hidden;
+    background-color: #f0eada;
 
     &::-webkit-scrollbar {
         width: 8px;
@@ -141,4 +142,22 @@
 
 .MuiBox-root.css-qxh7fn {
     width: 80%;
+}
+
+.card-review {
+    margin: 10px;
+    border-radius: 10px;
+
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 10px;
+    }
+
+    .mark-content {
+        color: #FAAF00;
+        margin-left: 10px;
+    }
 }

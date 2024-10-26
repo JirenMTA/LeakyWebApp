@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import { useSelector } from "react-redux";
 import { useMediaQuery } from 'react-responsive';
 import { getProducts } from '../../service/apiService';
-import axios from 'axios';
+import { getCart } from '../../service/apiService';
 
 const HomePage = (props) => {
     const importAll = (r) => {
@@ -23,35 +23,10 @@ const HomePage = (props) => {
     const [listProduct, setListProduct] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredProducts, setFilteredProducts] = useState([]);
-
     const userState = useSelector(state => state.userState);
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-
-
-    //let clone = []
-    // for (let i = 0; i < 21; i++) {
-    //     clone.push({
-    //         id: i,
-    //         name: `Apple Juice (${i * 100} ml)`,
-    //         price: "100 rup",
-    //         image: images[Math.floor(Math.random() * images.length)],
-    //         reviews: [
-    //             {
-    //                 user: "stan@juice-sh.op",
-    //                 review: "I'd stand on my head to make you a deal for this piece of art."
-    //             },
-    //             {
-    //                 user: "bender@juice-sh.op",
-    //                 review: "Just when my opinion of humans couldn't get any lower, along comes Stanewqceee eeeeeeeeeeeee eeeeeeeeeeee eeeeeee"
-    //             }
-
-
-    //         ],
-    //         description: "Finest pressings of apples. Allergy disclaimer: Might contain traces of worms. Can be sent back to us for recycling."
-
-    //     })
-    // }
-
+    const dispatch = useDispatch();
+    const [listProductInBasket, setListProductInBasket] = useState([]);
 
     const fetchProducts = async () => {
         let res = await getProducts();
@@ -63,29 +38,29 @@ const HomePage = (props) => {
     }, []);
 
     useEffect(() => {
-        // if listProduct
         const filteredProducts_ = listProduct.filter((product) =>
             product.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
         );
         setFilteredProducts(filteredProducts_);
-
-
     }, [listProduct, searchTerm])
+
+
+    const fetchListCart = async (data) => {
+        const res = await getCart(data);
+        setListProductInBasket(res?.data?.products);
+    }
+
+    useEffect(() => {
+        fetchListCart();
+    }, []);
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
 
-    const dispatch = useDispatch();
-
-    let cloneProductInBasket = [];
-    const [listProductInBasket, setListProductInBasket] = useState(cloneProductInBasket);
-
     useEffect(() => {
         dispatch(doFetchListOrder({ orderList: listProductInBasket }));
     }, [listProductInBasket])
-
-
 
 
     return (
@@ -119,7 +94,12 @@ const HomePage = (props) => {
                     </div>
                     <div className="list-product">
                         {filteredProducts && filteredProducts.length > 0 && filteredProducts.map((item, key) => {
-                            return <Product product={item} key={key}></Product>
+                            return <Product
+                                fetchListCart={fetchListCart}
+                                listProductInBasket={listProductInBasket}
+                                setListProductInBasket={setListProductInBasket}
+                                product={item}
+                                key={key}></Product>
                         })}
                     </div>
                 </div>

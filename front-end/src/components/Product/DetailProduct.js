@@ -6,17 +6,18 @@ import SendIcon from '@mui/icons-material/Send';
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { doFetchListOrder } from "../../redux/action/orderListAction";
 import { useDispatch } from "react-redux";
 import { postComment } from "../../service/apiService";
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
 import cloneImage from '../../assets/image_products/banana_juice.jpg'
-import { Typography, Box } from '@mui/material';
+import React from 'react';
+import { Card, CardContent, Typography } from '@mui/material';
+import { Box } from '@mui/system';
 
 
 const DetailProduct = (props) => {
-    const { show, setShow, product, handleShowDetail } = props
+    const { show, setShow, product, handleShowDetail, handleAddToBasket } = props
     const [review, setReview] = useState('');
     const handleClose = () => setShow(false);
     const dispatch = useDispatch();
@@ -25,14 +26,22 @@ const DetailProduct = (props) => {
     const userState = useSelector(state => state.userState);
     const listProduct = useSelector(state => state.orderListState.orderList);
 
-    const handleUserAddToBasket = () => {
-        if (!userState.isAuthenticated) {
-            toast.error("You have to login to do this action!");
-            return
-        }
-        dispatch(doFetchListOrder({ orderList: [...listProduct, product] }));
-        handleClose();
-    }
+    // Sample data for reviews
+    const reviews = [
+        {
+            id: 1,
+            username: 'Alice',
+            message: 'Great product!',
+            avatar: "https://i.redd.it/tnpjnvyab2z31.png",
+        },
+        {
+            id: 2,
+            username: 'Bob',
+            message: 'Could be better.',
+            avatar: cloneImage,
+        },
+    ];
+
 
     const handlePostComment = async () => {
         if (!userState.isAuthenticated) {
@@ -43,9 +52,10 @@ const DetailProduct = (props) => {
             toast.error("Review is blank!");
             return;
         }
+
         await postComment({
-            "author_id": userState?.account?.id,
-            "product_id": product?.id,
+            "author_id": +userState?.account?.id,
+            "product_id": +product?.id,
             "mark": rate,
             "comment": review
         });
@@ -103,18 +113,22 @@ const DetailProduct = (props) => {
             <hr />
             <div className="review-container">
                 {product && product.comments && product.comments.length > 0 && product?.comments.map((item, key) => {
-                    return <div key={key}>
-                        <div className="user">
-                            {"@" + item?.author?.username}
-                        </div>
-                        <div className="review">
-                            <Box width={"500px"}>
-                                <Typography variant="body1" component="p" style={{ whiteSpace: 'pre-line' }}>
-                                    {item?.comment}
-                                </Typography>
+                    return <Card key={key} className="card-review">
+                        <CardContent>
+                            <Box display="flex" alignItems="center" >
+                                <img
+                                    src={"https://i.redd.it/tnpjnvyab2z31.png"}
+                                    alt={item?.author?.username}
+                                />
+                                <Typography variant="h6">{item?.author?.username}</Typography>
+                                <StarIcon className='mark-content' />
+                                {item?.mark}
                             </Box>
-                        </div>
-                    </div>
+                            <Typography variant="body1" style={{ marginTop: '10px', fontSize: "13px" }}>
+                                {item?.comment}
+                            </Typography>
+                        </CardContent>
+                    </Card>
                 })}
             </div>
             <hr />
@@ -157,7 +171,7 @@ const DetailProduct = (props) => {
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={handleUserAddToBasket}>
+                <Button variant="primary" onClick={handleAddToBasket}>
                     Add to basket
                 </Button>
             </Modal.Footer>

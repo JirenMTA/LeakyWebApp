@@ -2,7 +2,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import "./Product.scss"
 import DetailProduct from './DetailProduct';
-import { getDetailProducts } from '../../service/apiService';
+import { getDetailProducts, postCart } from '../../service/apiService';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -12,7 +12,7 @@ import cloneImage from '../../assets/image_products/apple_juice.jpg'
 import Rating from '@mui/material/Rating';
 
 const Product = (props) => {
-    const { product } = props;
+    const { product, fetchListCart, listProductInBasket, setListProductInBasket } = props;
     const [show, setShow] = useState(false);
     const dispatch = useDispatch();
     const userState = useSelector(state => state.userState);
@@ -24,18 +24,31 @@ const Product = (props) => {
         setShow(true);
     }
 
-    const handleAddToBasket = (event) => {
+    const handleAddToBasket = async (event) => {
         if (!userState.isAuthenticated) {
             toast.error("You have to login to do this action!");
             return
         }
-        dispatch(doFetchListOrder({ orderList: [...listProduct, product] }));
+        const res = await postCart({
+            "user_id": +userState?.account?.id,
+            "product_id": +product?.id,
+            "amount": 1
+        })
+
+        if (!(res?.status === 200 && res?.statusText === 'OK' && res?.data?.status === "Ok")) {
+            toast.error("Error add to basket");
+        }
+        else {
+            toast.success("Successfuly added to basket");
+        }
+
+        fetchListCart();
+        dispatch(doFetchListOrder({ orderList: listProductInBasket }));
     }
 
     const fetchDetailProduct = async () => {
-        const id = 4
-        const res = await getDetailProducts(id);
-        setDetailProduct({ ...res.data, id: id });
+        const res = await getDetailProducts(product?.id);
+        setDetailProduct(res.data);
     }
 
     return (
@@ -73,7 +86,12 @@ const Product = (props) => {
                     </div>
                 </Card.Body>
             </Card>
-            <DetailProduct show={show} setShow={setShow} product={detailProduct} handleShowDetail={handleShowDetail}></DetailProduct>
+            <DetailProduct
+                show={show}
+                setShow={setShow}
+                handleAddToBasket={handleAddToBasket}
+                product={detailProduct}
+                handleShowDetail={handleShowDetail}></DetailProduct>
         </div>
     );
 }

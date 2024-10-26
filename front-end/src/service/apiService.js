@@ -38,9 +38,8 @@ const postLogin = async (data) => {
         const response = await axios.post(
             'http://localhost:8000/auth/sign_in',
             data,
-            { withCredentials: true } // Cho phép gửi và nhận cookie
+            { withCredentials: true }
         );
-        console.log(response);
         return response;
     } catch (error) {
         console.error("Error during login:", error);
@@ -67,4 +66,63 @@ const postComment = (data) => {
     }
 }
 
-export { getAddressByCoord, getCoordByAddress, getProducts, getDetailProducts, postLogin, postComment, postSignup }
+const postCart = (data) => {
+    try {
+        const response = axios.post(
+            'http://localhost:8000/cart',
+            data,
+        );
+        return response;
+    } catch (error) {
+        console.error("Error during post cart:", error);
+        return error.response;
+    }
+};
+
+const getCart = (data) => {
+    try {
+        const response = axios.get(
+            'http://localhost:8000/cart',
+            data,
+        );
+        return response;
+    } catch (error) {
+        console.error("Error during get cart:", error);
+        return error.response;
+    }
+}
+
+const putCart = (data) => {
+    try {
+        const response = axios.put(
+            'http://localhost:8000/cart',
+            data,
+        );
+        return response;
+    } catch (error) {
+        console.error("Error during put cart:", error);
+        return error.response;
+    }
+}
+
+const deleteCart = (data) => {
+    try {
+        const response = axios.delete(
+            'http://localhost:8000/cart',
+            { data: data },
+        );
+        return response;
+    } catch (error) {
+        console.error("Error during delete cart:", error);
+        return error.response;
+    }
+}
+
+
+
+export {
+    getAddressByCoord, getCoordByAddress,
+    getProducts, getDetailProducts, postLogin,
+    postComment, postSignup, postCart, getCart, putCart,
+    deleteCart
+}

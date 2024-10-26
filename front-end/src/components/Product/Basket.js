@@ -5,6 +5,10 @@ import Button from 'react-bootstrap/Button';
 import ModalPurchase from '../Purchase/ModalPurchase';
 import { useMediaQuery } from 'react-responsive';
 import ModalPromocode from '../Purchase/ModalPromocode';
+import { deleteCart, getCart, putCart } from '../../service/apiService';
+import NumericInput from 'react-numeric-input';
+import { useDispatch, useSelector } from 'react-redux';
+import { doFetchListOrder } from '../../redux/action/orderListAction';
 
 const Basket = (props) => {
     const importAll = (r) => {
@@ -13,25 +17,15 @@ const Basket = (props) => {
         return imagesArray;
     };
     const images = importAll(require.context('../../assets/image_products', false, /\.(png|jpe?g|svg)$/));
-    let clone = []
-    for (let i = 0; i < 10; i++) {
-        const full_price = Math.floor(Math.random() * 10) * 10 + 200;
-        clone.push({
-            id: i,
-            name: `Apple Juice (${i * 100} ml)`,
-            full_price: full_price,
-            sale: full_price - Math.floor(Math.random() * 2) * 10,
-            image: images[Math.floor(Math.random() * images.length)],
-            address: "Революционная 46, Самара, Россия",
-        });
-    }
 
-    const [listProduct, setListProduct] = useState(clone);
+    const [listProduct, setListProduct] = useState([]);
     const [show, setShow] = useState(false);
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
     const [item, setItem] = useState(null);
     const [showModalPromocode, setShowModalPromocode] = useState(false);
     const [code, setCode] = useState('');
+    const userState = useSelector(state => state.userState);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setListProduct(prevList =>
@@ -41,6 +35,43 @@ const Basket = (props) => {
         );
     }, [item]);
 
+    const fetchListCart = async (data) => {
+        const res = await getCart(data);
+        setListProduct(res?.data?.products);
+        dispatch(doFetchListOrder({ orderList: res?.data?.products }));
+    }
+
+    const fetchChangeCart = async (data) => {
+        await putCart(data);
+    }
+
+    const handleChangeAmount = (item, value) => {
+        if (+value <= 0) { value = 1 }
+        setListProduct(prevItems =>
+            prevItems.map(i =>
+                i?.product?.id === item?.product?.id ? { ...i, amount: value } : i
+            )
+        );
+        fetchChangeCart({
+            "user_id": +userState?.account?.id,
+            "product_id": +item?.product?.id,
+            "amount": +value
+        });
+    };
+
+    const handleDelteteItem = async (item) => {
+        await deleteCart({
+            "product_id": +item?.product?.id,
+            "user_id": +userState?.account?.id,
+        })
+        await fetchListCart();
+    }
+
+
+    useEffect(() => {
+        fetchListCart();
+    }, []);
+
     return <div className="basket-container">
         {!isMobile ?
             <Table striped bordered hover size="sm">
@@ -49,6 +80,7 @@ const Basket = (props) => {
                         <th className='column-no'>No</th>
                         <th className='column-name'>Name</th>
                         <th className='column-img'>Image</th>
+                        <th className='column-amount'>Amount</th>
                         <th className='column-price'>Price</th>
                         <th className='column-code'>Promocode</th>
                         <th className='column-action'>Action</th>
@@ -59,36 +91,49 @@ const Basket = (props) => {
                         listProduct && listProduct.length > 0 && listProduct.map((item, key) => {
                             return <tr key={key + ' product-in-basket'}>
                                 <td>{key}</td>
-                                <td>{item?.name}</td>
+                                <td>{item?.product?.name}</td>
                                 <td>
-                                    <img src={item?.image}></img>
+                                    <img src={images[item?.product?.id % images.length]}></img>
+                                </td>
+                                <td>
+                                    <NumericInput
+                                        className="form-control"
+                                        value={item?.amount}
+                                        onChange={(event) => { handleChangeAmount(item, event); }}
+                                        inputMode="numeric"
+                                        onKeyDown={(event) => {
+                                            if (!/[0-9]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                                                event.preventDefault();
+                                            }
+                                        }}
+                                    />
                                 </td>
                                 <td>
                                     {
 
-                                        item?.total_price && item?.total_price < item?.sale ?
+                                        item?.product?.total_price && item?.product?.total_price < item?.product?.sale ?
                                             <>
                                                 <div className='full-price line-through'>
-                                                    {item?.full_price + " руб."}
+                                                    {item?.product?.full_price + " руб."}
                                                 </div>
                                                 <div className='total-price'>
-                                                    {item?.total_price + " руб."}
+                                                    {item?.product?.total_price + " руб."}
                                                 </div>
                                             </>
                                             :
-                                            item?.sale && item?.sale < item?.full_price ?
+                                            item?.product?.sale && item?.product?.sale < item?.product?.full_price ?
                                                 <>
                                                     <div className='full-price line-through'>
-                                                        {item?.full_price + " руб."}
+                                                        {item?.product?.full_price + " руб."}
                                                     </div>
                                                     <div className='sale'>
-                                                        {item?.sale + " руб."}
+                                                        {item?.product?.sale + " руб."}
                                                     </div>
 
                                                 </>
                                                 :
                                                 <div className='full-price'>
-                                                    {item?.full_price + " руб."}
+                                                    {item?.product?.full_price + " руб."}
                                                 </div>
                                     }
                                 </td>
@@ -106,7 +151,10 @@ const Basket = (props) => {
                                             onClick={() => { setShowModalPromocode(true); setItem(item); setCode(item?.code || '') }}>
                                             Promocode
                                         </Button>
-                                        <Button variant="outline-warning">Delete</Button>
+                                        <Button variant="outline-warning"
+                                            onClick={() => handleDelteteItem(item)}
+                                        >Delete
+                                        </Button>
                                     </div>
                                 </td>
                             </tr>
@@ -129,39 +177,50 @@ const Basket = (props) => {
                                 <td>{key}</td>
                                 <td>
                                     <div className='product-in-basket-container'>
-                                        <span>{item.name}</span>
-                                        <img src={item.image}></img>
+                                        <span>{item?.product?.name}</span>
+                                        <img src={images[item?.product?.id % images.length]}></img>
                                         {
 
-                                            item?.total_price && item?.total_price < item?.sale ?
+                                            item?.product?.total_price && item?.product?.total_price < item?.product?.sale ?
                                                 <>
                                                     <div className='full-price line-through'>
-                                                        {item?.full_price + " руб."}
+                                                        {item?.product?.full_price + " руб."}
                                                     </div>
                                                     <div className='total-price'>
-                                                        {item?.total_price + " руб."}
+                                                        {item?.product?.total_price + " руб."}
                                                     </div>
                                                 </>
                                                 :
-                                                item?.sale && item?.sale < item?.full_price ?
+                                                item?.product?.sale && item?.product?.sale < item?.product?.full_price ?
                                                     <>
                                                         <div className='full-price line-through'>
-                                                            {item?.full_price + " руб."}
+                                                            {item?.product?.full_price + " руб."}
                                                         </div>
                                                         <div className='sale'>
-                                                            {item?.sale + " руб."}
+                                                            {item?.product?.sale + " руб."}
                                                         </div>
 
                                                     </>
                                                     :
                                                     <div className='full-price'>
-                                                        {item?.full_price}
+                                                        {item?.product?.full_price}
                                                     </div>
                                         }
                                     </div>
                                 </td>
                                 <td>
                                     <div className='action-content'>
+                                        <NumericInput
+                                            className="form-control"
+                                            value={item?.amount}
+                                            onChange={(event) => { handleChangeAmount(item, event); }}
+                                            inputMode="numeric"
+                                            onKeyDown={(event) => {
+                                                if (!/[0-9]/.test(event.key) && !['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                                                    event.preventDefault();
+                                                }
+                                            }}
+                                        />
                                         <input
                                             disabled
                                             style={{ width: "100%", textAlign: "center", fontSize: "10px" }}
