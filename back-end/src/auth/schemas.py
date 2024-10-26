@@ -1,5 +1,4 @@
-from pydantic import BaseModel, EmailStr
-from typing import Optional
+from pydantic import BaseModel, EmailStr, ConfigDict
 from enum import Enum
 
 
@@ -23,3 +22,10 @@ class SLocalSignUp(BaseModel):
 class SResult(BaseModel):
     status: ResponseStatus
     error: str | None = None
+
+
+class SAccessControl(BaseModel):
+    id: int
+    role: str | None = "customer"
+
+    model_config = ConfigDict(from_attributes=True)
