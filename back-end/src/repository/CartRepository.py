@@ -25,9 +25,21 @@ class CartRepository:
             return cart_models
 
     @classmethod
-    async def get_cart_if_exists(cls, user_id: int, product_id: int) -> Cart | None:
+    async def get_cart_if_exists_by_product(cls, user_id: int, product_id: int) -> Cart | None:
         async with new_session() as session:
             query = select(Cart).where(Cart.user_id == user_id, Cart.product_id == product_id)
+            result = await session.execute(query)
+            cart_models = result.scalars().first()
+            return cart_models
+
+    @classmethod
+    async def get_cart_if_exists(cls, user_id: int, cart_id: int) -> Cart | None:
+        async with new_session() as session:
+            query = (
+                select(Cart)
+                .where(Cart.user_id == user_id, Cart.id == cart_id)
+                .options(joinedload(Cart.product))
+            )
             result = await session.execute(query)
             cart_models = result.scalars().first()
             return cart_models
@@ -38,7 +50,9 @@ class CartRepository:
             query = (
                 select(
                     func.sum(Cart.amount).label("count_products"),
-                    func.sum(Cart.amount * Product.full_price).label("summary_price"),
+                    func.sum(
+                        Cart.amount * Product.full_price * (100.0 - Product.sale) / 100.0
+                    ).label("summary_price"),
                 )
                 .select_from(Cart)
                 .join(Product, Cart.product_id == Product.id)

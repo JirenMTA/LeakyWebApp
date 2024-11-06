@@ -11,5 +11,5 @@ class User(Base):
     email: Mapped[str]
     hash: Mapped[str | None]
     is_external: Mapped[bool] = mapped_column(default=False)
-
+    balance: Mapped[float] = mapped_column(default=15000.0)
     comments: Mapped[list["Comment"]] = relationship()

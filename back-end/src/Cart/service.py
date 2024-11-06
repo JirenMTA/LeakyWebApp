@@ -38,7 +38,9 @@ class CartService:
         if not product_exists:
             return SResult(status="Fail", error="No such product!")
 
-        existing_cart = await CartRepository.get_cart_if_exists(user_id, data.product_id)
+        existing_cart = await CartRepository.get_cart_if_exists_by_product(
+            user_id, data.product_id
+        )
         if existing_cart is not None:
             obj = SCartEdit(
                 user_id=user_id,

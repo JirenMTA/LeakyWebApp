@@ -10,7 +10,6 @@ class ResponseStatus(Enum):
     Error = "Fail"
 
 
-# TODO не принимать id автора, а доставать его из Cookie
 class SCartAdd(BaseModel):
     product_id: int
     amount: int
