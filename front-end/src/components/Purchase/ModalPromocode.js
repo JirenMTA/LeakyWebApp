@@ -6,21 +6,26 @@ import { toast } from "react-toastify";
 import './ModalPromocode.scss';
 
 const ModalPromocode = (props) => {
-    const { show, setShow, item, setItem, code, setCode } = props
+    const { show, setShow, item, setItem, code, setCode, promocodeAll, setPromocodeAll } = props
 
     const handleClose = () => {
         setShow(false);
     }
 
     const onSubmitCode = () => {
-        if (code === 'PHAMNGOCHUNG' || code === 'PHAMNGOCDUONG' || code === 'JIRENMTA') {
-            setCode(code)
-            setItem({ ...item, total_price: item?.sale * 80 / 100, code: code });
+        if (item === null) {
+            setPromocodeAll(code);
         }
         else {
-            toast.error("Invalid code");
-            setCode('');
-            setItem({ ...item, total_price: item?.sale, code: '' });
+            if (code === 'PHAMNGOCHUNG' || code === 'PHAMNGOCDUONG' || code === 'JIRENMTA') {
+                setCode(code)
+                setItem({ ...item, total_price: item?.sale * 80 / 100, code: code });
+            }
+            else {
+                toast.error("Invalid code");
+                setCode('');
+                setItem({ ...item, total_price: item?.sale, code: '' });
+            }
         }
         handleClose();
     }

@@ -46,7 +46,8 @@ const Login = (props) => {
             account: {
                 token: '11',
                 username: email,
-                id: 1
+                id: 1,
+                role: 'admin'
             },
             isAuthenticated: true
         }));

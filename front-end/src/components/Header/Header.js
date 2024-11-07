@@ -62,11 +62,11 @@ const Header = (props) => {
                                             )}
                                         </div>
                                         <NavDropdown title="Setting" id="basic-nav-dropdown">
+                                            <Link to="/profile" className='dropdown-item'>Profile</Link>
+                                            <NavDropdown.Divider />
                                             <NavDropdown.Item onClick={handleUserLogout}>
                                                 Logout
                                             </NavDropdown.Item>
-                                            <NavDropdown.Divider />
-                                            <Link to="/users" className='dropdown-item'>Profile</Link>
                                         </NavDropdown>
                                     </div>
                                 )}

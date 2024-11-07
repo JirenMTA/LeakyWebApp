@@ -1,0 +1,15 @@
+.body-card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .form-add-product {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .price {
+        display: flex;
+        gap: 5px;
+    }
+}

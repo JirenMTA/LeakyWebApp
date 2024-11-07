@@ -21,6 +21,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
                     refresh_token: action.payload?.account?.refresh_token,
                     username: action.payload?.account?.username,
                     id: action.payload?.account?.id,
+                    role: action.payload?.account?.role,
                 },
                 isAuthenticated: action?.payload?.isAuthenticated
             };

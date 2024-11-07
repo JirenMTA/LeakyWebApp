@@ -6,7 +6,6 @@ import SendIcon from '@mui/icons-material/Send';
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
 import { postComment } from "../../service/apiService";
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
@@ -20,28 +19,9 @@ const DetailProduct = (props) => {
     const { show, setShow, product, handleShowDetail, handleAddToBasket } = props
     const [review, setReview] = useState('');
     const handleClose = () => setShow(false);
-    const dispatch = useDispatch();
     const [rate, setRate] = useState();
     const [hover, setHover] = useState(-1);
     const userState = useSelector(state => state.userState);
-    const listProduct = useSelector(state => state.orderListState.orderList);
-
-    // Sample data for reviews
-    const reviews = [
-        {
-            id: 1,
-            username: 'Alice',
-            message: 'Great product!',
-            avatar: "https://i.redd.it/tnpjnvyab2z31.png",
-        },
-        {
-            id: 2,
-            username: 'Bob',
-            message: 'Could be better.',
-            avatar: cloneImage,
-        },
-    ];
-
 
     const handlePostComment = async () => {
         if (!userState.isAuthenticated) {
@@ -53,13 +33,20 @@ const DetailProduct = (props) => {
             return;
         }
 
-        await postComment({
+        const res = await postComment({
             "author_id": +userState?.account?.id,
             "product_id": +product?.id,
             "mark": rate,
             "comment": review
         });
-        handleShowDetail();
+
+        if (res && res.statusText === 'OK' && res.data.status === "Ok") {
+            setReview('');
+            handleShowDetail();
+        }
+        else {
+            toast.error("Error sending review")
+        }
     }
 
     const labels = {
@@ -73,6 +60,9 @@ const DetailProduct = (props) => {
     const getLabelText = (value) => {
         return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
     }
+
+    const parser = new DOMParser();
+
 
     return <div className="detail-product-container">
         <Modal show={show} onHide={handleClose} centered size="lg">
@@ -124,6 +114,11 @@ const DetailProduct = (props) => {
                                 <StarIcon className='mark-content' />
                                 {item?.mark}
                             </Box>
+                            {/* <div className="Container" dangerouslySetInnerHTML
+                                ={{
+                                    "__html": item?.comment
+                                }}>
+                            </div> */}
                             <Typography variant="body1" style={{ marginTop: '10px', fontSize: "13px" }}>
                                 {item?.comment}
                             </Typography>

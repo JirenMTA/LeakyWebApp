@@ -21,23 +21,27 @@ const Basket = (props) => {
     const [listProduct, setListProduct] = useState([]);
     const [show, setShow] = useState(false);
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-    const [item, setItem] = useState(null);
+    const [itemCurrent, setItemCurrent] = useState(null);
     const [showModalPromocode, setShowModalPromocode] = useState(false);
     const [code, setCode] = useState('');
     const userState = useSelector(state => state.userState);
+    const [totalPrice, setTotalPrice] = useState(0);
     const dispatch = useDispatch();
+    const [promocodeAll, setPromocodeAll] = useState('');
+    const [purchaseAll, setPurchaseAll] = useState(false);
 
     useEffect(() => {
         setListProduct(prevList =>
             prevList.map(product =>
-                product?.id === item?.id ? { ...product, ...item } : product
+                product?.product?.id === itemCurrent?.product?.id ? { ...product, ...itemCurrent } : product
             )
         );
-    }, [item]);
+    }, [itemCurrent]);
 
-    const fetchListCart = async (data) => {
-        const res = await getCart(data);
+    const fetchListCart = async () => {
+        const res = await getCart();
         setListProduct(res?.data?.products);
+        setTotalPrice(res?.data?.total_price);
         dispatch(doFetchListOrder({ orderList: res?.data?.products }));
     }
 
@@ -45,18 +49,19 @@ const Basket = (props) => {
         await putCart(data);
     }
 
-    const handleChangeAmount = (item, value) => {
+    const handleChangeAmount = async (item, value) => {
         if (+value <= 0) { value = 1 }
         setListProduct(prevItems =>
             prevItems.map(i =>
                 i?.product?.id === item?.product?.id ? { ...i, amount: value } : i
             )
         );
-        fetchChangeCart({
+        await fetchChangeCart({
             "user_id": +userState?.account?.id,
             "product_id": +item?.product?.id,
             "amount": +value
         });
+        await fetchListCart();
     };
 
     const handleDelteteItem = async (item) => {
@@ -67,12 +72,37 @@ const Basket = (props) => {
         await fetchListCart();
     }
 
+    const handlePurchaseAll = () => {
+        setPurchaseAll(true);
+        setShow(true);
+    }
+
 
     useEffect(() => {
         fetchListCart();
     }, []);
 
     return <div className="basket-container">
+        <div className='total-price-content'>
+            {`Total price: ${totalPrice} руб.`}
+            <div>
+                <Button variant="outline-primary" onClick={handlePurchaseAll}>
+                    Purchase all
+                </Button>
+            </div>
+            <div className='promocode-all'>
+                <Button
+                    onClick={() => { setItemCurrent(null); setShowModalPromocode(true); }}
+                    variant="outline-success">
+                    Code
+                </Button>
+                <input
+                    disabled
+                    value={promocodeAll || ''}
+                ></input>
+            </div>
+        </div>
+
         {!isMobile ?
             <Table striped bordered hover size="sm">
                 <thead>
@@ -146,11 +176,12 @@ const Basket = (props) => {
                                 </td>
                                 <td>
                                     <div className='action-content'>
-                                        <Button variant="outline-primary" onClick={() => { setShow(true); setItem(item) }}>Purchase</Button>
+                                        <Button variant="outline-primary" onClick={() => { setPurchaseAll(false); setShow(true); setItemCurrent(item) }}>Purchase</Button>
                                         <Button variant="outline-success"
-                                            onClick={() => { setShowModalPromocode(true); setItem(item); setCode(item?.code || '') }}>
+                                            onClick={() => { setShowModalPromocode(true); setItemCurrent(item); setCode(item?.code || '') }}>
                                             Promocode
                                         </Button>
+
                                         <Button variant="outline-warning"
                                             onClick={() => handleDelteteItem(item)}
                                         >Delete
@@ -226,8 +257,8 @@ const Basket = (props) => {
                                             style={{ width: "100%", textAlign: "center", fontSize: "10px" }}
                                             value={item?.code || ''}
                                         ></input>
-                                        <Button variant="outline-primary" onClick={() => { setShow(true); setItem(item) }}>Purchase</Button>
-                                        <Button variant="outline-success" onClick={() => { setShowModalPromocode(true); setItem(item) }}>Code</Button>
+                                        <Button variant="outline-primary" onClick={() => { setShow(true); setItemCurrent(item) }}>Purchase</Button>
+                                        <Button variant="outline-success" onClick={() => { setShowModalPromocode(true); setItemCurrent(item) }}>Code</Button>
                                         <Button variant="outline-warning">Delete</Button>
                                     </div>
                                 </td>
@@ -237,14 +268,21 @@ const Basket = (props) => {
                 </tbody>
             </Table>
         }
-        <ModalPurchase show={show} setShow={setShow} item={item} ></ModalPurchase>
+        <ModalPurchase
+            show={show}
+            setShow={setShow}
+            item={itemCurrent}
+            purchaseAll={purchaseAll}
+        />
         <ModalPromocode
             show={showModalPromocode}
             setShow={setShowModalPromocode}
-            item={item}
+            item={itemCurrent}
             code={code || ''}
             setCode={setCode}
-            setItem={setItem}
+            setItem={setItemCurrent}
+            promocodeAll={promocodeAll}
+            setPromocodeAll={setPromocodeAll}
         ></ModalPromocode>
     </div>
 

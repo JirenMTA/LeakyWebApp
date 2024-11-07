@@ -17,6 +17,27 @@
 }
 
 .basket-container {
+    .total-price-content {
+        font-size: 30px;
+        font-weight: 150;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        margin-bottom: 10px;
+
+        .promocode-all {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            height: 40px;
+            text-align: center;
+            justify-items: center;
+            font-size: 25px;
+        }
+    }
+
     table {
         width: 100%;
 
@@ -106,4 +127,15 @@
 
     }
 
+    .total-price-content {
+        width: 100%;
+
+        .promocode-all {
+            width: 100%;
+
+            input {
+                width: 100%;
+            }
+        }
+    }
 }

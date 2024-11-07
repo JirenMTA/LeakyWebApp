@@ -5,7 +5,7 @@ import YandexMapComponent from './YandexMapComponent';
 import "./ModalPurchase.scss"
 
 const ModalPurchase = (props) => {
-    const { show, setShow } = props;
+    const { show, setShow, purchaseAll } = props;
     const handleClose = () => setShow(false);
     const [address, setAddress] = useState('');
     const { item } = props
@@ -14,7 +14,10 @@ const ModalPurchase = (props) => {
         <>
             <Modal show={show} onHide={handleClose} size='xl' backdrop="static">
                 <Modal.Header closeButton>
-                    <Modal.Title>Purchase for {` "${item?.name}"`} </Modal.Title>
+                    {purchaseAll ?
+                        <Modal.Title>Purchase for all product in basket </Modal.Title>
+                        :
+                        <Modal.Title>Purchase for {` "${item?.product?.name}"`} </Modal.Title>}
                 </Modal.Header>
                 <Modal.Body className='yandexmap-container'>
                     <YandexMapComponent address={address} setAddress={setAddress} />

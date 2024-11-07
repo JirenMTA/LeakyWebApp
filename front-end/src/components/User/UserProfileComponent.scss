@@ -1,0 +1,62 @@
+.user-profile {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+    .avatar-container {
+        margin-right: 20px;
+        cursor: pointer;
+    }
+
+    .avatar {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        border: 2px solid #007bff;
+        object-fit: cover;
+        transition: width 0.3s ease, height 0.3s ease;
+    }
+
+    .small-avatar {
+        width: 35px;
+        height: 35px;
+    }
+
+    .user-info {
+        h2 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #333;
+
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 190px;
+        }
+
+        p {
+            margin: 4px 0;
+            color: #555;
+
+            strong {
+                color: #007bff;
+            }
+        }
+    }
+
+    .edit-icon {
+        margin-left: auto;
+        cursor: pointer;
+        color: #007bff;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: #0056b3;
+        }
+    }
+}

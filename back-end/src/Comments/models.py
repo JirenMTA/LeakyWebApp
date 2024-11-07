@@ -10,7 +10,6 @@ comment_time = Annotated[
     mapped_column(server_default=text("TIMEZONE('utc', now())")),
 ]
 
-
 class Comment(Base):
     __tablename__ = "comments"
     id: Mapped[int] = mapped_column(primary_key=True)
