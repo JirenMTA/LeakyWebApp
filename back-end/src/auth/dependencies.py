@@ -33,3 +33,11 @@ async def verify_cookie(cookie: str = Depends(get_token)) -> SAccessControl:
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     return SAccessControl.validate(user)
+
+
+async def admin_required(
+    access_control_obj: SAccessControl = Depends(get_token),
+) -> SAccessControl:
+    if access_control_obj.role != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+    return access_control_obj

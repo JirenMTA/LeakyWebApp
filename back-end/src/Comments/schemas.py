@@ -12,7 +12,6 @@ class ResponseStatus(Enum):
 
 # TODO не принимать id автора, а доставать его из Cookie
 class SCommentAdd(BaseModel):
-    author_id: int
     product_id: int
     mark: float
     comment: str

@@ -10,16 +10,12 @@ class ResponseStatus(Enum):
     Error = "Fail"
 
 
-# TODO не принимать id автора, а доставать его из Cookie
 class SCartAdd(BaseModel):
-    user_id: int
     product_id: int
     amount: int
 
 
 class SCartGet(BaseModel):
-    id: int
-    user_id: int
     product_id: int
     amount: int
 
@@ -35,20 +31,17 @@ class SCartGetByUserObj(BaseModel):
 
 
 class SCartGetByUserFull(BaseModel):
-    user_id: int
     products: list[SCartGetByUserObj]
     total_products: int = 0
     total_price: float = 0.0
 
 
 class SCartEdit(BaseModel):
-    user_id: int
     product_id: int
     amount: int
 
 
 class SCartDelete(BaseModel):
-    user_id: int
     product_id: int
 
 
