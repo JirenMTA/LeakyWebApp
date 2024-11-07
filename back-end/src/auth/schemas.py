@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
 from enum import Enum
+from src.Roles.schemas import SRoleGet
 
 
 class ResponseStatus(Enum):
@@ -26,6 +27,6 @@ class SResult(BaseModel):
 
 class SAccessControl(BaseModel):
     id: int
-    role: str | None = "customer"
+    role: SRoleGet | None
 
     model_config = ConfigDict(from_attributes=True)

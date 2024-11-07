@@ -1,7 +1,9 @@
 from typing import List
 from fastapi import HTTPException, status
 from src.repository.UserRepository import UserRepository
+from src.repository.RoleRepository import RoleRepository
 from src.Users.schemas import SUserPriv
+from src.Roles.service import SResult
 
 
 class UserService:
@@ -19,3 +21,14 @@ class UserService:
 
         user_schema = SUserPriv.model_validate(user)
         return user_schema
+
+    @classmethod
+    async def update_role(cls, user_id: int, role_id: int) -> SResult:
+        role = await RoleRepository.check_role_exists(role_id)
+        if not role:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No such role!")
+        new_role = await UserRepository.update_role(user_id, role_id)
+        if not new_role:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No such user!")
+
+        return SResult(status="Ok", role=role)

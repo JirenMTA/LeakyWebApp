@@ -33,7 +33,7 @@ class CartRepository:
             return cart_models
 
     @classmethod
-    async def get_cart_if_exists(cls, user_id: int, cart_id: int) -> Cart | None:
+    async def upd_cart_if_exists(cls, user_id: int, cart_id: int, amount: int) -> Cart | None:
         async with new_session() as session:
             query = (
                 select(Cart)
@@ -41,8 +41,15 @@ class CartRepository:
                 .options(joinedload(Cart.product))
             )
             result = await session.execute(query)
-            cart_models = result.scalars().first()
-            return cart_models
+            cart_model = result.scalars().first()
+            if not cart_model:
+                return None
+            if cart_model.amount == amount:
+                await session.delete(cart_model)
+            else:
+                cart_model.amount -= amount
+            await session.commit()
+            return cart_model
 
     @classmethod
     async def get_summary(cls, user_id: int) -> Tuple[int, float]:

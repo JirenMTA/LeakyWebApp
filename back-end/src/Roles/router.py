@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter
 from src.Roles.schemas import (
     SRoleAdd,
     SRoleGet,
@@ -8,6 +8,7 @@ from src.Roles.schemas import (
 )
 
 from src.Roles.service import RolesService
+from src.Users.service import UserService
 
 router = APIRouter(prefix="/roles", tags=["Роли пользователей"])
 
@@ -33,4 +34,10 @@ async def edit_role(data: SRoleEdit) -> SResult:
 @router.delete("")
 async def delete_role(data: SRoleDelete) -> SResult:
     result = await RolesService.delete_role(data)
+    return result
+
+
+@router.post("/user")
+async def change_role_for_user(user_id: int, role_id: int) -> SResult:
+    result = await UserService.update_role(user_id, role_id)
     return result
