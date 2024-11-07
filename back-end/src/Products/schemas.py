@@ -48,11 +48,6 @@ class SResult(BaseModel):
     product: SProductGetShort | None = None
 
 
-# TODO добавить статистку продаж товара
-# class SProductGetStat(BaseModel):
-#    status: ResponseStatus
-#    error: str | None
-
 from src.Comments.schemas import SCommentGetByProduct
 
 SProductGetFull.update_forward_refs()

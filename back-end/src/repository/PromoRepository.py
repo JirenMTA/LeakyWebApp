@@ -22,6 +22,18 @@ class PromoRepository:
             return promo is not None
 
     @classmethod
+    async def check_promo_active(cls, code: str) -> int | None:
+        async with new_session() as session:
+            query = select(Promo).where(
+                Promo.code == code, Promo.used == False, Promo.active == True
+            )
+            result = await session.execute(query)
+            promo = result.scalars().first()
+            if promo is None:
+                return None
+            return promo.id
+
+    @classmethod
     async def add_promo(cls, data: SPromoAdd) -> Promo | None:
         async with new_session() as session:
             promo = Promo(code=data.code, sale=data.sale, active=data.active)

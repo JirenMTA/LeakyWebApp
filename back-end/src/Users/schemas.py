@@ -13,7 +13,7 @@ class SUserPriv(BaseModel):
     id: int
     username: str | None
     email: EmailStr
-    hash: str | None  # TODO delete
+    balance: float
     is_external: bool
 
     model_config = ConfigDict(from_attributes=True)
@@ -22,7 +22,6 @@ class SUserPriv(BaseModel):
 class SLocalUserAdd(BaseModel):
     username: str | None
     email: EmailStr
-    hash: str  # TODO rename password
 
 
 class SExternalUserAdd(BaseModel):

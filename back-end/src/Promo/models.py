@@ -17,4 +17,5 @@ class Promo(Base):
     code: Mapped[str] = mapped_column(unique=True)
     sale: Mapped[int]
     active: Mapped[bool] = mapped_column(default=False)
+    used: Mapped[bool] = mapped_column(default=False)
     created: Mapped[created_at]
