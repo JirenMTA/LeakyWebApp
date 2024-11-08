@@ -16,6 +16,7 @@ class SCartAdd(BaseModel):
 
 
 class SCartGet(BaseModel):
+    id: int
     product_id: int
     amount: int
 
@@ -23,6 +24,7 @@ class SCartGet(BaseModel):
 
 
 class SCartGetByUserObj(BaseModel):
+    id: int
     product: SProductGetShort
     amount: int
     created_at: datetime

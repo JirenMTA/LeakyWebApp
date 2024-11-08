@@ -12,4 +12,6 @@ class Product(Base):
     amount: Mapped[int] = mapped_column(default=0)
     sale: Mapped[float] = mapped_column(default=0.0)
     rating: Mapped[float] = mapped_column(default=5.0)
+    image: Mapped[str] = mapped_column(nullable=True)
+
     comments: Mapped[list["Comment"]] = relationship()

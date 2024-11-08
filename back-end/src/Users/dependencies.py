@@ -14,7 +14,7 @@ async def user_paginator(skip: int = 0, limit: int = 20) -> dict:
 async def user_access_control(
     id: int, curr_user: Annotated[SAccessControl, Depends(verify_cookie)]
 ) -> bool:
-    if id == curr_user.id or curr_user.role == "admin":
+    if id == curr_user.id or curr_user.role.name == "admin":
         return True
 
     raise HTTPException(

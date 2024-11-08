@@ -64,3 +64,18 @@ class ProductRepository:
             await session.execute(update_query)
             await session.commit()
             return new_rating
+
+    @classmethod
+    async def set_image(cls, id: int, filename: str) -> str:
+        async with new_session() as session:
+            query = (
+                select(Product)
+                .where(Product.id == id)
+                .options(selectinload(Product.comments).joinedload(Comment.author))
+            )
+            result = await session.execute(query)
+            product_model = result.unique().scalars().first()
+            product_model.image = filename
+            await session.flush()
+            await session.commit()
+            return product_model.image

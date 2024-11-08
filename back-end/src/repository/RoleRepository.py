@@ -16,6 +16,12 @@ class RoleRepository:
             return role_models
 
     @classmethod
+    async def check_role_exists(cls, id: int) -> Roles:
+        async with new_session() as session:
+            result = await session.get(Roles, id)
+            return result
+
+    @classmethod
     async def add_role(cls, data: str) -> Roles | None:
         async with new_session() as session:
             new_role = Roles(name=data)

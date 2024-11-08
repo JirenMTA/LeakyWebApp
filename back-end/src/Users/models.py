@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey
 
 from src.database import Base
 from src.Comments.models import Comment
@@ -12,4 +13,8 @@ class User(Base):
     hash: Mapped[str | None]
     is_external: Mapped[bool] = mapped_column(default=False)
     balance: Mapped[float] = mapped_column(default=15000.0)
+    avatar: Mapped[str] = mapped_column(nullable=True)
+    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"), default=1)
+
+    role: Mapped["Roles"] = relationship()
     comments: Mapped[list["Comment"]] = relationship()

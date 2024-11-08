@@ -26,7 +26,7 @@ class OrderService:
     async def create_order(cls, user_id: int, data: SOrderCreateFromFont) -> SResult:
         purchases_arr = []
         for elem in data.products:
-            cart = await CartRepository.get_cart_if_exists(user_id, elem.cart_id)
+            cart = await CartRepository.upd_cart_if_exists(user_id, elem.cart_id, elem.amount)
             if cart is None:
                 return SResult(status="Fail", error=f"Not such cart id: {elem.cart_id}")
             purchases_arr.append(
