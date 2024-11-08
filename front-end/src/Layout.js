@@ -5,11 +5,12 @@ import { ToastContainer } from 'react-toastify';
 import Login from './components/Auth/Login'
 import Basket from './components/Product/Basket';
 import Signup from './components/Auth/Signup';
-import Purchased from './components/Purchased/Purchased';
 import ProductManager from './components/Product/Admin/ProductManager';
 import PromocodeManager from './components/Promocode/PromocodeManager';
 import Profile from './components/User/Profile';
+import Cart from './components/Cart/Cart';
 import './index.scss'
+import Order from './components/Order/Order';
 
 const Layout = () => {
     return (
@@ -18,10 +19,11 @@ const Layout = () => {
                 <Route path='/' element={<App />}>
                     <Route index element={<HomePage></HomePage>}></Route>
                     <Route element={<Basket />} path='/basket'></Route>
-                    <Route path='/purchased' element={<Purchased />}></Route>
+                    <Route path='/cart' element={<Cart />}></Route>
                     <Route path='/admin/productmanager' element={<ProductManager />}></Route>
                     <Route path='/admin/promocodemanager' element={<PromocodeManager />}></Route>
                     <Route path='/profile' element={<Profile />}></Route>
+                    <Route path='/order' element={<Order />}></Route>
                 </Route>
                 <Route path='/login' element={<Login />}></Route>
                 <Route path='/signup' element={<Signup />}></Route>

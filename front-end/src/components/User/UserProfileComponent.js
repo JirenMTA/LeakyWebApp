@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import avatar from "../../assets/avatar/goku.png"
+import xss from "../../assets/avatar/test.svg"
 import { toast } from "react-toastify";
 import './UserProfileComponent.scss';
 

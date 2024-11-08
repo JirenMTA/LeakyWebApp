@@ -6,17 +6,16 @@ import { getDetailProducts, postCart } from '../../service/apiService';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { doFetchListOrder } from '../../redux/action/orderListAction';
 import { toast } from 'react-toastify';
 import cloneImage from '../../assets/image_products/apple_juice.jpg'
 import Rating from '@mui/material/Rating';
+import { doFetchListCart } from '../../redux/action/listCartAction';
 
 const Product = (props) => {
     const { product, fetchListCart, listProductInBasket, setListProductInBasket } = props;
     const [show, setShow] = useState(false);
     const dispatch = useDispatch();
     const userState = useSelector(state => state.userState);
-    const listProduct = useSelector(state => state.orderListState.orderList);
     const [detailProduct, setDetailProduct] = useState(null);
 
     const handleShowDetail = () => {
@@ -30,11 +29,9 @@ const Product = (props) => {
             return
         }
         const res = await postCart({
-            "user_id": +userState?.account?.id,
             "product_id": +product?.id,
             "amount": 1
         })
-
         if (!(res?.status === 200 && res?.statusText === 'OK' && res?.data?.status === "Ok")) {
             toast.error("Error add to basket");
         }
@@ -43,7 +40,7 @@ const Product = (props) => {
         }
 
         fetchListCart();
-        dispatch(doFetchListOrder({ orderList: listProductInBasket }));
+        dispatch(doFetchListCart({ orderList: listProductInBasket }));
     }
 
     const fetchDetailProduct = async () => {

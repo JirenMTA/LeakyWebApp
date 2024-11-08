@@ -16,7 +16,7 @@ const getCoordByAddress = (address) => {
 
 const getProducts = () => {
     try {
-        const response = axios.get('http://localhost:8000/products');
+        const response = axios.get('/products');
         return response;
     } catch (error) {
         return error;
@@ -25,7 +25,7 @@ const getProducts = () => {
 
 const getDetailProducts = (id) => {
     try {
-        const response = axios.get(`http://localhost:8000/products/${id}`);
+        const response = axios.get(`/products/${id}`);
         return response;
     } catch (error) {
         return error;
@@ -36,7 +36,7 @@ const getDetailProducts = (id) => {
 const postLogin = async (data) => {
     try {
         const response = await axios.post(
-            'http://localhost:8000/auth/sign_in',
+            '/auth/sign_in',
             data,
             { withCredentials: true }
         );
@@ -49,7 +49,7 @@ const postLogin = async (data) => {
 
 const postSignup = (data) => {
     try {
-        const response = axios.post(`http://localhost:8000/auth/sign_up`, data);
+        const response = axios.post(`/auth/sign_up`, data);
         return response;
     } catch (error) {
         return error;
@@ -58,7 +58,7 @@ const postSignup = (data) => {
 
 const getLogOut = (data) => {
     try {
-        const response = axios.get(`http://localhost:8000/auth/logout`);
+        const response = axios.get(`/auth/logout`);
         return response;
     } catch (error) {
         return error;
@@ -67,7 +67,7 @@ const getLogOut = (data) => {
 
 const postComment = (data) => {
     try {
-        const response = axios.post(`http://localhost:8000/comments`, data);
+        const response = axios.post(`/comments`, data);
         return response;
     } catch (error) {
         return error;
@@ -77,8 +77,9 @@ const postComment = (data) => {
 const postCart = (data) => {
     try {
         const response = axios.post(
-            'http://localhost:8000/cart',
+            '/cart',
             data,
+            { withCredentials: true }
         );
         return response;
     } catch (error) {
@@ -89,7 +90,7 @@ const postCart = (data) => {
 
 const getCart = () => {
     try {
-        const response = axios.get('http://localhost:8000/cart');
+        const response = axios.get('/cart');
         return response;
     } catch (error) {
         console.error("Error during get cart:", error);
@@ -100,7 +101,7 @@ const getCart = () => {
 const putCart = (data) => {
     try {
         const response = axios.put(
-            'http://localhost:8000/cart',
+            '/cart',
             data,
         );
         return response;
@@ -113,7 +114,7 @@ const putCart = (data) => {
 const deleteCart = (data) => {
     try {
         const response = axios.delete(
-            'http://localhost:8000/cart',
+            '/cart',
             { data: data },
         );
         return response;
@@ -126,7 +127,7 @@ const deleteCart = (data) => {
 const postProduct = (data) => {
     try {
         const response = axios.post(
-            'http://localhost:8000/products',
+            '/products',
             data,
         );
         return response;
@@ -139,7 +140,7 @@ const postProduct = (data) => {
 const deleteProduct = (data) => {
     try {
         const response = axios.delete(
-            'http://localhost:8000/products',
+            '/products',
             { data: data },
         );
         return response;
@@ -152,7 +153,7 @@ const deleteProduct = (data) => {
 const getPromocode = (data) => {
     try {
         const response = axios.get(
-            'http://localhost:8000/promo',
+            '/promo',
         );
         return response;
     } catch (error) {
@@ -164,7 +165,7 @@ const getPromocode = (data) => {
 const putPromocode = (data) => {
     try {
         const response = axios.put(
-            'http://localhost:8000/promo',
+            '/promo',
             data
         );
         return response;
@@ -177,7 +178,7 @@ const putPromocode = (data) => {
 const postPromocode = (data) => {
     try {
         const response = axios.post(
-            'http://localhost:8000/promo',
+            '/promo',
             data
         );
         return response;
@@ -191,7 +192,7 @@ const postPromocode = (data) => {
 const deletePromocode = (data) => {
     try {
         const response = axios.delete(
-            'http://localhost:8000/promo',
+            '/promo',
             { data: data }
         );
         return response;
@@ -201,11 +202,48 @@ const deletePromocode = (data) => {
     }
 }
 
+const postCreateOrder = (data) => {
+    try {
+        const response = axios.post(
+            '/orders',
+            data
+        );
+        return response;
+    } catch (error) {
+        console.error("Error during post promocode:", error);
+        return error.response;
+    }
+}
+
+const getOrder = () => {
+    try {
+        const response = axios.get(
+            '/orders',
+        );
+        return response;
+    } catch (error) {
+        console.error("Error during get order:", error);
+        return error.response;
+    }
+}
+
+const postUsePromo = (data) => {
+    try {
+        const response = axios.post(
+            '/orders/promo', data
+        );
+        return response;
+    } catch (error) {
+        console.error("Error during use promocode:", error);
+        return error.response;
+    }
+}
 
 export {
     getAddressByCoord, getCoordByAddress,
     getProducts, getDetailProducts, postLogin, getLogOut,
     postComment, postSignup, postCart, getCart, putCart,
     deleteCart, postProduct, deleteProduct,
-    getPromocode, putPromocode, postPromocode, deletePromocode
+    getPromocode, putPromocode, postPromocode, deletePromocode,
+    postCreateOrder, getOrder, postUsePromo
 }

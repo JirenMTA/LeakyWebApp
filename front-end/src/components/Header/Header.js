@@ -13,7 +13,8 @@ import "./Header.scss";
 
 const Header = (props) => {
     const navigate = useNavigate();
-    const listProductAddedToBasket = useSelector(state => state.orderListState.orderList);
+    const listProductAddedToBasket = useSelector(state => state.listCartState.orderList);
+    const listOrderCount = useSelector(state => state.listOrderState.numberOrder);
     const userState = useSelector(state => state.userState);
     const dispatch = useDispatch();
     const { colapseOnMobile, setColapseOnMobile } = props
@@ -23,7 +24,6 @@ const Header = (props) => {
         dispatch(doLogout());
         navigate("/");
     };
-
 
     return (
         <Navbar expand="lg" className="bg-body-tertiary" style={{ height: "70px" }}>
@@ -50,15 +50,18 @@ const Header = (props) => {
                                     </>
                                 ) : (
                                     <div className='header-authenticated-container'>
-                                        <div className='container-purchased' onClick={() => navigate("/purchased")}>
-                                            <CheckIcon />
-                                            <div>Purchased</div>
-                                        </div>
-                                        <div className='container-basket' onClick={() => navigate("/basket")}>
+                                        <div className='container-basket' onClick={() => navigate("/cart")}>
                                             <ShoppingBasketIcon />
-                                            <div>My basket</div>
+                                            <div>Cart</div>
                                             {listProductAddedToBasket && listProductAddedToBasket.length > 0 && (
                                                 <span className='basket-count'>{listProductAddedToBasket.length}</span>
+                                            )}
+                                        </div>
+                                        <div className='container-basket' onClick={() => navigate("/order")}>
+                                            <CheckIcon />
+                                            <div>Order</div>
+                                            {listOrderCount && listOrderCount > 0 && (
+                                                <span className='basket-count'>{listOrderCount}</span>
                                             )}
                                         </div>
                                         <NavDropdown title="Setting" id="basic-nav-dropdown">

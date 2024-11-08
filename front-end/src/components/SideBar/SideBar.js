@@ -25,7 +25,7 @@ const SideBar = (props) => {
     const isMobile = useMediaQuery({ query: '(max-width: 1000px)' });
     const { colapseOnMobile, setColapseOnMobile } = props;
     const navigate = useNavigate();
-    const listProductAddedToBasket = useSelector(state => state.orderListState.orderList);
+    const listProductAddedToBasket = useSelector(state => state.listCartState.orderList);
 
     const handleUserLogout = async () => {
         await getLogOut();
@@ -37,12 +37,12 @@ const SideBar = (props) => {
     };
 
     // Only for mobile
-    const handleClickPurchased = () => {
-        navigate("/purchased");
+    const handleClickCart = () => {
+        navigate("/cart");
         setColapseOnMobile(true);
     }
-    const handleClickBasket = () => {
-        navigate("/basket");
+    const handleClickOrder = () => {
+        navigate("/order");
         setColapseOnMobile(true);
     }
 
@@ -108,10 +108,13 @@ const SideBar = (props) => {
                                                 <MenuItem icon={<BorderColorIcon />} component={<Link to="/login" />}> Signup </MenuItem>
                                             </> :
                                             <>
+                                                <MenuItem icon={<ShoppingBasketIcon />} onClick={handleClickCart}>
+                                                    Cart
+                                                </MenuItem>
                                                 <MenuItem
                                                     icon={
                                                         <div className="basket-icon-wrapper">
-                                                            <ShoppingBasketIcon />
+                                                            <CheckIcon />
                                                             {listProductAddedToBasket && listProductAddedToBasket.length > 0 && (
                                                                 <span className="basket-count">
                                                                     {listProductAddedToBasket.length}
@@ -119,12 +122,9 @@ const SideBar = (props) => {
                                                             )}
                                                         </div>
                                                     }
-                                                    onClick={handleClickBasket}
+                                                    onClick={handleClickOrder}
                                                 >
-                                                    Basket
-                                                </MenuItem>
-                                                <MenuItem icon={<CheckIcon />} onClick={handleClickPurchased}>
-                                                    Purchased
+                                                    Order
                                                 </MenuItem>
                                                 {
                                                     userState?.account?.role === "admin" &&

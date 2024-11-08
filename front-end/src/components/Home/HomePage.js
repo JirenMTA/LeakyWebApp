@@ -2,15 +2,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./HomePage.scss"
 import { useEffect, useState } from "react";
 import Product from "../Product/Product";
-import { doFetchListOrder } from "../../redux/action/orderListAction";
 import { useDispatch } from "react-redux";
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import { useSelector } from "react-redux";
 import { useMediaQuery } from 'react-responsive';
-import { getProducts } from '../../service/apiService';
+import { getOrder, getProducts } from '../../service/apiService';
 import { getCart } from '../../service/apiService';
+import { doFetchListCart } from '../../redux/action/listCartAction';
+import { doFetchListOrder } from '../../redux/action/listOrderAction';
+
 
 const HomePage = (props) => {
     const importAll = (r) => {
@@ -27,10 +29,14 @@ const HomePage = (props) => {
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
     const dispatch = useDispatch();
     const [listProductInBasket, setListProductInBasket] = useState([]);
+    const [listOrderCount, setListOrderCount] = useState(0);
+
 
     const fetchProducts = async () => {
-        let res = await getProducts();
-        setListProduct(res.data);
+        let listCart = await getProducts();
+        let listOrder = await getOrder();
+        setListProduct(listCart?.data);
+        setListOrderCount(listOrder?.data?.length);
     };
 
     useEffect(() => {
@@ -59,8 +65,9 @@ const HomePage = (props) => {
     };
 
     useEffect(() => {
-        dispatch(doFetchListOrder({ orderList: listProductInBasket }));
-    }, [listProductInBasket])
+        dispatch(doFetchListCart({ orderList: listProductInBasket }));
+        dispatch(doFetchListOrder({ numberOrder: listOrderCount }));
+    }, [listProductInBasket, listOrderCount])
 
 
     return (

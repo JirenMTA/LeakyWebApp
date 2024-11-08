@@ -1,9 +1,11 @@
 import { combineReducers } from "redux";
-import orderListReducer from "./orderListReducer";
 import userReducer from "./userReducer";
+import listCartReducer from "./listCartReducer";
+import listOrderReducer from "./listOrderReducer";
 
 const rootReducer = combineReducers({
-    orderListState: orderListReducer,
+    listCartState: listCartReducer,
+    listOrderState: listOrderReducer,
     userState: userReducer
 });
 
