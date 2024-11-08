@@ -7,12 +7,9 @@ from src.Products.router import router as product_router
 from src.Comments.router import router as comment_router
 from src.Cart.router import router as cart_router
 from src.Promo.router import router as promo_router
-<<<<<<< HEAD
 from fastapi.middleware.cors import CORSMiddleware
-=======
 from src.Roles.router import router as role_router
 from src.Order.router import router as order_router
->>>>>>> back-end
 
 
 @asynccontextmanager

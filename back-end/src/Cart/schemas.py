@@ -26,6 +26,7 @@ class SCartGetByUserObj(BaseModel):
     product: SProductGetShort
     amount: int
     created_at: datetime
+    id: int
 
     model_config = ConfigDict(from_attributes=True)
 
