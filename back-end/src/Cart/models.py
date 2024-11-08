@@ -16,7 +16,7 @@ cart_update_time = Annotated[
 ]
 
 
-# TODO may be add price of product to price for bug
+# TODO may be add price of product for bug
 class Cart(Base):
     __tablename__ = "Cart"
     id: Mapped[int] = mapped_column(primary_key=True)

@@ -1,4 +1,4 @@
-from typing import List, Annotated
+from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from src.auth.dependencies import verify_cookie

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 from src.database import create_tables, drop_tables
@@ -10,6 +11,8 @@ from src.Cart.router import router as cart_router
 from src.Promo.router import router as promo_router
 from src.Roles.router import router as role_router
 from src.Order.router import router as order_router
+from src.Images.router import router as image_router
+from src.lifespan_scripts import generate_default_roles
 
 
 @asynccontextmanager
@@ -18,11 +21,15 @@ async def lifespan(app: FastAPI):
     print("База данных очищена")
     await create_tables()
     print("База данных готова к работе")
+    await generate_default_roles()
+    print("Стандартные роли загружены")
     yield
     print("Приложение выключено!")
 
 
 app = FastAPI(title="Leaky Web App", lifespan=lifespan)
+app.mount("/static", StaticFiles(directory="back-end/static"), name="static")
+
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(product_router)
@@ -31,3 +38,4 @@ app.include_router(cart_router)
 app.include_router(promo_router)
 app.include_router(role_router)
 app.include_router(order_router)
+app.include_router(image_router)

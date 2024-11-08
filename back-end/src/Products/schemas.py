@@ -25,6 +25,7 @@ class SProductGetShort(BaseModel):
     full_price: float
     sale: float
     rating: float
+    image: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -37,6 +38,7 @@ class SProductGetFull(BaseModel):
     amount: int
     sale: float
     rating: float
+    image: str | None = None
     comments: list[SCommentGetByProduct] | None = None
 
     model_config = ConfigDict(from_attributes=True)
