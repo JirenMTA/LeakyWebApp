@@ -11,6 +11,12 @@ class ProductService:
         return product_schemas
 
     @classmethod
+    async def find_products(cls, param: str) -> List[SProductGetShort]:
+        products = await ProductRepository.find_products(param)
+        product_schemas = [SProductGetShort.model_validate(product) for product in products]
+        return product_schemas
+
+    @classmethod
     async def get_one_by_id(cls, id: int) -> SProductGetFull | None:
         product = await ProductRepository.get_one(id)
         if not product:

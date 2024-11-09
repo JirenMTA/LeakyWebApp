@@ -1,12 +1,17 @@
-from fastapi import APIRouter, status, HTTPException
+from typing import Annotated
+from fastapi import APIRouter, status, HTTPException, Depends
+
 from src.Products.schemas import (
     SProductAdd,
     SProductGetShort,
     SProductGetFull,
     SResult,
 )
-
 from src.Products.service import ProductService
+from src.auth.dependencies import admin_required
+from src.auth.schemas import SAccessControl
+from src.database import new_session
+from sqlalchemy import text
 
 router = APIRouter(prefix="/products", tags=["Товары"])
 
@@ -14,6 +19,12 @@ router = APIRouter(prefix="/products", tags=["Товары"])
 @router.get("")
 async def get_products() -> list[SProductGetShort]:
     product_schemas = await ProductService.get_all_products()
+    return product_schemas
+
+
+@router.get("/find")
+async def find(param: str):
+    product_schemas = await ProductService.find_products(param)
     return product_schemas
 
 

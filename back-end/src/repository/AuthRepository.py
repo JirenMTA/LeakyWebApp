@@ -32,7 +32,6 @@ class AuthRepository:
                 email=data.email,
                 hash=generate_password_hash(data.password),
             )
-            # TODO Подумать над тем, чтобы не генерировать хэш непосрественно в репозитории
             session.add(user)
             await session.flush()
             await session.commit()

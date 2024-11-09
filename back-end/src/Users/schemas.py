@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict, EmailStr
 from enum import Enum
+from src.Roles.schemas import SRoleGet
 
 
 class ResponseStatus(Enum):
@@ -7,7 +8,6 @@ class ResponseStatus(Enum):
     Error = "Fail"
 
 
-# TODO secure validation
 class SUserPub(BaseModel):
     username: str | None
     email: EmailStr
@@ -23,6 +23,7 @@ class SUserPriv(BaseModel):
     balance: float
     is_external: bool
     avatar: str | None = None
+    role: SRoleGet | None = None
 
     model_config = ConfigDict(from_attributes=True)
 

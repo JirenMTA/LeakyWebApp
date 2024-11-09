@@ -23,6 +23,7 @@ class SLocalSignUp(BaseModel):
 class SResult(BaseModel):
     status: ResponseStatus
     error: str | None = None
+    id: int | None = None
 
 
 class SAccessControl(BaseModel):
