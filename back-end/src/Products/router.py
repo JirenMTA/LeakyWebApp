@@ -35,6 +35,8 @@ async def get_product(id: int) -> SProductGetFull:
 
 
 @router.post("")
-async def add_product(data: SProductAdd, _: Annotated[SAccessControl, Depends(admin_required)]) -> SResult:
+async def add_product(
+    data: SProductAdd, _: Annotated[SAccessControl, Depends(admin_required)]
+) -> SResult:
     result = await ProductService.add_product(data)
     return result
