@@ -2,15 +2,15 @@ from typing import List
 from fastapi import HTTPException, status
 from src.repository.UserRepository import UserRepository
 from src.repository.RoleRepository import RoleRepository
-from src.Users.schemas import SUserPriv
+from src.Users.schemas import SUserPriv, SUserPub
 from src.Roles.service import SResult
 
 
 class UserService:
     @classmethod
-    async def get_all(cls, pagination: dict) -> List[SUserPriv]:
+    async def get_all(cls, pagination: dict) -> List[SUserPub]:
         users = await UserRepository.get_all(pagination)
-        user_schemas = [SUserPriv.model_validate(user) for user in users]
+        user_schemas = [SUserPub.model_validate(user) for user in users]
         return user_schemas
 
     @classmethod

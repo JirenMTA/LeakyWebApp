@@ -9,7 +9,6 @@ class ResponseStatus(Enum):
     Error = "Fail"
 
 
-# TODO Мб стоит хранить еще сложную категорию товаров и что-то еще
 class SProductAdd(BaseModel):
     name: str
     description: str

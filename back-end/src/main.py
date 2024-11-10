@@ -12,7 +12,7 @@ from src.Promo.router import router as promo_router
 from src.Roles.router import router as role_router
 from src.Order.router import router as order_router
 from src.Images.router import router as image_router
-from src.lifespan_scripts import generate_default_roles
+from src.lifespan_scripts import generate_default_roles, create_default_admin
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -22,6 +22,8 @@ async def lifespan(app: FastAPI):
     print("База данных готова к работе")
     await generate_default_roles()
     print("Стандартные роли загружены")
+    await create_default_admin()
+    print("Добавлена стандартная учетка администратора")
     yield
     print("Приложение выключено!")
 

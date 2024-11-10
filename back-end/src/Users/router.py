@@ -1,7 +1,7 @@
 from typing import List, Annotated
 from fastapi import APIRouter, Depends
 
-from src.Users.schemas import SUserPriv
+from src.Users.schemas import SUserPriv, SUserPub
 from src.Users.service import UserService
 from src.Users.dependencies import user_paginator, user_access_control
 
@@ -9,10 +9,9 @@ router = APIRouter(prefix="/users", tags=["Пользователи"])
 
 
 @router.get("")
-async def get_users(pagination: Annotated[dict, Depends(user_paginator)]) -> List[SUserPriv]:
+async def get_users(pagination: Annotated[dict, Depends(user_paginator)]) -> List[SUserPub]:
     users = await UserService.get_all(pagination)
-    user_schemas = [SUserPriv.model_validate(user) for user in users]
-    return user_schemas
+    return users
 
 
 @router.get("/{id}")
@@ -20,5 +19,4 @@ async def get_user(
     id: int, access: Annotated[bool, Depends(user_access_control)]
 ) -> SUserPriv:
     user = await UserService.get_one_by_id(id)
-    user_schema = SUserPriv.model_validate(user)
-    return user_schema
+    return user
