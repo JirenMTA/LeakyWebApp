@@ -2,13 +2,13 @@ import Table from 'react-bootstrap/Table';
 import { useEffect, useState } from 'react';
 import "../Basket.scss"
 import Button from 'react-bootstrap/Button';
-import ModalPurchase from '../../Purchase/ModalPurchase';
 import { useMediaQuery } from 'react-responsive';
-import ModalPromocode from '../../Purchase/ModalPromocode';
 import NumericInput from 'react-numeric-input';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProducts } from '../../../service/apiService';
+import { getImageByName, getProducts } from '../../../service/apiService';
 import AdminModalAddProduct from './AdminModalAddProduct';
+import defaultImageProduct from "../../../assets/image_products/default.jpg"
+import getSalePrice from '../../utils/GetSalePrice';
 
 const ProductManager = (props) => {
     const importAll = (r) => {
@@ -20,6 +20,8 @@ const ProductManager = (props) => {
 
     const [listProduct, setListProduct] = useState([]);
     const [showModalAddproduct, setShowModalAddproduct] = useState(false);
+    const [currentProduct, setCurrentProduct] = useState(null)
+
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
     const userState = useSelector(state => state.userState);
 
@@ -41,9 +43,13 @@ const ProductManager = (props) => {
         );
     };
 
+    const handleChangeProduct = async (product) => {
+        setCurrentProduct(product)
+        setShowModalAddproduct(true);
+    }
 
     return <div className="basket-container">
-        <Button onClick={() => (setShowModalAddproduct(true))}>Add product</Button>
+        <Button onClick={() => { setCurrentProduct(null); setShowModalAddproduct(true) }}>Add product</Button>
         {!isMobile ?
             <Table striped bordered hover size="sm">
                 <thead>
@@ -63,7 +69,7 @@ const ProductManager = (props) => {
                                 <td>{key}</td>
                                 <td>{item?.name}</td>
                                 <td>
-                                    <img src={images[item?.id % images.length]}></img>
+                                    <img src={item?.image ? getImageByName(item?.image, 'product') : defaultImageProduct}></img>
                                 </td>
                                 <td>
                                     <NumericInput
@@ -80,15 +86,14 @@ const ProductManager = (props) => {
                                 </td>
                                 <td>
                                     {
-                                        item?.sale && item?.sale < item?.full_price ?
+                                        item?.sale > 0 ?
                                             <>
                                                 <div className='full-price line-through'>
-                                                    {item.full_price + " руб."}
+                                                    {item?.full_price + " руб."}
                                                 </div>
                                                 <div className='sale'>
-                                                    {item?.sale + " руб."}
+                                                    {getSalePrice(item?.full_price, item?.sale) + " руб."}
                                                 </div>
-
                                             </>
                                             :
                                             <div className='full-price'>
@@ -98,7 +103,7 @@ const ProductManager = (props) => {
                                 </td>
                                 <td>
                                     <div className='action-content'>
-                                        <Button variant="outline-primary">Change</Button>
+                                        <Button variant="outline-primary" onClick={() => handleChangeProduct(item)}>Change</Button>
                                         <Button variant="outline-warning"
                                         >Delete
                                         </Button>
@@ -158,7 +163,7 @@ const ProductManager = (props) => {
                                                 }
                                             }}
                                         />
-                                        <Button variant="outline-primary">Change</Button>
+                                        <Button variant="outline-primary" onClick={() => handleChangeProduct(item)}>Change</Button>
                                         <Button variant="outline-warning">Delete</Button>
                                     </div>
                                 </td>
@@ -171,6 +176,7 @@ const ProductManager = (props) => {
         <AdminModalAddProduct
             showModalAddproduct={showModalAddproduct}
             fetchListProduct={fetchListProduct}
+            product={currentProduct}
             setShowModalAddproduct={setShowModalAddproduct}
         ></AdminModalAddProduct>
     </div>

@@ -10,6 +10,7 @@ import { doLogout } from '../../redux/action/userActions';
 import { useMediaQuery } from 'react-responsive';
 import logo from "../../assets/logo/logo.png";
 import "./Header.scss";
+import { getLogOut } from '../../service/apiService';
 
 const Header = (props) => {
     const navigate = useNavigate();
@@ -20,7 +21,8 @@ const Header = (props) => {
     const { colapseOnMobile, setColapseOnMobile } = props
     const isMobile = useMediaQuery({ query: '(max-width: 1000px)' });
 
-    const handleUserLogout = () => {
+    const handleUserLogout = async () => {
+        await getLogOut();
         dispatch(doLogout());
         navigate("/");
     };
@@ -60,7 +62,7 @@ const Header = (props) => {
                                         <div className='container-basket' onClick={() => navigate("/order")}>
                                             <CheckIcon />
                                             <div>Order</div>
-                                            {listOrderCount && listOrderCount > 0 && (
+                                            {listOrderCount > 0 && (
                                                 <span className='basket-count'>{listOrderCount}</span>
                                             )}
                                         </div>

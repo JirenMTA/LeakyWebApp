@@ -2,10 +2,11 @@ import { FETCH_USER_LOGIN, FETCH_USER_LOGOUT } from "../action/userActions";
 
 const INITIAL_STATE = {
     account: {
-        access_token: '',
-        refresh_token: '',
+        email: '',
+        role: '',
         username: '',
-        id: ''
+        id: '',
+        avatar: null
     },
     isAuthenticated: false
 }
@@ -15,15 +16,11 @@ const userReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case FETCH_USER_LOGIN:
             return {
-                ...state,
                 account: {
-                    access_token: action?.payload?.account?.access_token,
-                    refresh_token: action.payload?.account?.refresh_token,
-                    username: action.payload?.account?.username,
-                    id: action.payload?.account?.id,
-                    role: action.payload?.account?.role,
+                    ...state.account,
+                    ...action.payload?.account
                 },
-                isAuthenticated: action?.payload?.isAuthenticated
+                isAuthenticated: action?.payload?.isAuthenticated || state?.isAuthenticated
             };
         case FETCH_USER_LOGOUT:
             return INITIAL_STATE

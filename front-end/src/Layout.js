@@ -3,14 +3,13 @@ import App from './App'
 import HomePage from './components/Home/HomePage';
 import { ToastContainer } from 'react-toastify';
 import Login from './components/Auth/Login'
-import Basket from './components/Product/Basket';
 import Signup from './components/Auth/Signup';
 import ProductManager from './components/Product/Admin/ProductManager';
 import PromocodeManager from './components/Promocode/PromocodeManager';
 import Profile from './components/User/Profile';
 import Cart from './components/Cart/Cart';
-import './index.scss'
 import Order from './components/Order/Order';
+import './index.scss'
 
 const Layout = () => {
     return (
@@ -18,7 +17,6 @@ const Layout = () => {
             <Routes>
                 <Route path='/' element={<App />}>
                     <Route index element={<HomePage></HomePage>}></Route>
-                    <Route element={<Basket />} path='/basket'></Route>
                     <Route path='/cart' element={<Cart />}></Route>
                     <Route path='/admin/productmanager' element={<ProductManager />}></Route>
                     <Route path='/admin/promocodemanager' element={<PromocodeManager />}></Route>

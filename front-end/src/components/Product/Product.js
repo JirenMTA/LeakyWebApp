@@ -1,15 +1,16 @@
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import "./Product.scss"
 import DetailProduct from './DetailProduct';
-import { getDetailProducts, postCart } from '../../service/apiService';
+import { getDetailProducts, getImageByName, postCart } from '../../service/apiService';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import cloneImage from '../../assets/image_products/apple_juice.jpg'
+import defaultImageProduct from '../../assets/image_products/default.jpg'
 import Rating from '@mui/material/Rating';
 import { doFetchListCart } from '../../redux/action/listCartAction';
+import getSalePrice from '../utils/GetSalePrice';
+import "./Product.scss"
 
 const Product = (props) => {
     const { product, fetchListCart, listProductInBasket, setListProductInBasket } = props;
@@ -52,7 +53,7 @@ const Product = (props) => {
         <div className='product-container'>
             <Card >
                 <div className='img-product' onClick={handleShowDetail}>
-                    <Card.Img variant="top" src={cloneImage} />
+                    <Card.Img variant="top" src={product?.image ? getImageByName(product?.image, 'product') : defaultImageProduct} />
                 </div>
                 <Card.Body className='body-product-card' >
                     <Card.Title>{product?.name}</Card.Title>
@@ -62,16 +63,15 @@ const Product = (props) => {
                             readOnly
                             size="small"
                         />
-
                     </div>
                     <div className='price-product'>
-                        {product?.sale < product?.full_price ? (
+                        {product?.sale > 0 ? (
                             <>
                                 <span className='full-price'>
                                     {product?.full_price + " руб."}
                                 </span>
                                 <span className='sale'>
-                                    {product?.sale + " руб."}
+                                    {getSalePrice(product?.full_price, product?.sale) + " руб."}
                                 </span>
                             </>
                         ) : (

@@ -44,10 +44,12 @@ const HomePage = (props) => {
     }, []);
 
     useEffect(() => {
-        const filteredProducts_ = listProduct.filter((product) =>
-            product.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
-        );
-        setFilteredProducts(filteredProducts_);
+        if (listProduct && listProduct?.filter) {
+            const filteredProducts_ = listProduct.filter((product) =>
+                product.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
+            );
+            setFilteredProducts(filteredProducts_);
+        }
     }, [listProduct, searchTerm])
 
 

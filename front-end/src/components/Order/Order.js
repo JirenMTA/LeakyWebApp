@@ -4,25 +4,20 @@ import Button from 'react-bootstrap/Button';
 import ModalPurchase from '../Purchase/ModalPurchase';
 import { useMediaQuery } from 'react-responsive';
 import ModalPromocode from '../Purchase/ModalPromocode';
-import { deleteCart, getCart, getOrder, putCart } from '../../service/apiService';
+import { deleteCart, getCart, getImageByName, getOrder, postPayforOrder, putCart } from '../../service/apiService';
 import { useDispatch, useSelector } from 'react-redux';
-import "./Order.scss"
 import { doFetchListOrder } from '../../redux/action/listOrderAction';
+import defaultImageProduct from '../../assets/image_products/default.jpg'
+import "./Order.scss"
+import getSalePrice from '../utils/GetSalePrice';
+import { toast } from 'react-toastify';
 
 
 const Order = (props) => {
-    const importAll = (r) => {
-        let imagesArray = [];
-        r.keys().forEach((item) => { imagesArray.push(r(item)); });
-        return imagesArray;
-    };
-    const images = importAll(require.context('../../assets/image_products', false, /\.(png|jpe?g|svg)$/));
-
     const [show, setShow] = useState(false);
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
     const [itemCurrent, setItemCurrent] = useState(null);
     const [showModalPromocode, setShowModalPromocode] = useState(false);
-    const [code, setCode] = useState('');
     const [purchaseAll, setPurchaseAll] = useState(false);
     const [listOrder, setListOrder] = useState([]);
     const [currentOrder, setCurrentOrder] = useState(null);
@@ -34,9 +29,14 @@ const Order = (props) => {
         dispatch(doFetchListOrder({ numberOrder: res?.data?.length }));
     }
 
-    const handlePurchaseAll = () => {
-        setPurchaseAll(true);
-        setShow(true);
+    const handlePurchaseAll = async (e, order) => {
+        const res = await postPayforOrder(order?.id)
+        if (res && res?.data && res?.data?.status === "Ok") {
+            toast.success("You paid for this order. Thanks for using our market");
+        }
+        else {
+            toast.error("Something went wrong! Try again letter");
+        }
     }
 
     useEffect(() => {
@@ -49,7 +49,7 @@ const Order = (props) => {
                 <div className='total-price-content'>
                     {`Total price: ${order?.total_price} руб.`}
                     <div>
-                        <Button variant="outline-primary" onClick={handlePurchaseAll}>
+                        <Button variant="outline-primary" onClick={(e) => handlePurchaseAll(e, order)}>
                             Purchase all
                         </Button>
                     </div>
@@ -82,7 +82,7 @@ const Order = (props) => {
                                     <td>{key}</td>
                                     <td>{product?.product?.name}</td>
                                     <td>
-                                        <img src={images[product?.product?.id % images.length]}></img>
+                                        <img src={product?.product?.image ? getImageByName(product?.product?.image, 'product') : defaultImageProduct}></img>
                                     </td>
                                     <td>
                                         <input
@@ -93,13 +93,13 @@ const Order = (props) => {
                                     </td>
                                     <td>
                                         {
-                                            product?.product?.sale && product?.product?.sale < product?.product?.full_price ?
+                                            product?.product?.sale > 0 ?
                                                 <>
                                                     <div className='full-price line-through'>
                                                         {product?.product?.full_price + " руб."}
                                                     </div>
                                                     <div className='sale'>
-                                                        {product?.product?.sale + " руб."}
+                                                        {getSalePrice(product?.product?.full_price, product?.product?.sale) + " руб."}
                                                     </div>
 
                                                 </>
@@ -120,7 +120,7 @@ const Order = (props) => {
                     <div className='total-price-content'>
                         {`Total price: ${order?.total_price} руб.`}
                         <div>
-                            <Button variant="outline-primary" onClick={handlePurchaseAll}>
+                            <Button variant="outline-primary" onClick={(e) => handlePurchaseAll(e, order)}>
                                 Purchase all
                             </Button>
                         </div>
@@ -152,15 +152,15 @@ const Order = (props) => {
                                         <td>
                                             <div className='product-in-basket-container'>
                                                 <span>{product?.product?.name}</span>
-                                                <img src={images[product?.product?.id % images.length]}></img>
+                                                <img src={product?.product?.image ? getImageByName(product?.product?.image, 'product') : defaultImageProduct}></img>
                                                 {
-                                                    product?.product?.sale && product?.product?.sale < product?.product?.full_price ?
+                                                    product?.product?.sale > 0 ?
                                                         <>
                                                             <div className='full-price line-through'>
                                                                 {product?.product?.full_price + " руб."}
                                                             </div>
                                                             <div className='sale'>
-                                                                {product?.product?.sale + " руб."}
+                                                                {getSalePrice(product?.product?.full_price, product?.product?.sale) + " руб."}
                                                             </div>
 
                                                         </>

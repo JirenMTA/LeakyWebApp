@@ -2,22 +2,19 @@ import Table from 'react-bootstrap/Table';
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useMediaQuery } from 'react-responsive';
-import { deleteCart, getCart, postCreateOrder, putCart } from '../../service/apiService';
+import { deleteCart, getCart, getImageByName, postCreateOrder, putCart } from '../../service/apiService';
 import NumericInput from 'react-numeric-input';
 import { useDispatch, useSelector } from 'react-redux';
 import { doFetchListOrder } from '../../redux/action/listOrderAction';
 import { getOrder } from '../../service/apiService';
+import { doFetchListCart } from '../../redux/action/listCartAction';
+import { toast } from 'react-toastify';
+import defaultImageProduct from '../../assets/image_products/default.jpg'
 import "./Cart.scss"
+import getSalePrice from '../utils/GetSalePrice';
 
 
 const Cart = (props) => {
-    const importAll = (r) => {
-        let imagesArray = [];
-        r.keys().forEach((item) => { imagesArray.push(r(item)); });
-        return imagesArray;
-    };
-    const images = importAll(require.context('../../assets/image_products', false, /\.(png|jpe?g|svg)$/));
-
     const [listProduct, setListProduct] = useState([]);
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
     const userState = useSelector(state => state.userState);
@@ -28,7 +25,6 @@ const Cart = (props) => {
         const res = await getCart();
         setListProduct(res?.data?.products);
         setTotalPrice(res?.data?.total_price);
-        // dispatch(doFetchListCart({ orderList: res?.data?.products }));
     }
 
     const fetchChangeCart = async (data) => {
@@ -63,8 +59,17 @@ const Cart = (props) => {
         listProduct.forEach(product => {
             payload.products.push({ cart_id: +product?.id, amount: +product?.amount });
         });
+        if (payload?.products?.length <= 0) {
+            toast.error("Cart empty!");
+            return
+        }
+
         const res = await postCreateOrder(payload);
         let listOrder = await getOrder();
+        let listCart = await getCart();
+        setListProduct(listCart?.data?.products);
+        setTotalPrice(listCart?.data?.total_price);
+        dispatch(doFetchListCart({ orderList: listCart?.dat?.products }));
         dispatch(doFetchListOrder({ numberOrder: listOrder?.data?.length }));
     }
 
@@ -98,7 +103,7 @@ const Cart = (props) => {
                                 <td>{key}</td>
                                 <td>{item?.product?.name}</td>
                                 <td>
-                                    <img src={images[item?.product?.id % images.length]}></img>
+                                    <img src={item?.product?.image ? getImageByName(item?.product?.image, 'product') : defaultImageProduct}></img>
                                 </td>
                                 <td>
                                     <NumericInput
@@ -115,31 +120,20 @@ const Cart = (props) => {
                                 </td>
                                 <td>
                                     {
-
-                                        item?.product?.total_price && item?.product?.total_price < item?.product?.sale ?
+                                        item?.product?.sale > 0 ?
                                             <>
                                                 <div className='full-price line-through'>
                                                     {item?.product?.full_price + " руб."}
                                                 </div>
-                                                <div className='total-price'>
-                                                    {item?.product?.total_price + " руб."}
+                                                <div className='sale'>
+                                                    {getSalePrice(item?.product?.full_price, item?.product?.sale) + " руб."}
                                                 </div>
+
                                             </>
                                             :
-                                            item?.product?.sale && item?.product?.sale < item?.product?.full_price ?
-                                                <>
-                                                    <div className='full-price line-through'>
-                                                        {item?.product?.full_price + " руб."}
-                                                    </div>
-                                                    <div className='sale'>
-                                                        {item?.product?.sale + " руб."}
-                                                    </div>
-
-                                                </>
-                                                :
-                                                <div className='full-price'>
-                                                    {item?.product?.full_price + " руб."}
-                                                </div>
+                                            <div className='full-price'>
+                                                {item?.product?.full_price + " руб."}
+                                            </div>
                                     }
                                 </td>
                                 <td>
@@ -171,33 +165,25 @@ const Cart = (props) => {
                                 <td>
                                     <div className='product-in-basket-container'>
                                         <span>{item?.product?.name}</span>
-                                        <img src={images[item?.product?.id % images.length]}></img>
+                                        <img src={item?.product?.image ? getImageByName(item?.product?.image, 'product') : defaultImageProduct}></img>
                                         {
 
-                                            item?.product?.total_price && item?.product?.total_price < item?.product?.sale ?
+                                            item?.product?.sale > 0 ?
                                                 <>
                                                     <div className='full-price line-through'>
                                                         {item?.product?.full_price + " руб."}
                                                     </div>
-                                                    <div className='total-price'>
-                                                        {item?.product?.total_price + " руб."}
+                                                    <div className='sale'>
+                                                        {getSalePrice(item?.product?.full_price, item?.product?.sale) + " руб."}
                                                     </div>
+
                                                 </>
                                                 :
-                                                item?.product?.sale && item?.product?.sale < item?.product?.full_price ?
-                                                    <>
-                                                        <div className='full-price line-through'>
-                                                            {item?.product?.full_price + " руб."}
-                                                        </div>
-                                                        <div className='sale'>
-                                                            {item?.product?.sale + " руб."}
-                                                        </div>
+                                                <div className='full-price'>
+                                                    {item?.product?.full_price + " руб."}
+                                                </div>
 
-                                                    </>
-                                                    :
-                                                    <div className='full-price'>
-                                                        {item?.product?.full_price}
-                                                    </div>
+
                                         }
                                     </div>
                                 </td>

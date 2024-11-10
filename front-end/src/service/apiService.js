@@ -38,7 +38,6 @@ const postLogin = async (data) => {
         const response = await axios.post(
             '/auth/sign_in',
             data,
-            { withCredentials: true }
         );
         return response;
     } catch (error) {
@@ -56,9 +55,9 @@ const postSignup = (data) => {
     }
 }
 
-const getLogOut = (data) => {
+const getLogOut = async (data) => {
     try {
-        const response = axios.get(`/auth/logout`);
+        const response = await axios.get(`/auth/logout`);
         return response;
     } catch (error) {
         return error;
@@ -239,11 +238,81 @@ const postUsePromo = (data) => {
     }
 }
 
+
+const getUserById = async (id) => {
+    try {
+        const response = await axios.get(
+            `/users/${id}`
+        );
+        return response;
+    } catch (error) {
+        console.error("Error during use promocode:", error);
+        return error.response;
+    }
+}
+
+const getImageByName = (img_name, type) => {
+    return `${axios.getUri()}/static/${type}/${img_name}`;
+}
+
+const postUploadAvartar = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const response = await axios.post(
+            '/images/upload_avatar/'
+            , formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response;
+    } catch (error) {
+        console.error("Error during use promocode:", error);
+        return error.response;
+    }
+}
+
+const postUploadProductImage = async (id, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const response = await axios.post(
+            `/images/upload_product_img/${id}`
+            , formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response;
+    } catch (error) {
+        console.error("Error during use promocode:", error);
+        return error.response;
+    }
+}
+
+const postPayforOrder = async (order_id) => {
+    try {
+        const response = await axios.post(
+            `/orders/pay`, { order_id, amount: 0 }
+        );
+        return response;
+    } catch (error) {
+        console.error("Error during use promocode:", error);
+        return error.response;
+    }
+}
+
+
 export {
     getAddressByCoord, getCoordByAddress,
     getProducts, getDetailProducts, postLogin, getLogOut,
     postComment, postSignup, postCart, getCart, putCart,
     deleteCart, postProduct, deleteProduct,
     getPromocode, putPromocode, postPromocode, deletePromocode,
-    postCreateOrder, getOrder, postUsePromo
+    postCreateOrder, getOrder, postUsePromo, getUserById,
+    getImageByName, postUploadAvartar, postUploadProductImage,
+    postPayforOrder
 }

@@ -19,7 +19,7 @@ async def sign_up(data: SLocalSignUp) -> SResult:
     if user is None:  # TODO Более понятная обработка ошибок
         return SResult(status="Fail", error="Failed to add user")
 
-    return SResult(status="Ok")
+    return SResult(status="Ok", id=-1)
 
 
 @router.post("/sign_in", response_model=SResult, response_model_exclude_unset=True)
@@ -35,13 +35,13 @@ async def sign_in(data: SSignIn, response: Response) -> SResult:
     cookie = generate_cookie({"id": user.id, "role": user.role.name})
     response.set_cookie(key="auth", value=cookie, httponly=True, samesite="strict")
 
-    return SResult(status="Ok")
+    return SResult(status="Ok", id=user.id)
 
 
 @router.get("/logout", response_model=SResult, response_model_exclude_unset=True)
 async def logout(response: Response):
     response.delete_cookie("auth")
-    return SResult(status="Ok")
+    return SResult(status="Ok", id=-1)
 
 
 """

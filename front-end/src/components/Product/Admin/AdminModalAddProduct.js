@@ -1,13 +1,17 @@
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/esm/Button';
 import { TextField } from '@mui/material';
-import './AdminModalAddProduct.scss'
 import { useState } from 'react';
-import { postProduct } from '../../../service/apiService';
+import { postProduct, postUploadProductImage } from '../../../service/apiService';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
+import defaultImageProduct from '../../../assets//image_products//default.jpg'
+import { getImageByName } from '../../../service/apiService';
+import './AdminModalAddProduct.scss'
+
 
 const AdminModalAddProduct = (props) => {
-    const { showModalAddproduct, setShowModalAddproduct, fetchListProduct } = props;
+    const { showModalAddproduct, setShowModalAddproduct, fetchListProduct, product } = props;
     const handleClose = () => setShowModalAddproduct(false);
 
     const [name, setName] = useState('')
@@ -15,30 +19,58 @@ const AdminModalAddProduct = (props) => {
     const [fullPrice, setFullPrice] = useState(0);
     const [amount, setAmount] = useState(0);
     const [sale, setSale] = useState(0);
+    const [image, setImage] = useState(false);
+    const [previewImage, setPreviewImage] = useState(null);
 
+    const handleFileChange = (event) => {
+        setImage(event.target.files[0])
+        setPreviewImage(URL.createObjectURL(event.target.files[0]));
+    };
 
     const handlePostProduct = async (event) => {
-        const res = await postProduct({
-            name: name,
-            description: description,
-            full_price: +fullPrice,
-            amount: +amount,
-            sale: +sale
-        })
-        if (res?.data?.status === "Ok") {
-            toast.success("Successfully add new product!");
+        if (!product) {
+            const res = await postProduct({
+                name: name,
+                description: description,
+                full_price: +fullPrice,
+                amount: +amount,
+                sale: +sale
+            })
+            if (res?.data?.status === "Ok") {
+                toast.success("Successfully add new product!");
+            }
+            else {
+                toast.error("Error add new product!")
+            }
+            fetchListProduct();
+            handleClose();
         }
         else {
-            toast.error("Error add new product!")
+            const res = await postUploadProductImage(product?.id, image)
+            if (!(res && res?.data?.status === "Ok")) {
+                toast.error("Error upload image");
+                return;
+            }
+            fetchListProduct();
+            handleClose();
         }
-        fetchListProduct();
-        handleClose();
     }
+
+    useEffect(() => {
+        setName(product?.name || '')
+        setAmount(product?.amount || 0);
+        setDescription(product?.description || '');
+        setFullPrice(product?.fullPrice || 0);
+        setSale(product?.sale || 0)
+        setPreviewImage(product?.image ? getImageByName(product?.image, 'product') : defaultImageProduct)
+        setImage(product?.image ? true : false);
+
+    }, [showModalAddproduct, product])
 
     return <div className="modal-add-roduct">
         <Modal show={showModalAddproduct} onHide={handleClose} backdrop="static" centered>
             <Modal.Header closeButton>
-                <Modal.Title>Add product</Modal.Title>
+                <Modal.Title>{product ? "Change product" : "Add product"}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className='body-card-container'>
@@ -94,7 +126,17 @@ const AdminModalAddProduct = (props) => {
                             </TextField>
                         </div>
                     </div>
-
+                    <div className="col-md-12">
+                        <label> Image </label>
+                        <div className="input-group mb-3" style={{ margin: "20px 0" }}>
+                            <input type="file" className="form-control" id="inputGroupFile02" onChange={handleFileChange} />
+                            <label className="input-group-text">Upload</label>
+                        </div>
+                        <div className="img-preview" >
+                            <img src={previewImage} hidden={!image} />
+                            {image ? <></> : <div className="border-dotted-no-image">No preview image</div>}
+                        </div>
+                    </div>
                 </div>
 
             </Modal.Body>
@@ -103,7 +145,7 @@ const AdminModalAddProduct = (props) => {
                     Close
                 </Button>
                 <Button variant="primary" onClick={handlePostProduct}>
-                    Add product
+                    {product ? "Change product" : "Add product"}
                 </Button>
             </Modal.Footer>
         </Modal>

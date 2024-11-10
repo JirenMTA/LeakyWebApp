@@ -7,11 +7,11 @@ import { postSignup } from "../../service/apiService";
 
 const Signup = (props) => {
     const navigate = useNavigate();
-    const [username, setUsername] = useState('1');
-    const [email, setEmail] = useState('1@gmail.com');
-    const [password, setPassword] = useState('1');
+    const [username, setUsername] = useState('string');
+    const [email, setEmail] = useState('user@example.com');
+    const [password, setPassword] = useState('string');
     const [showPassword, setShowPassword] = useState(false);
-    const [passwordConfirm, setPasswordConfirm] = useState('1');
+    const [passwordConfirm, setPasswordConfirm] = useState('string');
 
     const validateEmail = (email) => {
         return String(email)

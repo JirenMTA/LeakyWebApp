@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { doLogin } from "../../redux/action/userActions";
-import { postLogin } from "../../service/apiService";
+import { getUserById, postLogin } from "../../service/apiService";
 
 const Login = (props) => {
     const navigate = useNavigate();
@@ -30,29 +30,33 @@ const Login = (props) => {
     }
 
     const handleSubmitLogin = async (event) => {
+
         if (!validateEmail(email)) {
             toast.error("Invalid email");
             return;
         }
 
         const res = await fetchLogin();
-        if (res.data.status != "Ok") {
+        console.log(res);
+        if (res?.data?.status != "Ok") {
             toast.error("Wrong email or password");
             return;
         }
-
+        const information = await getUserById(res?.data?.id);
+        console.log(information);
         dispatch(doLogin({
             account: {
-                token: '11',
-                username: email,
-                id: 1,
-                role: 'admin'
+                username: information?.data?.username,
+                email: information?.data?.email,
+                id: res?.data?.id,
+                role: 'admin',
+                avatar: information?.data?.avatar
             },
             isAuthenticated: true
         }));
 
         navigate("/");
-        toast.success("Successfully login to JuiceShop")
+        // toast.success("Successfully login to JuiceShop")
     }
 
     return <div className="login-container">

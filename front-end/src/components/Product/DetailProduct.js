@@ -1,4 +1,3 @@
-import "./DetailProduct.scss"
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -6,14 +5,16 @@ import SendIcon from '@mui/icons-material/Send';
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { postComment } from "../../service/apiService";
+import { getImageByName, postComment } from "../../service/apiService";
 import Rating from '@mui/material/Rating';
 import StarIcon from '@mui/icons-material/Star';
-import cloneImage from '../../assets/image_products/banana_juice.jpg'
 import React from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-
+import defaultAvatar from '../../assets/avatar/default.jpg'
+import defaultProductImage from '../../assets/image_products/default.jpg'
+import "./DetailProduct.scss"
+import getSalePrice from '../utils/GetSalePrice';
 
 const DetailProduct = (props) => {
     const { show, setShow, product, handleShowDetail, handleAddToBasket } = props
@@ -61,9 +62,6 @@ const DetailProduct = (props) => {
         return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
     }
 
-    const parser = new DOMParser();
-
-
     return <div className="detail-product-container">
         <Modal show={show} onHide={handleClose} centered size="lg">
             <Modal.Header closeButton>
@@ -72,7 +70,7 @@ const DetailProduct = (props) => {
             <Modal.Body>
                 <div className="body-container">
                     <div className="img-container">
-                        <img src={cloneImage} />
+                        <img src={product?.image ? getImageByName(product?.image, 'product') : defaultProductImage} />
                     </div>
                     <div className="description">
                         <div>
@@ -84,13 +82,13 @@ const DetailProduct = (props) => {
                             readOnly
                         ></Rating>
                         <div className='price-product'>
-                            {product?.sale ? (
+                            {product?.sale > 0 ? (
                                 <>
                                     <span className='full-price'>
                                         {product?.full_price + " руб."}
                                     </span>
                                     <span className='sale'>
-                                        {product?.sale + " руб."}
+                                        {getSalePrice(product?.full_price, product?.sale) + " руб."}
                                     </span>
                                 </>
                             ) : (
@@ -107,7 +105,7 @@ const DetailProduct = (props) => {
                         <CardContent>
                             <Box display="flex" alignItems="center" >
                                 <img
-                                    src={"https://i.redd.it/tnpjnvyab2z31.png"}
+                                    src={item?.author?.avatar ? getImageByName(item?.author?.avatar, 'avatar') : defaultAvatar}
                                     alt={item?.author?.username}
                                 />
                                 <Typography variant="h6">{item?.author?.username}</Typography>
