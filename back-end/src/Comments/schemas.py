@@ -10,7 +10,6 @@ class ResponseStatus(Enum):
     Error = "Fail"
 
 
-# TODO не принимать id автора, а доставать его из Cookie
 class SCommentAdd(BaseModel):
     product_id: int
     mark: float

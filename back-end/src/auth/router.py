@@ -35,19 +35,10 @@ async def sign_in(data: SSignIn, response: Response) -> SResult:
     cookie = generate_cookie({"id": user.id, "role": user.role.name})
     response.set_cookie(key="auth", value=cookie, httponly=True, samesite="strict")
 
-    return SResult(status="Ok")
+    return SResult(status="Ok", id=user.id)
 
 
 @router.get("/logout", response_model=SResult, response_model_exclude_unset=True)
 async def logout(response: Response):
     response.delete_cookie("auth")
     return SResult(status="Ok")
-
-
-"""
-Test functionality of dependencies to fix IDOR
-"""
-
-# @router.get("/test")
-# async def read_items(commons: Annotated[dict, Depends(common_parameters)]):
-#    return commons

@@ -1,4 +1,4 @@
-from sqlalchemy import select, update
+from sqlalchemy import select, update, text
 from sqlalchemy.orm import selectinload
 from sqlalchemy.sql import func
 
@@ -16,6 +16,13 @@ class ProductRepository:
             result = await session.execute(query)
             product_models = result.scalars().all()
             return product_models
+
+    @classmethod
+    async def find_products(cls, param: str):
+        async with new_session() as session:
+            query = f"select * from products where name like '%{param}%' limit 5"
+            data = await session.execute(text(query))
+            return data
 
     @classmethod
     async def get_one(cls, id: int) -> Product | None:
