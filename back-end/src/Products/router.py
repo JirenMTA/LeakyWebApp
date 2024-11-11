@@ -10,8 +10,6 @@ from src.Products.schemas import (
 from src.Products.service import ProductService
 from src.auth.dependencies import admin_required
 from src.auth.schemas import SAccessControl
-from src.database import new_session
-from sqlalchemy import text
 
 router = APIRouter(prefix="/products", tags=["Товары"])
 
@@ -37,6 +35,8 @@ async def get_product(id: int) -> SProductGetFull:
 
 
 @router.post("")
-async def add_product(data: SProductAdd) -> SResult:
+async def add_product(
+    data: SProductAdd, _: Annotated[SAccessControl, Depends(admin_required)]
+) -> SResult:
     result = await ProductService.add_product(data)
     return result
