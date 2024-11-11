@@ -19,7 +19,7 @@ async def sign_up(data: SLocalSignUp) -> SResult:
     if user is None:  # TODO Более понятная обработка ошибок
         return SResult(status="Fail", error="Failed to add user")
 
-    return SResult(status="Ok", id=-1)
+    return SResult(status="Ok")
 
 
 @router.post("/sign_in", response_model=SResult, response_model_exclude_unset=True)
@@ -41,17 +41,4 @@ async def sign_in(data: SSignIn, response: Response) -> SResult:
 @router.get("/logout", response_model=SResult, response_model_exclude_unset=True)
 async def logout(response: Response):
     response.delete_cookie("auth")
-<<<<<<< HEAD
-    return SResult(status="Ok", id=-1)
-
-
-"""
-Test functionality of dependencies to fix IDOR
-"""
-
-# @router.get("/test")
-# async def read_items(commons: Annotated[dict, Depends(common_parameters)]):
-#    return commons
-=======
     return SResult(status="Ok")
->>>>>>> back-end

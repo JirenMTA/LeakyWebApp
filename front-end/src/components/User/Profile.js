@@ -18,7 +18,6 @@ const Profile = (props) => {
             account: {
                 username: information?.data?.username,
                 email: information?.data?.email,
-                role: 'admin',
                 avatar: information?.data?.avatar
             },
             isAuthenticated: true

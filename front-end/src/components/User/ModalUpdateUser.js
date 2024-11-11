@@ -67,7 +67,7 @@ const ModalUpdateUser = (props) => {
                         <div className="col-md-4">
                             <label className="form-label">Role</label>
                             <select className="form-select" value={userState?.account?.role} disabled>
-                                <option value={"user"}>USER</option>
+                                <option value={"customer"}>CUSTOMER</option>
                                 <option value={"admin"}>ADMIN</option>
                             </select>
                         </div>

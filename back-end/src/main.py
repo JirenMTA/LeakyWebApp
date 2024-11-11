@@ -27,7 +27,7 @@ async def lifespan(app: FastAPI):
     yield
     print("Приложение выключено!")
 
-app = FastAPI(title="Leaky Web App")
+app = FastAPI(title="Leaky Web App", lifespan=lifespan)
 
 # Set up CORS
 origins = [

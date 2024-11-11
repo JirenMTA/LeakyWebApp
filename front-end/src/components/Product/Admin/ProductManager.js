@@ -9,6 +9,8 @@ import { getImageByName, getProducts } from '../../../service/apiService';
 import AdminModalAddProduct from './AdminModalAddProduct';
 import defaultImageProduct from "../../../assets/image_products/default.jpg"
 import getSalePrice from '../../utils/GetSalePrice';
+import { getUserById } from '../../../service/apiService';
+import { useNavigate } from 'react-router-dom';
 
 const ProductManager = (props) => {
     const importAll = (r) => {
@@ -21,16 +23,24 @@ const ProductManager = (props) => {
     const [listProduct, setListProduct] = useState([]);
     const [showModalAddproduct, setShowModalAddproduct] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null)
-
+    const userState = useSelector(state => state?.userState)
+    const navigate = useNavigate();
     const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-    const userState = useSelector(state => state.userState);
 
     const fetchListProduct = async () => {
         const res = await getProducts();
         setListProduct(res?.data)
     }
 
+    const checkCanLoad = async () => {
+        const information = await getUserById(userState?.account?.id);
+        if (!(information?.data?.role?.name === 'admin')) {
+            navigate("/")
+        }
+    }
+
     useEffect(() => {
+        checkCanLoad();
         fetchListProduct();
     }, [])
 

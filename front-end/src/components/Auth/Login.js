@@ -37,7 +37,6 @@ const Login = (props) => {
         }
 
         const res = await fetchLogin();
-        console.log(res);
         if (res?.data?.status != "Ok") {
             toast.error("Wrong email or password");
             return;
@@ -49,7 +48,7 @@ const Login = (props) => {
                 username: information?.data?.username,
                 email: information?.data?.email,
                 id: res?.data?.id,
-                role: 'admin',
+                role: information?.data?.role?.name,
                 avatar: information?.data?.avatar
             },
             isAuthenticated: true
