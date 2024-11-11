@@ -5,11 +5,13 @@ import { getUserById } from "../../service/apiService";
 import { useEffect, useState } from "react";
 import { doLogin } from "../../redux/action/userActions";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Profile = (props) => {
     const dispatch = useDispatch();
     const userState = useSelector(state => state?.userState)
     const [balance, setBalance] = useState(0);
+    const navigate = useNavigate();
 
     const fetchMyInformation = async () => {
         const information = await getUserById(userState?.account?.id);
@@ -20,7 +22,7 @@ const Profile = (props) => {
                 email: information?.data?.email,
                 avatar: information?.data?.avatar
             },
-            isAuthenticated: true
+            isAuthenticated: information?.isAuthenticated
         }));
     }
 
@@ -30,8 +32,7 @@ const Profile = (props) => {
 
 
     if (!userState || !userState.isAuthenticated) {
-        toast.error("Page not found");
-        return <></>
+        navigate("/");
     }
 
     return <div>

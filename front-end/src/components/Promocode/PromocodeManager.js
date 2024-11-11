@@ -89,7 +89,7 @@ const PromocodeManager = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {promoCodes.map((promo) => (
+                        {(promoCodes) && (promoCodes.length > 0) && promoCodes.map((promo) => (
                             <TableRow key={promo.id}>
                                 <TableCell>{promo.code}</TableCell>
                                 <TableCell>{promo.sale}</TableCell>
@@ -162,7 +162,7 @@ const PromocodeManager = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {promoCodes.map((promo) => (
+                        {(promoCodes) && (promoCodes.length > 0) && promoCodes.map((promo) => (
                             <TableRow key={promo.id}>
                                 <TableCell>{promo.code}</TableCell>
                                 <TableCell>{promo.sale}</TableCell>

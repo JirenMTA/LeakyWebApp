@@ -1,12 +1,13 @@
-import axios from "../utils/axiosCustomize";
+import { instance as axios } from "../utils/axiosCustomize";
+//import axios from "../utils/axiosCustomize";
 
-const getAddressByCoord = (coordinates) => {
-    return axios.get(`https://geocode-maps.yandex.ru/1.x/?apikey=1d89ceef-3bdf-4e95-9ad8-cb9169d831cf&geocode=${coordinates[0]},${coordinates[1]}&format=json`);
+const getAddressByCoord = async (coordinates) => {
+    return await axios.get(`https://geocode-maps.yandex.ru/1.x/?apikey=1d89ceef-3bdf-4e95-9ad8-cb9169d831cf&geocode=${coordinates[0]},${coordinates[1]}&format=json`);
 }
 
-const getCoordByAddress = (address) => {
+const getCoordByAddress = async (address) => {
     try {
-        const response = axios.get(`https://geocode-maps.yandex.ru/1.x/?apikey=1d89ceef-3bdf-4e95-9ad8-cb9169d831cf&geocode=${address}&format=json`);
+        const response = await axios.get(`https://geocode-maps.yandex.ru/1.x/?apikey=1d89ceef-3bdf-4e95-9ad8-cb9169d831cf&geocode=${address}&format=json`);
         return response;
     } catch (error) {
         return error;
@@ -14,18 +15,18 @@ const getCoordByAddress = (address) => {
 };
 
 
-const getProducts = () => {
+const getProducts = async () => {
     try {
-        const response = axios.get('/products');
+        const response = await axios.get('/products');
         return response;
     } catch (error) {
         return error;
     }
 };
 
-const getDetailProducts = (id) => {
+const getDetailProducts = async (id) => {
     try {
-        const response = axios.get(`/products/${id}`);
+        const response = await axios.get(`/products/${id}`);
         return response;
     } catch (error) {
         return error;
@@ -46,9 +47,9 @@ const postLogin = async (data) => {
     }
 };
 
-const postSignup = (data) => {
+const postSignup = async (data) => {
     try {
-        const response = axios.post(`/auth/sign_up`, data);
+        const response = await axios.post(`/auth/sign_up`, data);
         return response;
     } catch (error) {
         return error;
@@ -64,18 +65,18 @@ const getLogOut = async (data) => {
     }
 }
 
-const postComment = (data) => {
+const postComment = async (data) => {
     try {
-        const response = axios.post(`/comments`, data);
+        const response = await axios.post(`/comments`, data);
         return response;
     } catch (error) {
         return error;
     }
 }
 
-const postCart = (data) => {
+const postCart = async (data) => {
     try {
-        const response = axios.post(
+        const response = await axios.post(
             '/cart',
             data,
             { withCredentials: true }
@@ -87,9 +88,9 @@ const postCart = (data) => {
     }
 };
 
-const getCart = () => {
+const getCart = async () => {
     try {
-        const response = axios.get('/cart');
+        const response = await axios.get('/cart');
         return response;
     } catch (error) {
         console.error("Error during get cart:", error);
@@ -97,9 +98,9 @@ const getCart = () => {
     }
 }
 
-const putCart = (data) => {
+const putCart = async (data) => {
     try {
-        const response = axios.put(
+        const response = await axios.put(
             '/cart',
             data,
         );
@@ -110,9 +111,9 @@ const putCart = (data) => {
     }
 }
 
-const deleteCart = (data) => {
+const deleteCart = async (data) => {
     try {
-        const response = axios.delete(
+        const response = await axios.delete(
             '/cart',
             { data: data },
         );
@@ -123,9 +124,9 @@ const deleteCart = (data) => {
     }
 }
 
-const postProduct = (data) => {
+const postProduct = async (data) => {
     try {
-        const response = axios.post(
+        const response = await axios.post(
             '/products',
             data,
         );
@@ -136,9 +137,9 @@ const postProduct = (data) => {
     }
 }
 
-const deleteProduct = (data) => {
+const deleteProduct = async (data) => {
     try {
-        const response = axios.delete(
+        const response = await axios.delete(
             '/products',
             { data: data },
         );
@@ -149,9 +150,9 @@ const deleteProduct = (data) => {
     }
 }
 
-const getPromocode = (data) => {
+const getPromocode = async (data) => {
     try {
-        const response = axios.get(
+        const response = await axios.get(
             '/promo',
         );
         return response;
@@ -161,9 +162,9 @@ const getPromocode = (data) => {
     }
 }
 
-const putPromocode = (data) => {
+const putPromocode = async (data) => {
     try {
-        const response = axios.put(
+        const response = await axios.put(
             '/promo',
             data
         );
@@ -174,9 +175,9 @@ const putPromocode = (data) => {
     }
 }
 
-const postPromocode = (data) => {
+const postPromocode = async (data) => {
     try {
-        const response = axios.post(
+        const response = await axios.post(
             '/promo',
             data
         );
@@ -188,9 +189,9 @@ const postPromocode = (data) => {
 }
 
 
-const deletePromocode = (data) => {
+const deletePromocode = async (data) => {
     try {
-        const response = axios.delete(
+        const response = await axios.delete(
             '/promo',
             { data: data }
         );
@@ -201,9 +202,9 @@ const deletePromocode = (data) => {
     }
 }
 
-const postCreateOrder = (data) => {
+const postCreateOrder = async (data) => {
     try {
-        const response = axios.post(
+        const response = await axios.post(
             '/orders',
             data
         );
@@ -214,9 +215,9 @@ const postCreateOrder = (data) => {
     }
 }
 
-const getOrder = () => {
+const getOrder = async () => {
     try {
-        const response = axios.get(
+        const response = await axios.get(
             '/orders',
         );
         return response;
@@ -226,9 +227,9 @@ const getOrder = () => {
     }
 }
 
-const postUsePromo = (data) => {
+const postUsePromo = async (data) => {
     try {
-        const response = axios.post(
+        const response = await axios.post(
             '/orders/promo', data
         );
         return response;
@@ -305,6 +306,21 @@ const postPayforOrder = async (order_id) => {
     }
 }
 
+const dangerousGetFindProduct = async (param) => {
+    try {
+        const response = await axios.get(
+            `/products/find`, {
+            params: {
+                param: param,
+            },
+        });
+        return response;
+    } catch (error) {
+        console.error("Error during get products:", error);
+        return error.response;
+    }
+}
+
 
 export {
     getAddressByCoord, getCoordByAddress,
@@ -314,5 +330,5 @@ export {
     getPromocode, putPromocode, postPromocode, deletePromocode,
     postCreateOrder, getOrder, postUsePromo, getUserById,
     getImageByName, postUploadAvartar, postUploadProductImage,
-    postPayforOrder
+    postPayforOrder, dangerousGetFindProduct
 }

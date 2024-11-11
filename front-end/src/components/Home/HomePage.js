@@ -8,20 +8,14 @@ import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 import { useSelector } from "react-redux";
 import { useMediaQuery } from 'react-responsive';
-import { getOrder, getProducts } from '../../service/apiService';
+import { dangerousGetFindProduct, getOrder, getProducts } from '../../service/apiService';
 import { getCart } from '../../service/apiService';
 import { doFetchListCart } from '../../redux/action/listCartAction';
 import { doFetchListOrder } from '../../redux/action/listOrderAction';
+import { useNavigate } from "react-router-dom";
 
 
 const HomePage = (props) => {
-    const importAll = (r) => {
-        let imagesArray = [];
-        r.keys().forEach((item) => { imagesArray.push(r(item)); });
-        return imagesArray;
-    };
-    const images = importAll(require.context('../../assets/image_products', false, /\.(png|jpe?g|svg)$/));
-
     const [listProduct, setListProduct] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -31,39 +25,48 @@ const HomePage = (props) => {
     const [listProductInBasket, setListProductInBasket] = useState([]);
     const [listOrderCount, setListOrderCount] = useState(0);
 
-
     const fetchProducts = async () => {
-        let listCart = await getProducts();
-        let listOrder = await getOrder();
-        setListProduct(listCart?.data);
-        setListOrderCount(listOrder?.data?.length);
+        let products = await getProducts();
+        setListProduct(products?.data);
     };
 
     useEffect(() => {
-        fetchProducts();
-    }, []);
+        fetchListCart();
+        fetchListOrder()
+    }, [userState]);
+    // useEffect(() => {
+    //     if (listProduct && listProduct?.filter) {
+    //         const filteredProducts_ = listProduct.filter((product) =>
+    //             product.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
+    //         );
+    //         setFilteredProducts(filteredProducts_);
+    //     }
+    // }, [listProduct, searchTerm])
 
-    useEffect(() => {
-        if (listProduct && listProduct?.filter) {
-            const filteredProducts_ = listProduct.filter((product) =>
-                product.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
-            );
-            setFilteredProducts(filteredProducts_);
+    const fetchListOrder = async () => {
+        if (userState.isAuthenticated) {
+            let listOrder = await getOrder();
+            setListOrderCount(listOrder?.data?.length);
         }
-    }, [listProduct, searchTerm])
-
+    }
 
     const fetchListCart = async (data) => {
-        const res = await getCart(data);
-        setListProductInBasket(res?.data?.products);
+        if (userState.isAuthenticated) {
+            const res = await getCart(data);
+            setListProductInBasket(res?.data?.products);
+        }
     }
 
     useEffect(() => {
+        fetchProducts();
         fetchListCart();
+        fetchListOrder()
     }, []);
 
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
+    const handleSearchChange = async (e) => {
+        setSearchTerm(e.target.value.trim());
+        const res = await dangerousGetFindProduct(e.target.value.trim());
+        setListProduct(res?.data);
     };
 
     useEffect(() => {
@@ -102,7 +105,7 @@ const HomePage = (props) => {
                         </div>
                     </div>
                     <div className="list-product">
-                        {filteredProducts && filteredProducts.length > 0 && filteredProducts.map((item, key) => {
+                        {listProduct && listProduct.length > 0 && listProduct.map((item, key) => {
                             return <Product
                                 fetchListCart={fetchListCart}
                                 listProductInBasket={listProductInBasket}

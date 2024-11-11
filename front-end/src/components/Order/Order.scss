@@ -22,6 +22,10 @@
     gap: 20px;
     padding: 10px;
 
+    button {
+        width: 150px;
+    }
+
     .border-order {
         border: solid;
         border-color: rgb(48, 169, 225);
@@ -111,6 +115,13 @@
 }
 
 @media (max-width: 768px) {
+
+    .basket-container {
+        button {
+            width: 100%;
+        }
+    }
+
     .column-no {
         width: 30px;
     }

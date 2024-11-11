@@ -1,6 +1,5 @@
 import Table from 'react-bootstrap/Table';
 import { useEffect, useState } from 'react';
-import "../Basket.scss"
 import Button from 'react-bootstrap/Button';
 import { useMediaQuery } from 'react-responsive';
 import NumericInput from 'react-numeric-input';
@@ -13,13 +12,6 @@ import { getUserById } from '../../../service/apiService';
 import { useNavigate } from 'react-router-dom';
 
 const ProductManager = (props) => {
-    const importAll = (r) => {
-        let imagesArray = [];
-        r.keys().forEach((item) => { imagesArray.push(r(item)); });
-        return imagesArray;
-    };
-    const images = importAll(require.context('../../../assets/image_products', false, /\.(png|jpe?g|svg)$/));
-
     const [listProduct, setListProduct] = useState([]);
     const [showModalAddproduct, setShowModalAddproduct] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null)
@@ -59,7 +51,9 @@ const ProductManager = (props) => {
     }
 
     return <div className="basket-container">
-        <Button onClick={() => { setCurrentProduct(null); setShowModalAddproduct(true) }}>Add product</Button>
+        <Button onClick={() => { setCurrentProduct(null); setShowModalAddproduct(true) }}>
+            Add product
+        </Button>
         {!isMobile ?
             <Table striped bordered hover size="sm">
                 <thead>
@@ -140,7 +134,7 @@ const ProductManager = (props) => {
                                 <td>
                                     <div className='product-in-basket-container'>
                                         <span>{item?.name}</span>
-                                        <img src={images[item?.id % images.length]}></img>
+                                        <img src={item?.image ? getImageByName(item?.image, 'product') : defaultImageProduct}></img>
                                         {
 
                                             item?.sale && item?.sale < item?.full_price ?
