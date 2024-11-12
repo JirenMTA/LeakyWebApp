@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import BorderColorIcon from '@mui/icons-material/BorderColor';
-import avatar from "../../assets/avatar/goku.png"
-import { toast } from "react-toastify";
-import './UserProfileComponent.scss';
 import { getImageByName } from '../../service/apiService';
 import ModalUpdateUser from './ModalUpdateUser';
 import { useSelector } from 'react-redux';
 import defaultAvartar from '../../assets/avatar/default.jpg'
+import './UserProfileComponent.scss';
 
 const UserProfileComponent = (props) => {
     const { collapse, user, maxWidth, isEdit } = props;
