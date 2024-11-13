@@ -64,7 +64,9 @@ const HomePage = (props) => {
     }, []);
 
     const handleSearchChange = async (e) => {
-        setSearchTerm(e.target.value.trim());
+        if (e.target.value.length > 100)
+            return;
+        setSearchTerm(e.target.value);
         const res = await dangerousGetFindProduct(e.target.value.trim());
         setListProduct(res?.data);
     };
