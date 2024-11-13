@@ -2,6 +2,14 @@
     display: flex;
     flex-direction: row;
 
+    .img-container {
+        height: 130px;
+
+        img {
+            height: 100%;
+        }
+    }
+
     .description {
         margin-left: 10px;
         display: flex;
@@ -9,21 +17,44 @@
         font-weight: 300;
         gap: 20px;
         font-size: 20px;
+
+        .price-product {
+            font-weight: 500;
+            margin: 10px 0px;
+
+            .full-price {
+                text-decoration: line-through;
+                margin-right: '10px';
+                color: 'gray';
+            }
+
+            .sale {
+                color: red;
+                font-weight: bold;
+                margin-left: 10px;
+            }
+        }
     }
 
     @media (max-width: 768px) {
         flex-direction: column;
         align-items: center;
+
+        img {
+            width: 100%;
+        }
     }
 
 }
 
 
 .review-container {
-    height: 100px;
+    height: 150px;
     overflow-y: auto;
     padding-right: 10px;
     margin: 10px;
+    overflow-x: hidden;
+    background-color: #f0eada;
 
     &::-webkit-scrollbar {
         width: 8px;
@@ -58,6 +89,13 @@
 .add-review-container {
     padding: 10px;
 
+    .rating-container {
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 30px;
+    }
+
     .input-add-review {
         display: flex;
         flex-direction: row;
@@ -69,7 +107,7 @@
             width: 100%;
 
             textarea {
-                height: 120px;
+                height: 80px;
                 resize: none;
             }
 
@@ -99,5 +137,27 @@
                 color: #0056b3;
             }
         }
+    }
+}
+
+.MuiBox-root.css-qxh7fn {
+    width: 80%;
+}
+
+.card-review {
+    margin: 10px;
+    border-radius: 10px;
+
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 10px;
+    }
+
+    .mark-content {
+        color: #FAAF00;
+        margin-left: 10px;
     }
 }

@@ -4,12 +4,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 import Header from './components/Header/Header';
 import { Outlet } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import SideBar from './components/SideBar/SideBar';
-import { YMaps } from '@pbe/react-yandex-maps';
-import { useMediaQuery } from 'react-responsive';
+import { setupAxiosInterceptors } from './utils/axiosCustomize';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 const App = (props) => {
   const [colapseOnMobile, setColapseOnMobile] = useState(true);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setupAxiosInterceptors(navigate, dispatch);
+  }, [navigate, dispatch]);
 
   return (
     <div className='app-container'>

@@ -1,0 +1,41 @@
+.body-card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .form-add-product {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .price {
+        display: flex;
+        gap: 5px;
+    }
+
+    .img-preview {
+        align-items: center !important;
+        justify-content: center;
+        display: flex;
+        height: 200px;
+
+        .border-dotted-no-image {
+            border-style: dashed;
+            border-radius: 20px;
+            border-width: 1px;
+            border-color: rgb(87, 84, 84);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        img {
+            width: auto !important;
+            height: 230px !important;
+            object-fit: cover !important;
+            margin: 10px !important;
+        }
+    }
+}

@@ -1,0 +1,25 @@
+.promocode-table {
+
+    .action-column {
+        display: flex;
+        gap: 5px;
+
+        button {
+            width: 100%;
+        }
+    }
+}
+
+
+@media (max-width: 768px) {
+    .action-column {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        button {
+            width: 100%;
+            margin: 5px;
+        }
+    }
+}

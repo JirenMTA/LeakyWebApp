@@ -10,20 +10,22 @@ import { doLogout } from '../../redux/action/userActions';
 import { useMediaQuery } from 'react-responsive';
 import logo from "../../assets/logo/logo.png";
 import "./Header.scss";
+import { getLogOut } from '../../service/apiService';
 
 const Header = (props) => {
     const navigate = useNavigate();
-    const listProductAddedToBasket = useSelector(state => state.orderListState.orderList);
+    const listProductAddedToBasket = useSelector(state => state.listCartState.orderList);
+    const listOrderCount = useSelector(state => state.listOrderState.numberOrder);
     const userState = useSelector(state => state.userState);
     const dispatch = useDispatch();
     const { colapseOnMobile, setColapseOnMobile } = props
     const isMobile = useMediaQuery({ query: '(max-width: 1000px)' });
 
-    const handleUserLogout = () => {
+    const handleUserLogout = async () => {
+        await getLogOut();
         dispatch(doLogout());
         navigate("/");
     };
-
 
     return (
         <Navbar expand="lg" className="bg-body-tertiary" style={{ height: "70px" }}>
@@ -50,23 +52,26 @@ const Header = (props) => {
                                     </>
                                 ) : (
                                     <div className='header-authenticated-container'>
-                                        <div className='container-purchased' onClick={() => navigate("/purchased")}>
-                                            <CheckIcon />
-                                            <div>Purchased</div>
-                                        </div>
-                                        <div className='container-basket' onClick={() => navigate("/basket")}>
+                                        <div className='container-basket' onClick={() => navigate("/cart")}>
                                             <ShoppingBasketIcon />
-                                            <div>My basket</div>
+                                            <div>Cart</div>
                                             {listProductAddedToBasket && listProductAddedToBasket.length > 0 && (
                                                 <span className='basket-count'>{listProductAddedToBasket.length}</span>
                                             )}
                                         </div>
+                                        <div className='container-basket' onClick={() => navigate("/order")}>
+                                            <CheckIcon />
+                                            <div>Order</div>
+                                            {listOrderCount > 0 && (
+                                                <span className='basket-count'>{listOrderCount}</span>
+                                            )}
+                                        </div>
                                         <NavDropdown title="Setting" id="basic-nav-dropdown">
+                                            <Link to="/profile" className='dropdown-item'>Profile</Link>
+                                            <NavDropdown.Divider />
                                             <NavDropdown.Item onClick={handleUserLogout}>
                                                 Logout
                                             </NavDropdown.Item>
-                                            <NavDropdown.Divider />
-                                            <Link to="/users" className='dropdown-item'>Profile</Link>
                                         </NavDropdown>
                                     </div>
                                 )}

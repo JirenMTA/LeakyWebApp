@@ -4,14 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { doLogin } from "../../redux/action/userActions";
-import { useMediaQuery } from 'react-responsive';
+import { getUserById, postLogin } from "../../service/apiService";
 
 const Login = (props) => {
     const navigate = useNavigate();
-    const [email, setEmail] = useState('1@gmail.com');
-    const [password, setPassword] = useState('1');
+    const [email, setEmail] = useState('user@example.com');
+    const [password, setPassword] = useState('string');
     const dispatch = useDispatch();
-    const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
+
 
     const validateEmail = (email) => {
         return String(email)
@@ -23,23 +23,39 @@ const Login = (props) => {
     const handleBackToHomepage = (event) => {
         navigate('/');
     }
+
+    const fetchLogin = async () => {
+        let data = await postLogin({ email, password });
+        return data;
+    }
+
     const handleSubmitLogin = async (event) => {
+
         if (!validateEmail(email)) {
             toast.error("Invalid email");
             return;
         }
 
+        const res = await fetchLogin();
+        if (res?.data?.status != "Ok") {
+            toast.error("Wrong email or password");
+            return;
+        }
+        const information = await getUserById(res?.data?.id);
+        console.log(information);
         dispatch(doLogin({
             account: {
-                access_token: '11',
-                refresh_token: '11',
-                username: email,
+                username: information?.data?.username,
+                email: information?.data?.email,
+                id: res?.data?.id,
+                role: information?.data?.role?.name,
+                avatar: information?.data?.avatar
             },
             isAuthenticated: true
         }));
 
         navigate("/");
-        toast.success("Successfully login to JuiceShop")
+        // toast.success("Successfully login to JuiceShop")
     }
 
     return <div className="login-container">

@@ -1,13 +1,13 @@
-import { FETCH_LIST_ORDER } from '../action/orderListAction'
+import { FETCH_LIST_CART } from '../action/listCartAction'
 
 const INITIAL_STATE = {
     orderList: []
 }
 
 
-const orderListReducer = (state = INITIAL_STATE, action) => {
+const listCartReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case FETCH_LIST_ORDER:
+        case FETCH_LIST_CART:
             return {
                 ...state,
                 orderList: action.payload.orderList
@@ -18,4 +18,4 @@ const orderListReducer = (state = INITIAL_STATE, action) => {
     }
 }
 
-export default orderListReducer;
+export default listCartReducer;

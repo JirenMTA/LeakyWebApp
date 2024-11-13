@@ -1,0 +1,166 @@
+.full-price {
+    color: 'gray';
+}
+
+.sale {
+    color: red;
+    font-weight: bold;
+}
+
+.total-price {
+    color: green;
+    font-weight: bold;
+}
+
+.line-through {
+    text-decoration: line-through;
+}
+
+.basket-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+
+    button {
+        width: 150px;
+    }
+
+    .border-order {
+        border: solid;
+        border-color: rgb(48, 169, 225);
+        border-width: 1px;
+        border-radius: 20px;
+        padding: 10px;
+
+    }
+
+    .total-price-content {
+        font-size: 30px;
+        font-weight: 150;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        margin-bottom: 10px;
+
+        .promocode-all {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            height: 40px;
+            text-align: center;
+            justify-items: center;
+            font-size: 25px;
+        }
+    }
+
+    table {
+        width: 100%;
+
+        th,
+        td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 10px;
+            word-wrap: break-word;
+            word-break: break-all;
+            white-space: normal;
+            overflow: hidden;
+        }
+
+        .column-img {
+            width: 15%;
+        }
+
+        .column-code {
+            width: 25%;
+        }
+
+
+        .column-action {
+            width: 200px;
+        }
+
+        .column-no {
+            width: 50px;
+        }
+
+        .column-amount {
+            width: 10%;
+        }
+
+        img {
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .action-content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+
+        button {
+            width: 70%;
+        }
+    }
+
+
+}
+
+@media (max-width: 768px) {
+
+    .basket-container {
+        button {
+            width: 100%;
+        }
+    }
+
+    .column-no {
+        width: 30px;
+    }
+
+    .column-product {
+        width: 40%;
+    }
+
+    .product-in-basket-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-weight: 500;
+        align-items: center;
+
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+    }
+
+    .action-content {
+        display: flex;
+        flex-direction: column;
+
+
+    }
+
+    .total-price-content {
+        width: 100%;
+
+        .promocode-all {
+            width: 100%;
+
+            input {
+                width: 100%;
+            }
+        }
+    }
+}
