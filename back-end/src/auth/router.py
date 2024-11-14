@@ -45,9 +45,6 @@ async def sign_in(data: SSignIn, response: Response) -> SResult:
 @router.get("/logout", response_model=SResult, response_model_exclude_unset=True)
 async def logout(response: Response):
     response.delete_cookie("auth")
-<<<<<<< HEAD
-    return SResult(status="Ok")
-=======
     return SResult(status="Ok")
 
 
@@ -66,4 +63,4 @@ async def second_factor_auth(
         return SResult(status="Ok", id=access_schema.id)
 
     return SResult(status="Fail", error="Invalid OTP")
->>>>>>> back-end
+

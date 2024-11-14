@@ -1,0 +1,74 @@
+.modal-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+
+    .auth_img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 1rem;
+    }
+
+    button {
+        margin-top: 1rem;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translate(-20%, -50%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+// @keyframes slideOutLeft {
+//     from {
+//         transform: translate(-50%, -50%); // Center position
+//         opacity: 1;
+//     }
+
+//     to {
+//         transform: translate(-50vw, -50%); // Slide out to the left
+//         opacity: 0;
+//     }
+// }
+
+.slide-in {
+    animation: slideInRight 0.4s forwards;
+}
+
+.slide-out {
+    animation: slideOutLeft 0.4s forwards;
+}
+
+/* Dot Indicator Styling */
+.dots-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    background-color: #ddd;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+
+    &.active {
+        background-color: #4a90e2; // Active dot color
+    }
+}

@@ -4,14 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { doLogin } from "../../redux/action/userActions";
-import { getUserById, postLogin } from "../../service/apiService";
+import { getUserById, post_otp_submit, postLogin } from "../../service/apiService";
+import ModalOTP from "./ModalOTP";
+import { post_qr_code_setup } from '../../service/apiService';
 
 const Login = (props) => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('user@example.com');
     const [password, setPassword] = useState('string');
     const dispatch = useDispatch();
-
+    const [openModal, setOpenModal] = useState(0);
+    const [otpCode, setOtpCode] = useState('');
 
     const validateEmail = (email) => {
         return String(email)
@@ -29,6 +32,29 @@ const Login = (props) => {
         return data;
     }
 
+    const handleOTPSubmit = async () => {
+        const res = await post_otp_submit(otpCode);
+        if (!(res?.data && res?.data?.status === "Ok")) {
+            toast.error("Invalid code");
+            return
+        }
+        const information = await getUserById(res?.data?.id);
+        dispatch(doLogin({
+            account: {
+                username: information?.data?.username,
+                email: information?.data?.email,
+                id: res?.data?.id,
+                role: information?.data?.role?.name,
+                avatar: information?.data?.avatar,
+                has2Fa: true
+            },
+            isAuthenticated: true
+        }));
+        setOpenModal(0);
+        navigate("/");
+        toast.success("Successfully login to ElectronicShop")
+    };
+
     const handleSubmitLogin = async (event) => {
 
         if (!validateEmail(email)) {
@@ -41,21 +67,25 @@ const Login = (props) => {
             toast.error("Wrong email or password");
             return;
         }
+        else if (res?.data?.second_factor_required) {
+            setOpenModal(1);
+            return;
+        }
         const information = await getUserById(res?.data?.id);
-        console.log(information);
         dispatch(doLogin({
             account: {
                 username: information?.data?.username,
                 email: information?.data?.email,
                 id: res?.data?.id,
                 role: information?.data?.role?.name,
-                avatar: information?.data?.avatar
+                avatar: information?.data?.avatar,
+                has2Fa: false
             },
             isAuthenticated: true
         }));
 
         navigate("/");
-        // toast.success("Successfully login to JuiceShop")
+        toast.success("Successfully login to ElectronicShop")
     }
 
     return <div className="login-container">
@@ -82,6 +112,13 @@ const Login = (props) => {
             <span className='forgot-password'>Forgot password?</span>
             <button className='btn-submit' onClick={handleSubmitLogin}>Login to Juice Shop</button>
             <span className='back' onClick={(event) => handleBackToHomepage(event)}>Go to Homepage</span>
+            <ModalOTP
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+                otpCode={otpCode}
+                setOtpCode={setOtpCode}
+                handleOTPSubmit={handleOTPSubmit}
+            ></ModalOTP>
         </div>
     </div>
 }

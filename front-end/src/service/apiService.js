@@ -321,6 +321,44 @@ const dangerousGetFindProduct = async (param) => {
     }
 }
 
+const get_qr_code = async () => {
+    try {
+        const response = await axios.get(`/users/qr_generator`, {
+            responseType: 'blob',
+            headers: {
+                'Accept': 'image/png',
+            },
+        })
+        return response;
+    } catch (error) {
+        console.error("Error during get qr code:", error);
+        return error.response;
+    }
+}
+
+const post_qr_code_setup = async () => {
+    try {
+        const response = await axios.post(`/users/setup_2fa`)
+        return response;
+    } catch (error) {
+        console.error("Error during setup qr code:", error);
+        return error.response;
+    }
+}
+
+const post_otp_submit = async (token) => {
+    try {
+        const response = await axios.post(`/auth/2fa`, null, {
+            params: {
+                token: token,
+            },
+        })
+        return response;
+    } catch (error) {
+        console.error("Error during submit qr code:", error);
+        return error.response;
+    }
+}
 
 export {
     getAddressByCoord, getCoordByAddress,
@@ -330,5 +368,6 @@ export {
     getPromocode, putPromocode, postPromocode, deletePromocode,
     postCreateOrder, getOrder, postUsePromo, getUserById,
     getImageByName, postUploadAvartar, postUploadProductImage,
-    postPayforOrder, dangerousGetFindProduct
+    postPayforOrder, dangerousGetFindProduct,
+    get_qr_code, post_qr_code_setup, post_otp_submit
 }
