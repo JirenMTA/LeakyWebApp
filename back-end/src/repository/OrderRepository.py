@@ -75,10 +75,14 @@ class OrderRepository:
             query = select(User).where(User.id == user_id)
             user_result = await session.execute(query)
             user = user_result.scalar_one()
-            user.balance -= order.total_price
-            await session.flush()
-            await session.commit()
-            return order
+            if user.balance >= order.total_price:
+                user.balance -= order.total_price
+                order.paid = True
+                await session.flush()
+                await session.commit()
+                return order
+            else:
+                return None
 
     @classmethod
     async def use_promo_for_order(
