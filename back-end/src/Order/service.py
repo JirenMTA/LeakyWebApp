@@ -57,6 +57,6 @@ class OrderService:
             return SResult(status="Fail", error=f"Not such order!")
         order = await OrderRepository.pay_for_order(user_id, data)
         if not order:
-            return SResult(status="Fail", order="Not enough money!")
+            return SResult(status="Fail", error="Not enough money!")
         order_schema = SOrderGetShort.model_validate(order)
         return SResult(status="Ok", order=order_schema)
