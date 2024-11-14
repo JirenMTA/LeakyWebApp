@@ -13,7 +13,7 @@ def get_token(request: Request):
     return token
 
 
-async def verify_cookie(cookie: str = Depends(get_token)) -> SAccessControl:
+async def pre_auth(cookie: str = Depends(get_token)) -> SAccessControl:
     try:
         # TODO for vuln set verify_signature on False or use weak secret for cookies
         auth_data = get_auth_data()
@@ -22,7 +22,7 @@ async def verify_cookie(cookie: str = Depends(get_token)) -> SAccessControl:
             auth_data["secret_key"],
             algorithms=[auth_data["algorithm"]],
             options={
-                "require": ["id", "role", "exp"],
+                "require": ["id", "role", "type", "exp"],
             },
         )
     except BaseException as ex:
@@ -32,7 +32,17 @@ async def verify_cookie(cookie: str = Depends(get_token)) -> SAccessControl:
     user = await AuthRepository.get_user_by_id(int(decoded.get("id")))
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    return SAccessControl.validate(user)
+    return_val = SAccessControl.validate(user)
+    return_val.validated = decoded.get("type") == "auth"
+    return return_val
+
+
+async def verify_cookie(
+    access_control_obj: SAccessControl = Depends(pre_auth),
+) -> SAccessControl:
+    if access_control_obj.second_factor_on and not access_control_obj.validated:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+    return access_control_obj
 
 
 async def admin_required(
