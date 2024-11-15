@@ -1,4 +1,5 @@
 from typing import List
+from time import sleep
 
 from src.repository.OrderRepository import OrderRepository
 from src.Order.schemas import (
@@ -44,6 +45,7 @@ class OrderService:
     async def use_promo_for_order(cls, user_id: int, data: SUsePromo) -> SOrderGetShort:
         promo_id = await PromoRepository.check_promo_active(data.promo)
         # TODO Тут замедлить для race condition
+        sleep(0.2)
         order = await OrderRepository.use_promo_for_order(user_id, data.order_id, promo_id)
         order_schema = SOrderGetShort.model_validate(order)
         return order_schema
@@ -54,5 +56,7 @@ class OrderService:
         if not exist:
             return SResult(status="Fail", error=f"Not such order!")
         order = await OrderRepository.pay_for_order(user_id, data)
+        if not order:
+            return SResult(status="Fail", error="Not enough money!")
         order_schema = SOrderGetShort.model_validate(order)
         return SResult(status="Ok", order=order_schema)

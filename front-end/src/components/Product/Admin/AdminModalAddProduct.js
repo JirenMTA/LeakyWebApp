@@ -42,6 +42,10 @@ const AdminModalAddProduct = (props) => {
             else {
                 toast.error("Error add new product!")
             }
+            if (res?.data?.product?.id && image) {
+                await postUploadProductImage(res?.data?.product?.id, image)
+            }
+
             fetchListProduct();
             handleClose();
         }
@@ -60,7 +64,7 @@ const AdminModalAddProduct = (props) => {
         setName(product?.name || '')
         setAmount(product?.amount || 0);
         setDescription(product?.description || '');
-        setFullPrice(product?.fullPrice || 0);
+        setFullPrice(product?.full_price || 0);
         setSale(product?.sale || 0)
         setPreviewImage(product?.image ? getImageByName(product?.image, 'product') : defaultImageProduct)
         setImage(product?.image ? true : false);
@@ -81,6 +85,7 @@ const AdminModalAddProduct = (props) => {
                             style={{ width: "100%" }}
                             value={name}
                             onChange={(event) => { setName(event.target.value) }}
+                            disabled={product}
                         >
                         </TextField>
                     </div>
@@ -90,6 +95,7 @@ const AdminModalAddProduct = (props) => {
                             className="input-text"
                             style={{ width: "100%" }}
                             value={description}
+                            disabled={product}
                             onChange={(event) => { setDescription(event.target.value) }}
                         >
                         </TextField>
@@ -101,6 +107,7 @@ const AdminModalAddProduct = (props) => {
                                 className="input-text"
                                 style={{ width: "100%" }}
                                 value={fullPrice}
+                                disabled={product}
                                 onChange={(event) => { setFullPrice(event.target.value) }}
                             >
                             </TextField>
@@ -111,6 +118,7 @@ const AdminModalAddProduct = (props) => {
                                 className="input-text"
                                 style={{ width: "100%" }}
                                 value={sale}
+                                disabled={product}
                                 onChange={(event) => { setSale(event.target.value) }}
                             >
                             </TextField>
@@ -121,6 +129,7 @@ const AdminModalAddProduct = (props) => {
                                 className="input-text"
                                 style={{ width: "100%" }}
                                 value={amount}
+                                disabled={product}
                                 onChange={(event) => { setAmount(event.target.value) }}
                             >
                             </TextField>

@@ -18,6 +18,11 @@ const setupAxiosInterceptors = (navigate, dispatch) => {
                 toast.error("403 Forbidden - Redirecting to login page");
                 navigate('/login');
             }
+            else if (error.response && error.response.status === 401) {
+                dispatch(doLogout());
+                toast.error("Unauthorized - Redirecting to login page");
+                navigate('/login');
+            }
             return Promise.reject(error);
         }
     );

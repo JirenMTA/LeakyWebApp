@@ -108,9 +108,6 @@ const ProductManager = (props) => {
                                 <td>
                                     <div className='action-content'>
                                         <Button variant="outline-primary" onClick={() => handleChangeProduct(item)}>Change</Button>
-                                        <Button variant="outline-warning"
-                                        >Delete
-                                        </Button>
                                     </div>
                                 </td>
                             </tr>
@@ -168,7 +165,6 @@ const ProductManager = (props) => {
                                             }}
                                         />
                                         <Button variant="outline-primary" onClick={() => handleChangeProduct(item)}>Change</Button>
-                                        <Button variant="outline-warning">Delete</Button>
                                     </div>
                                 </td>
                             </tr>
