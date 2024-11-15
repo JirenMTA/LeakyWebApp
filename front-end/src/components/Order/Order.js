@@ -30,13 +30,17 @@ const Order = (props) => {
     }
 
     const handlePurchaseAll = async (e, order) => {
-        const res = await postPayforOrder(order?.id)
+        const res = await postPayforOrder(order?.id);
         if (res && res?.data && res?.data?.status === "Ok") {
             toast.success("You paid for this order. Thanks for using our market");
+        }
+        else if (res && res?.status === 200 && res?.data?.status === "Fail") {
+            toast.error(res?.data?.error)
         }
         else {
             toast.error("Something went wrong! Try again latter");
         }
+        await fetchListOrder();
     }
 
     useEffect(() => {

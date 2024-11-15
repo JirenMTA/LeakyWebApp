@@ -27,8 +27,7 @@ async def lifespan(app: FastAPI):
     yield
     print("Приложение выключено!")
 
-app = FastAPI(title="Leaky Web App")
-#, lifespan=lifespan)
+app = FastAPI(title="Leaky Web App", lifespan=lifespan)
 
 origins = [
     "http://localhost:3000",
