@@ -13,6 +13,9 @@ from src.Roles.router import router as role_router
 from src.Order.router import router as order_router
 from src.Images.router import router as image_router
 from src.lifespan_scripts import generate_default_roles, create_default_admin
+import asyncio
+from Bot.bot import telegram_bot
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -44,7 +47,7 @@ app.add_middleware(
 )
 
 # Static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("static", StaticFiles(directory="static"), name="static")
 
 # Include routers
 app.include_router(auth_router)
@@ -56,3 +59,6 @@ app.include_router(promo_router)
 app.include_router(role_router)
 app.include_router(order_router)
 app.include_router(image_router)
+
+# Start telegram bot
+asyncio.run(telegram_bot())

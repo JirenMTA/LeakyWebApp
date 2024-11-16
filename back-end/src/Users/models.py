@@ -15,6 +15,7 @@ class User(Base):
     balance: Mapped[float] = mapped_column(default=15000.0)
     avatar: Mapped[str] = mapped_column(nullable=True)
     role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"), default=1)
+    chat_id: Mapped[int | None]
 
     role: Mapped["Roles"] = relationship()
     comments: Mapped[list["Comment"]] = relationship()
