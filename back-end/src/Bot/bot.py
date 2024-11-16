@@ -1,7 +1,7 @@
 from telebot.async_telebot import AsyncTeleBot
 from email_validator import validate_email, EmailNotValidError
 from telebot import types
-from ..repository.BotRepository import BotRepository
+from src.repository.BotRepository import BotRepository
 
 
 async def telegram_bot():
