@@ -30,7 +30,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Leaky Web App", lifespan=lifespan)
-app.mount("/static", StaticFiles(directory="back-end/static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(auth_router)
 app.include_router(user_router)

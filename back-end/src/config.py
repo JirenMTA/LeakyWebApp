@@ -1,2 +1,9 @@
+import os
+
+
 def get_auth_data():
-    return {"secret_key": "MySuperSecretJwtKey1337", "algorithm": "HS256"}
+    secret = os.getenv("JWT_SECRET")
+    if secret is None:
+        return {"secret_key": "DEFAULT_SECRET", "algorithm": "HS256"}
+    else:
+        return {"secret_key": secret, "algorithm": "HS256"}
