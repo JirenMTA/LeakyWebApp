@@ -3,18 +3,25 @@ from email_validator import validate_email, EmailNotValidError
 from telebot import types
 from src.repository.BotRepository import BotRepository
 
+bot = AsyncTeleBot('7501101529:AAFoflIDAV4tQpqFytoenx1iDA8hYDevOmU')
 
 async def telegram_bot():
-    bot = AsyncTeleBot('7501101529:AAE8yT0isiPGJUtMkr6rTVyginfwiMtFWmQ')
+
     command1 = types.BotCommand('start', 'Начать общение с ботом')
     command2 = types.BotCommand('site', 'Перейти на веб-сайт')
     command3 = types.BotCommand('info', 'Получить список важных команд')
-    await bot.set_my_commands([command1, command2, command3])
+    command4 = types.BotCommand('logout', 'Отвязать телеграм-бота от аккаунта')
+    await bot.set_my_commands([command1, command2, command3, command4])
 
-    def check_link_email(chat_id) -> bool:
-        if BotRepository.get_check_link_user_with_bot(chat_id) != chat_id:
-            return False
-        return True
+    async def check_link_email(chat_id) -> bool:
+        try:
+            check = await BotRepository.get_check_link_user_with_bot(chat_id)
+            if check != chat_id:
+                return False
+            return True
+        except BaseException() as ex:
+            print(str(ex))
+            await bot.send_message(chat_id, 'Возникла проблема, попробуйте позже')
 
     async def answer_not_link(chat_id):
         await bot.send_message(chat_id, 'Вы не привязали телеграмм-бота к вашей учетной записи в '
@@ -66,102 +73,160 @@ async def telegram_bot():
 
     @bot.message_handler(commands=['login'])
     async def set_login(message):
-        chat_id = message.chat.id
-        text_message = message.text.split(' ')
-        if len(text_message) != 2:
-            await bot.send_message(message.chat.id, 'Неверно указан логин (email)!')
-        email = text_message[1]
         try:
-            validate_email(email)
-            is_valid = True
-        except EmailNotValidError as e:
-            print("Invalid email address:", str(e))
-            is_valid = False
-        if not is_valid:
-            await bot.send_message(chat_id, 'Неверно указан логин (email)!')
-        # Добавление id чата в БД
-        result = BotRepository.link_chat_id_with_user(email, chat_id)
-        if result != chat_id:
-            # Если не нашли такую почту в БД
-            await bot.send_message(chat_id, 'Учётной записи с таким логином не существует!')
-        else:
-            await bot.send_message(chat_id, 'Аккаунт успешно привязан!')
+            chat_id = message.chat.id
+            text_message = message.text.split(' ')
+            if len(text_message) != 2:
+                await bot.send_message(message.chat.id, 'Неверно указан логин (email)!')
+            email = text_message[1]
+            try:
+                validate_email(email)
+                is_valid = True
+            except EmailNotValidError as e:
+                print("Invalid email address:", str(e))
+                is_valid = False
+            if not is_valid:
+                await bot.send_message(chat_id, 'Неверно указан логин (email)!')
+            # Добавление id чата в БД
+            result = await BotRepository.link_chat_id_with_user(email, chat_id)
+            if result != chat_id:
+                # Если не нашли такую почту в БД
+                await bot.send_message(chat_id, 'Учётной записи с таким логином не существует!')
+            else:
+                await bot.send_message(chat_id, 'Аккаунт успешно привязан!')
+        except BaseException() as ex:
+            print(str(ex))
+            await bot.send_message(message.chat.id, 'Возникла проблема, попробуйте позже')
 
     @bot.message_handler(commands=['orders'])
     async def get_all_orders(message):
-        chat_id = message.chat.id
-        check = check_link_email(chat_id)
-        if not check:
-            await answer_not_link(chat_id)
-        else:
-            # Получение всех заказов пользователя из БД
-            orders = BotRepository.get_all_orders(chat_id)
-            # Если нет заказов
-            if not orders:
-                await bot.send_message(chat_id, 'У вас нет активных заказов')
-            # Если есть заказы
+        try:
+            chat_id = message.chat.id
+            check = check_link_email(chat_id)
+            if not check:
+                await answer_not_link(chat_id)
             else:
-                await bot.send_message(chat_id, orders)
+                # Получение всех заказов пользователя из БД
+                orders = await BotRepository.get_all_orders(chat_id)
+                # Если нет заказов
+                if not orders:
+                    await bot.send_message(chat_id, 'У вас нет активных заказов')
+                # Если есть заказы
+                else:
+                    answer_text = '<h>Ваши заказы:</h>'
+                    for order in orders:
+                        order_content = ''
+                        for product in order.purchases.product:
+                            order_content += f'Название товара: {product.name}, Количество: {product.amount}\n'
+                        answer_text += (f'<p>Заказ <b>№{order.id}</b>!<p>Стоимость заказа: <b>{order.total_price}</b></p>'
+                                       f'<p>Состав заказа: {order_content}</p></p>')
+                    await bot.send_message(chat_id, answer_text, parse_mode='html')
+        except BaseException() as ex:
+            print(str(ex))
+            await bot.send_message(message.chat.id, 'Возникла проблема, попробуйте позже')
 
 
     @bot.message_handler(commands=['order'])
     async def get_order_by_order_id(message):
-        chat_id = message.chat.id
-        check = check_link_email(chat_id)
-        if not check:
-            await answer_not_link(chat_id)
-        else:
-            text_message = message.text.split(' ')
-            if len(text_message) != 2:
-                await bot.send_message(message.chat.id, 'Команда указана неверно!')
-            try:
-                order_id = int(text_message[1])
-            except:
-                await bot.send_message(message.chat.id, 'Номер заказа указан неверно!')
-            # Обращение к БД + проверка, что у чела есть такой заказ
-            order = BotRepository.get_order_by_order_id(order_id, chat_id)
-            if not order:
-                # Если не нашли заказ
-                await bot.send_message(chat_id, 'Такого заказа не существует!')
+        try:
+            chat_id = message.chat.id
+            check = check_link_email(chat_id)
+            if not check:
+                await answer_not_link(chat_id)
             else:
-                await bot.send_message(chat_id, order)
+                text_message = message.text.split(' ')
+                if len(text_message) != 2:
+                    await bot.send_message(message.chat.id, 'Команда указана неверно!')
+                try:
+                    order_id = int(text_message[1])
+                except:
+                    await bot.send_message(message.chat.id, 'Номер заказа указан неверно!')
+                # Обращение к БД + проверка, что у чела есть такой заказ
+                order = await BotRepository.get_order_by_order_id(order_id, chat_id)
+                if not order:
+                    # Если не нашли заказ
+                    await bot.send_message(chat_id, 'Такого заказа не существует!')
+                else:
+                    order_content = ''
+                    for product in order.purchases.product:
+                        order_content += f'Название товара: {product.name}, Количество: {product.amount}\n'
+                    answer_text = (f'Заказ <b>№{order.id}</b>!<p>Стоимость заказа: <b>{order.total_price}</b></p>'
+                        f'<p>Состав заказа: {order_content}</p>')
+                    await bot.send_message(chat_id, answer_text, parse_mode='html')
+        except BaseException() as ex:
+            print(str(ex))
+            await bot.send_message(message.chat.id, 'Возникла проблема, попробуйте позже')
 
 
     @bot.message_handler(commands=['promo'])
     async def get_promo(message):
-        chat_id = message.chat.id
-        check = check_link_email(chat_id)
-        if not check:
-            await answer_not_link(chat_id)
-        else:
-            promo = BotRepository.get_promo()
-            if not promo:
-                # Если не нашли промокоды
-                await bot.send_message(chat_id, 'У вас нет промокодов')
+        try:
+            chat_id = message.chat.id
+            check = check_link_email(chat_id)
+            if not check:
+                await answer_not_link(chat_id)
             else:
-                await bot.send_message(chat_id, promo)
+                promo = await BotRepository.get_promo()
+                if not promo:
+                    # Если не нашли промокоды
+                    await bot.send_message(chat_id, 'У вас нет промокодов')
+                else:
+                    answer_text = 'Активные промокоды:'
+                    for p in promo:
+                        answer_text += f'<p>Скидка {p.sale}: {p.code}</p>'
+                    await bot.send_message(chat_id, answer_text, parse_mode='html')
+        except BaseException() as ex:
+            print(str(ex))
+            await bot.send_message(message.chat.id, 'Возникла проблема, попробуйте позже')
+
+    @bot.message_handler(commands=['logout'])
+    async def logout(message):
+        try:
+            chat_id = message.chat.id
+            check = check_link_email(chat_id)
+            if not check:
+                await answer_not_link(chat_id)
+            else:
+                result = await BotRepository.unlink_chat_id_with_user(chat_id)
+                if not result:
+                    # Если не нашли промокоды
+                    await bot.send_message(chat_id, 'Возникла ошибка. Попробуйте ещё раз')
+                else:
+                    await bot.send_message(chat_id, 'Телеграм-бот успешно отвязан от аккаунта')
+        except BaseException() as ex:
+            print(str(ex))
+            await bot.send_message(message.chat.id, 'Возникла проблема, попробуйте позже')
 
 
     @bot.message_handler(content_types=['text'])
     async def get_info_of_orders_or_promo(message):
-        chat_id = message.chat.id
-        check = check_link_email(chat_id)
-        if not check:
-            await answer_not_link(chat_id)
-        else:
-            if message.text == 'Посмотреть заказы':
-                await bot.send_message(chat_id, 'У тебя ничего нет!!!!!')
-            elif message.text == 'Посмотреть статус заказа':
-                await bot.send_message(chat_id, 'Введите номер заказа')
-            elif message.text == 'Промокоды':
-                await bot.send_message(chat_id, 'У тебя нет промокодов!!!!!')
-            elif int(message.text):
-                # Обращение к БД + проверка, что у чела есть такой заказ
-                order_id = int(message.text)
-                order = BotRepository.get_order_by_order_id(order_id, chat_id)
-                if not order:
-                    await bot.send_message(chat_id, "Такого заказа не существует!")
-                else:
-                    await bot.send_message(chat_id, "Информация о заказе")
+        try:
+            chat_id = message.chat.id
+            check = check_link_email(chat_id)
+            if not check:
+                await answer_not_link(chat_id)
+            else:
+                if message.text == 'Посмотреть заказы':
+                    await bot.send_message(chat_id, 'У тебя ничего нет!!!!!')
+                elif message.text == 'Посмотреть статус заказа':
+                    await bot.send_message(chat_id, 'Введите номер заказа')
+                elif message.text == 'Промокоды':
+                    await bot.send_message(chat_id, 'У тебя нет промокодов!!!!!')
+                elif int(message.text):
+                    # Обращение к БД + проверка, что у чела есть такой заказ
+                    order_id = int(message.text)
+                    order = await BotRepository.get_order_by_order_id(order_id, chat_id)
+                    if not order:
+                        await bot.send_message(chat_id, "Такого заказа не существует!")
+                    else:
+                        order_content = ''
+                        for product in order.purchases.product:
+                            order_content += f'Название товара: {product.name}, Количество: {product.amount}\n'
+                        answer_text = (f'Заказ <b>№{order.id}</b>!<p>Стоимость заказа: <b>{order.total_price}</b></p>'
+                                       f'<p>Состав заказа: {order_content}</p>')
+                        await bot.send_message(chat_id, answer_text, parse_mode='html')
+        except BaseException() as ex:
+            print(str(ex))
+            await bot.send_message(message.chat.id, 'Возникла проблема, попробуйте позже')
 
     await bot.infinity_polling()

@@ -13,6 +13,7 @@ from src.Order.schemas import (
 from src.repository.CartRepository import CartRepository
 from src.Purchases.schemas import SPurchaseCreate
 from src.repository.PromoRepository import PromoRepository
+from src.Bot.notifications import notif_create_order, notif_pay_order
 
 
 class OrderService:
@@ -38,6 +39,7 @@ class OrderService:
             )
         order_create = SOrderCreate.model_validate({"products": purchases_arr})
         new_order = await OrderRepository.create_order(user_id, order_create)
+        await notif_create_order(user_id, new_order)
         return SResult(status="Ok", order=new_order)
 
     @classmethod
@@ -55,4 +57,5 @@ class OrderService:
             return SResult(status="Fail", error=f"Not such order!")
         order = await OrderRepository.pay_for_order(user_id, data)
         order_schema = SOrderGetShort.model_validate(order)
+        await notif_pay_order(user_id, order)
         return SResult(status="Ok", order=order_schema)

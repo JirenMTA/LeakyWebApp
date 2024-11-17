@@ -1,6 +1,7 @@
 from typing import List
 from src.repository.PromoRepository import PromoRepository
 from src.Promo.schemas import SPromoGet, SPromoAdd, SPromoEdit, SPromoDelete, SResult
+from src.Bot.notifications import notif_create_promo
 
 
 class PromoService:
@@ -14,6 +15,7 @@ class PromoService:
     async def add_promo(cls, data: SPromoAdd) -> SResult:
         promo = await PromoRepository.add_promo(data)
         promo_schema = SPromoGet.model_validate(promo)
+        await notif_create_promo(promo)
         return SResult(status="Ok", promo=promo_schema)
 
     @classmethod
