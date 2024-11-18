@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from src.database import create_tables, drop_tables
@@ -29,13 +30,13 @@ async def lifespan(app: FastAPI):
     print("Приложение выключено!")
 
 
-
 app = FastAPI(title="Leaky Web App", lifespan=lifespan)
 
 origins = [
     "http://localhost:3000",
     "https://localhost:3000",
 ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
