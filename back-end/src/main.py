@@ -13,6 +13,8 @@ from src.Roles.router import router as role_router
 from src.Order.router import router as order_router
 from src.Images.router import router as image_router
 from src.lifespan_scripts import generate_default_roles, create_default_admin
+import asyncio
+import os
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -27,12 +29,14 @@ async def lifespan(app: FastAPI):
     yield
     print("Приложение выключено!")
 
+if os.name == "nt":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 app = FastAPI(title="Leaky Web App", lifespan=lifespan)
 
 origins = [
+    "http://localhost:3000",
     "https://localhost:3000",
-    "https://127.0.0.1:3000",
-    "https://leakywebapp.localhost:3000"
 ]
 app.add_middleware(
     CORSMiddleware,
