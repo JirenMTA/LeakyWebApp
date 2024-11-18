@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { doLogout } from "../redux/action/userActions";
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: 'https://localhost:8080',
     withCredentials: true
 });
 

@@ -77,7 +77,7 @@ const PromocodeManager = () => {
             <Button variant="contained" color="primary" onClick={() => handleOpen()}>
                 Add Promo Code
             </Button>
-            <TableContainer>
+            <TableContainer className='table_content'>
                 <Table>
                     <TableHead>
                         <TableRow>

@@ -38,7 +38,7 @@ const Signup = (props) => {
             return;
         }
         const res = await postSignup({ username, email, password });
-        if (res.data.status === 'Ok') {
+        if (res?.data?.status === 'Ok') {
             navigate('/login')
             toast.success("Successfully Signup to JuiceShop")
         }

@@ -30,9 +30,9 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="Leaky Web App", lifespan=lifespan)
 
 origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://192.168.0.111:3000",
+    "https://localhost:3000",
+    "https://127.0.0.1:3000",
+    "https://leakywebapp.localhost:3000"
 ]
 app.add_middleware(
     CORSMiddleware,
