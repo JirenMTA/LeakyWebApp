@@ -14,6 +14,7 @@ from src.Order.router import router as order_router
 from src.Images.router import router as image_router
 from src.lifespan_scripts import generate_default_roles, create_default_admin
 from src.Bot.bot import telegram_bot
+import asyncio
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -25,8 +26,8 @@ async def lifespan(app: FastAPI):
     print("Стандартные роли загружены")
     await create_default_admin()
     print("Добавлена стандартная учетка администратора")
-    await telegram_bot()
-    print("Запущен телеграмм-бот")
+    #telegram_bot()
+    #print("Запущен телеграмм-бот")
     yield
     print("Приложение выключено!")
 
@@ -62,4 +63,4 @@ app.include_router(image_router)
 
 # Start telegram bot
 #print(asyncio.all_tasks())
-#asyncio.run(telegram_bot())
+asyncio.create_task(telegram_bot())

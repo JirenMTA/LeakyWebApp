@@ -1,10 +1,9 @@
 from telebot.async_telebot import AsyncTeleBot
 from email_validator import validate_email, EmailNotValidError
-from telebot import types
+from telebot import types, TeleBot
 from src.repository.BotRepository import BotRepository
 
 bot = AsyncTeleBot('7501101529:AAFoflIDAV4tQpqFytoenx1iDA8hYDevOmU')
-
 async def telegram_bot():
 
     command1 = types.BotCommand('start', 'Начать общение с ботом')
@@ -14,14 +13,12 @@ async def telegram_bot():
     await bot.set_my_commands([command1, command2, command3, command4])
 
     async def check_link_email(chat_id) -> bool:
-        try:
-            check = await BotRepository.get_check_link_user_with_bot(chat_id)
-            if check != chat_id:
-                return False
-            return True
-        except BaseException() as ex:
-            print(str(ex))
-            await bot.send_message(chat_id, 'Возникла проблема, попробуйте позже')
+        print(chat_id)
+        check = await BotRepository.get_check_link_user_with_bot(chat_id)
+        print(check)
+        if check == -1:
+            return False
+        return True
 
     async def answer_not_link(chat_id):
         await bot.send_message(chat_id, 'Вы не привязали телеграмм-бота к вашей учетной записи в '
@@ -100,12 +97,12 @@ async def telegram_bot():
 
     @bot.message_handler(commands=['orders'])
     async def get_all_orders(message):
-        try:
-            chat_id = message.chat.id
-            check = check_link_email(chat_id)
-            if not check:
-                await answer_not_link(chat_id)
-            else:
+        chat_id = message.chat.id
+        check = check_link_email(chat_id)
+        if not check:
+            await answer_not_link(chat_id)
+        else:
+            try:
                 # Получение всех заказов пользователя из БД
                 orders = await BotRepository.get_all_orders(chat_id)
                 # Если нет заказов
@@ -121,22 +118,23 @@ async def telegram_bot():
                         answer_text += (f'<p>Заказ <b>№{order.id}</b>!<p>Стоимость заказа: <b>{order.total_price}</b></p>'
                                        f'<p>Состав заказа: {order_content}</p></p>')
                     await bot.send_message(chat_id, answer_text, parse_mode='html')
-        except BaseException() as ex:
-            print(str(ex))
-            await bot.send_message(message.chat.id, 'Возникла проблема, попробуйте позже')
-
+            except:
+                print(str(BaseException()))
+                await bot.send_message(message.chat.id, 'Возникла проблема, попробуйте позже')
 
     @bot.message_handler(commands=['order'])
     async def get_order_by_order_id(message):
-        try:
-            chat_id = message.chat.id
-            check = check_link_email(chat_id)
-            if not check:
-                await answer_not_link(chat_id)
-            else:
+        chat_id = message.chat.id
+        check = await check_link_email(chat_id)
+        print(check)
+        if not check:
+            await answer_not_link(chat_id)
+        else:
+            try:
                 text_message = message.text.split(' ')
                 if len(text_message) != 2:
                     await bot.send_message(message.chat.id, 'Команда указана неверно!')
+                    return
                 try:
                     order_id = int(text_message[1])
                 except:
@@ -148,14 +146,17 @@ async def telegram_bot():
                     await bot.send_message(chat_id, 'Такого заказа не существует!')
                 else:
                     order_content = ''
-                    for product in order.purchases.product:
-                        order_content += f'Название товара: {product.name}, Количество: {product.amount}\n'
-                    answer_text = (f'Заказ <b>№{order.id}</b>!<p>Стоимость заказа: <b>{order.total_price}</b></p>'
-                        f'<p>Состав заказа: {order_content}</p>')
+                    products = await BotRepository.get_product_in_order(order_id)
+                    for product in products:
+                        print(product)
+                        print(product.order)
+                    order_content += f'\nНазвание товара: {product.name}, Количество: {product.amount}'
+                    answer_text = (f'Заказ <b>№{order.id}</b>!\nСтоимость заказа: <b>{order.total_price}</b>\n'
+                        f'Состав заказа: {order_content}')
                     await bot.send_message(chat_id, answer_text, parse_mode='html')
-        except BaseException() as ex:
-            print(str(ex))
-            await bot.send_message(message.chat.id, 'Возникла проблема, попробуйте позже')
+            except:
+                await bot.send_message(message.chat.id, 'Возникла проблема, попробуйте позже')
+                print(str(BaseException()))
 
 
     @bot.message_handler(commands=['promo'])
@@ -173,7 +174,7 @@ async def telegram_bot():
                 else:
                     answer_text = 'Активные промокоды:'
                     for p in promo:
-                        answer_text += f'<p>Скидка {p.sale}: {p.code}</p>'
+                        answer_text += f'\nСкидка {p.sale}: {p.code}'
                     await bot.send_message(chat_id, answer_text, parse_mode='html')
         except BaseException() as ex:
             print(str(ex))
@@ -222,8 +223,8 @@ async def telegram_bot():
                         order_content = ''
                         for product in order.purchases.product:
                             order_content += f'Название товара: {product.name}, Количество: {product.amount}\n'
-                        answer_text = (f'Заказ <b>№{order.id}</b>!<p>Стоимость заказа: <b>{order.total_price}</b></p>'
-                                       f'<p>Состав заказа: {order_content}</p>')
+                        answer_text = (f'Заказ <b>№{order.id}</b>!\nСтоимость заказа: <b>{order.total_price}</b>\n'
+                                       f'Состав заказа: {order_content}')
                         await bot.send_message(chat_id, answer_text, parse_mode='html')
         except BaseException() as ex:
             print(str(ex))

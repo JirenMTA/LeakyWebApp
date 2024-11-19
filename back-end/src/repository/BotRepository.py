@@ -2,9 +2,12 @@ from typing import List
 
 from pycparser.ply.yacc import resultlimit
 from sqlalchemy import select, delete
+
+from src.Products.models import Product
 from src.Users.models import User
 from src.Order.models import Orders
 from src.Promo.models import Promo
+from src.Purchases.models import Purchases
 from src.database import new_session
 
 
@@ -34,7 +37,7 @@ class BotRepository:
             return True
 
     @classmethod
-    async def get_chat_id(cls, user_id: int) -> int:
+    async def get_chat_id(cls, user_id: int) -> int | None:
         async with new_session() as session:
             query = select(User.chat_id).where(User.id == user_id)
             result = await session.execute(query)
@@ -52,12 +55,17 @@ class BotRepository:
             return chats_id
 
     @classmethod
-    async def get_check_link_user_with_bot(cls, chat_id: int) -> int | None:
+    async def get_check_link_user_with_bot(cls, chat_id: int) -> int:
         async with new_session() as session:
             query = select(User).where(User.chat_id == chat_id)
             result = await session.execute(query)
+            print(result.scalar_one())
             user = result.scalar_one()
+            print(f'User {user}')
+            print(f'User chat_id {user.chat_id}')
 
+            if not user.chat_id:
+                return -1
             return user.chat_id
 
     @classmethod
@@ -83,6 +91,19 @@ class BotRepository:
             order_result = await session.execute(query)
             order = order_result.scalar_one()
             return order
+
+    @classmethod
+    async def get_product_in_order(cls, order_id: int) -> Product | None:
+        async with new_session() as session:
+            query = select(Purchases.id).where(Purchases.order_id == order_id)
+            purchases_result = await session.execute(query)
+            purchase = purchases_result.scalar_one()
+
+            query = select(Product).where(Product.id == purchase)
+            product_result = await session.execute(query)
+            product = product_result.scalar_one()
+
+            return product
 
     '''
     @classmethod
