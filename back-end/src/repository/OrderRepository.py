@@ -7,6 +7,7 @@ from src.Order.models import Orders
 from src.Purchases.models import Purchases
 from src.Products.models import Product
 from src.Promo.models import Promo
+from src.Order.schemas import SUsePromo
 from src.Users.models import User
 from src.Order.schemas import SOrderCreate, SPayForOrder, SUsePromo
 
@@ -86,20 +87,27 @@ class OrderRepository:
 
     @classmethod
     async def use_promo_for_order(
-        cls, user_id: int, order_id: int, promo_id: int
+        cls, user_id: int, order_id: int, data: SUsePromo
     ) -> Orders | None:
         async with new_session() as session:
-            query = select(Promo).where(Promo.id == promo_id)
-            result = await session.execute(query)
-            promo = result.scalar_one()
+            with session.begin():
+                query = select(Promo).where(
+                    Promo.code == data.promo, Promo.used == False, Promo.active == True
+                )
+                result = await session.execute(query)
+                promo = result.scalars().first()
 
-            query = select(Orders).where(Orders.id == order_id, Orders.user_id == user_id)
-            order_result = await session.execute(query)
-            order = order_result.scalar_one()
+                query = select(Promo).where(Promo.id == promo.id)
+                result = await session.execute(query)
+                promo = result.scalar_one()
 
-            order.total_price -= promo.sale
-            promo.used = True
+                query = select(Orders).where(Orders.id == order_id, Orders.user_id == user_id)
+                order_result = await session.execute(query)
+                order = order_result.scalar_one()
 
-            await session.flush()
-            await session.commit()
-            return order
+                order.total_price -= promo.sale
+                promo.used = True
+
+                await session.flush()
+                await session.commit()
+                return order

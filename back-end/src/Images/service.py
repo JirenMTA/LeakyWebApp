@@ -7,7 +7,7 @@ from src.Images.schemas import SResult
 from src.repository.ProductRepository import ProductRepository
 from src.repository.UserRepository import UserRepository
 
-allowed_content_types = ["image/png", "image/jpg", "image/jpeg", "image/svg", "image/svg+xml"]
+allowed_content_types = ["image/png", "image/jpg", "image/jpeg"]
 
 
 class ImagesService:
@@ -38,8 +38,7 @@ class ImagesService:
                 status="Fail", error=f"Invalid content-type. Allowed {allowed_content_types}"
             )
         contents = await img.read()
-        filetype = img.filename.split(".")[-1]
-        new_name = str(uuid4()) + "." + filetype
+        new_name = str(uuid4())
         with open(os.path.join("static", "product", new_name), "wb+") as binary_file:
             binary_file.write(contents)
         filename = await ProductRepository.set_image(product_id, new_name)

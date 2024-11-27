@@ -43,10 +43,8 @@ class OrderService:
 
     @classmethod
     async def use_promo_for_order(cls, user_id: int, data: SUsePromo) -> SOrderGetShort:
-        promo_id = await PromoRepository.check_promo_active(data.promo)
-        # TODO Тут замедлить для race condition
-        sleep(0.2)
-        order = await OrderRepository.use_promo_for_order(user_id, data.order_id, promo_id)
+        # promo_id = await PromoRepository.check_promo_active(data.promo)
+        order = await OrderRepository.use_promo_for_order(user_id, data.order_id, data)
         order_schema = SOrderGetShort.model_validate(order)
         return order_schema
 
