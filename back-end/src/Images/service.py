@@ -7,7 +7,7 @@ from src.Images.schemas import SResult
 from src.repository.ProductRepository import ProductRepository
 from src.repository.UserRepository import UserRepository
 
-allowed_content_types = ["image/png", "image/jpg", "image/jpeg"]
+allowed_content_types = {"image/png": "png", "image/jpg": "jpg", "image/jpeg": "jpeg"}
 
 
 class ImagesService:
@@ -21,8 +21,7 @@ class ImagesService:
                 status="Fail", error=f"Invalid content-type. Allowed {allowed_content_types}"
             )
         contents = await img.read()
-        filetype = img.filename.split(".")[-1]
-        new_name = str(uuid4()) + "." + filetype
+        new_name = str(uuid4()) + "." + allowed_content_types.get(img.content_type)
         with open(os.path.join("static", "avatar", new_name), "wb+") as binary_file:
             binary_file.write(contents)
 
@@ -33,12 +32,13 @@ class ImagesService:
     async def save_product_img(cls, product_id: int, img: UploadFile) -> SResult:
         if img.size > 5242880:
             return SResult(status="Fail", error="File is too big. Should be less then 5 Mb")
-        if img.content_type not in allowed_content_types:
+        if img.content_type not in allowed_content_types.keys():
             return SResult(
-                status="Fail", error=f"Invalid content-type. Allowed {allowed_content_types}"
+                status="Fail",
+                error=f"Invalid content-type. Allowed {allowed_content_types.keys()}",
             )
         contents = await img.read()
-        new_name = str(uuid4())
+        new_name = str(uuid4()) + "." + allowed_content_types.get(img.content_type)
         with open(os.path.join("static", "product", new_name), "wb+") as binary_file:
             binary_file.write(contents)
         filename = await ProductRepository.set_image(product_id, new_name)

@@ -90,12 +90,15 @@ class OrderRepository:
         cls, user_id: int, order_id: int, data: SUsePromo
     ) -> Orders | None:
         async with new_session() as session:
-            with session.begin():
+            async with session.begin():
                 query = select(Promo).where(
                     Promo.code == data.promo, Promo.used == False, Promo.active == True
                 )
                 result = await session.execute(query)
                 promo = result.scalars().first()
+
+                if promo is None:
+                    return None
 
                 query = select(Promo).where(Promo.id == promo.id)
                 result = await session.execute(query)

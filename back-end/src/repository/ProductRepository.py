@@ -21,7 +21,7 @@ class ProductRepository:
     async def find_products(cls, param: str):
         async with new_session() as session:
             # query = f"select * from products where name like '%{param}%' limit 5"
-            query = select(Product).where(Product.name.like(param)).limit(5)
+            query = select(Product).where(Product.name.like(f"%{param}%")).limit(5)
             data = await session.execute(query)
             result = data.scalars().all()
             return result
