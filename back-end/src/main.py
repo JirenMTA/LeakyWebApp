@@ -26,8 +26,9 @@ async def lifespan(app: FastAPI):
     print("Стандартные роли загружены")
     await create_default_admin()
     print("Добавлена стандартная учетка администратора")
-    #telegram_bot()
-    #print("Запущен телеграмм-бот")
+    # Start telegram bot
+    asyncio.create_task(telegram_bot())
+    print("Телеграм-бот запущен")
     yield
     print("Приложение выключено!")
 
@@ -60,7 +61,3 @@ app.include_router(promo_router)
 app.include_router(role_router)
 app.include_router(order_router)
 app.include_router(image_router)
-
-# Start telegram bot
-#print(asyncio.all_tasks())
-asyncio.create_task(telegram_bot())

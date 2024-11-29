@@ -59,14 +59,11 @@ class BotRepository:
         async with new_session() as session:
             query = select(User).where(User.chat_id == chat_id)
             result = await session.execute(query)
-            print(result.scalar_one())
-            user = result.scalar_one()
-            print(f'User {user}')
-            print(f'User chat_id {user.chat_id}')
+            user = result.scalars().all()
 
-            if not user.chat_id:
+            if len(user) == 0:
                 return -1
-            return user.chat_id
+            return user[0].chat_id
 
     @classmethod
     async def get_all_orders(cls, chat_id: int) -> List[Orders] | None:
@@ -81,7 +78,7 @@ class BotRepository:
             return orders
 
     @classmethod
-    async def get_order_by_order_id(cls, order_id: int, chat_id: int) -> Orders | None:
+    async def get_order_by_order_id(cls, order_id: int, chat_id: int):
         async with new_session() as session:
             query = select(User.id).where(User.chat_id == chat_id)
             user_result = await session.execute(query)
@@ -89,35 +86,28 @@ class BotRepository:
 
             query = select(Orders).where(Orders.user_id == user_id, Orders.id == order_id)
             order_result = await session.execute(query)
-            order = order_result.scalar_one()
-            return order
+            order = order_result.scalars().all()
+            if len(order) == 0:
+                return None, None
 
-    @classmethod
-    async def get_product_in_order(cls, order_id: int) -> Product | None:
-        async with new_session() as session:
-            query = select(Purchases.id).where(Purchases.order_id == order_id)
+            query = select(Purchases).where(Purchases.order_id == order_id)
             purchases_result = await session.execute(query)
-            purchase = purchases_result.scalar_one()
+            purchases = purchases_result.scalars().all()
+            if len(purchases) == 0:
+                return None, None
+            return order[0], purchases
 
-            query = select(Product).where(Product.id == purchase)
-            product_result = await session.execute(query)
-            product = product_result.scalar_one()
-
-            return product
-
-    '''
     @classmethod
-    async def delete_order(cls, order_id: int, chat_id: int) -> int:
+    async def get_product_by_id(cls, product_id: int) -> Product | None:
         async with new_session() as session:
-            query = select(User.id).where(User.chat_id == chat_id)
-            user_result = await session.execute(query)
-            user_id = user_result.scalar_one()
+            query = select(Product).where(Product.id == product_id)
+            product_result = await session.execute(query)
+            product = product_result.scalars().all()
 
-            query = delete(Orders).where(Orders.user_id == user_id, Orders.id == order_id)
-            order_result = await session.execute(query)
-            await session.commit()
-            return 0
-    '''
+            if len(product) == 0:
+                return None
+
+            return product[0]
 
     @classmethod
     async def get_promo(cls) -> List[Promo] | None:
