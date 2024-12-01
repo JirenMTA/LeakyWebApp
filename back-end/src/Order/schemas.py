@@ -39,7 +39,6 @@ class SOrderGetShort(BaseModel):
 
 class SPayForOrder(BaseModel):
     order_id: int
-    amount: float
 
 
 class SUsePromo(BaseModel):

@@ -1,0 +1,35 @@
+version: "3.11"
+
+services:
+  LeakyWebAppDB:
+    container_name: LeakyWebAppDB
+    image: postgres:17.1-alpine3.20
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: Artem
+      POSTGRES_PASSWORD: LEAKYWEBAPPARTEMPASS
+      POSTGRES_DB: LeakyWebApp
+      LANG: en_US.utf8
+      LC_ALL: en_US.utf8
+#    volumes:
+#      - /home/user/docker/volumes/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "Artem", "-d", "LeakyWebApp"]
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+  LeakyWebAppBack:
+    container_name: LeakyWebAppBack
+    image: python:3.11.10-alpine3.20
+    build: .
+    depends_on:
+      LeakyWebAppDB:
+        condition: service_healthy
+    ports:
+      - 8080:8080
+    environment:
+      DB_URL: postgresql+asyncpg://Artem:LEAKYWEBAPPARTEMPASS@LeakyWebAppDB:5432/LeakyWebApp
+      JWT_SECRET: MySuperSecretJwtKey1337

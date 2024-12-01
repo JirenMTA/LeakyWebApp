@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
+
 from src.database import create_tables, drop_tables
 from src.auth.router import router as auth_router
 from src.Users.router import router as user_router
@@ -32,14 +33,14 @@ async def lifespan(app: FastAPI):
     yield
     print("Приложение выключено!")
 
+
 app = FastAPI(title="Leaky Web App", lifespan=lifespan)
 
-# Set up CORS
 origins = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://192.168.0.111:3000",
+    "https://localhost:3000",
 ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -48,10 +49,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Static files
-app.mount("/static", StaticFiles(directory="back-end/static"), name="static")
 
-# Include routers
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(product_router)

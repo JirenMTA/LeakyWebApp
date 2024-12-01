@@ -55,3 +55,39 @@ class UserRepository:
             await session.flush()
             await session.commit()
             return user.role.name
+
+    @classmethod
+    async def second_factor_on(cls, id: int) -> bool:
+        async with new_session() as session:
+            user = await session.get(User, id)
+            return user.second_factor_on
+
+    @classmethod
+    async def get_secret(cls, id: int) -> str | None:
+        async with new_session() as session:
+            user = await session.get(User, id)
+            return user.second_factor_secret
+
+    @classmethod
+    async def set_secret(cls, id: int, secret: str) -> str:
+        async with new_session() as session:
+            query = select(User).where(User.id == id)
+            result = await session.execute(query)
+            user = result.scalar_one()
+
+            user.second_factor_secret = secret
+            await session.flush()
+            await session.commit()
+            return user.second_factor_secret
+
+    @classmethod
+    async def setup_2fa(cls, id: int) -> bool:
+        async with new_session() as session:
+            query = select(User).where(User.id == id)
+            result = await session.execute(query)
+            user = result.scalar_one()
+
+            user.second_factor_on = True
+            await session.flush()
+            await session.commit()
+            return user.second_factor_on

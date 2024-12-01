@@ -1,3 +1,5 @@
+import os
+import sys
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
@@ -6,9 +8,9 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 
-db_engine = create_async_engine(
-    "postgresql+asyncpg://postgres:123@localhost:5432/LeakyWebApp"
-)
+if os.getenv("DB_URL") is None:
+    sys.exit("No DB connection string!")
+db_engine = create_async_engine(os.getenv("DB_URL"))
 
 new_session = async_sessionmaker(db_engine, expire_on_commit=False)
 

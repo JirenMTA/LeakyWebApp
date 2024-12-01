@@ -23,9 +23,7 @@ class ImagesService:
         contents = await img.read()
         filetype = img.filename.split(".")[-1]
         new_name = str(uuid4()) + "." + filetype
-        with open(
-            os.path.join("static", "avatar", new_name), "wb+"
-        ) as binary_file:
+        with open(os.path.join("static", "avatar", new_name), "wb+") as binary_file:
             binary_file.write(contents)
 
         filename = await UserRepository.set_avatar(user_id, new_name)
@@ -42,9 +40,7 @@ class ImagesService:
         contents = await img.read()
         filetype = img.filename.split(".")[-1]
         new_name = str(uuid4()) + "." + filetype
-        with open(
-            os.path.join("static", "product", new_name), "wb+"
-        ) as binary_file:
+        with open(os.path.join("static", "product", new_name), "wb+") as binary_file:
             binary_file.write(contents)
         filename = await ProductRepository.set_image(product_id, new_name)
 
