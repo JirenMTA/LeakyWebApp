@@ -30,13 +30,17 @@ const Order = (props) => {
     }
 
     const handlePurchaseAll = async (e, order) => {
-        const res = await postPayforOrder(order?.id)
+        const res = await postPayforOrder(order?.id);
         if (res && res?.data && res?.data?.status === "Ok") {
             toast.success("You paid for this order. Thanks for using our market");
         }
-        else {
-            toast.error("Something went wrong! Try again letter");
+        else if (res && res?.status === 200 && res?.data?.status === "Fail") {
+            toast.error(res?.data?.error)
         }
+        else {
+            toast.error("Something went wrong! Try again latter");
+        }
+        await fetchListOrder();
     }
 
     useEffect(() => {
@@ -49,12 +53,13 @@ const Order = (props) => {
                 <div className='total-price-content'>
                     {`Total price: ${order?.total_price} руб.`}
                     <div>
-                        <Button variant="outline-primary" onClick={(e) => handlePurchaseAll(e, order)}>
-                            Purchase all
+                        <Button variant="outline-primary" disabled={order?.paid} onClick={(e) => handlePurchaseAll(e, order)}>
+                            {order?.paid ? "Paid" : "Purchase all"}
                         </Button>
                     </div>
                     <div className='promocode-all'>
                         <Button
+                            disabled={order?.paid}
                             onClick={() => { setCurrentOrder(order); setShowModalPromocode(true); }}
                             variant="outline-success">
                             Code
@@ -120,12 +125,15 @@ const Order = (props) => {
                     <div className='total-price-content'>
                         {`Total price: ${order?.total_price} руб.`}
                         <div>
-                            <Button variant="outline-primary" onClick={(e) => handlePurchaseAll(e, order)}>
-                                Purchase all
-                            </Button>
+                            <div>
+                                <Button variant="outline-primary" disabled={order?.paid} onClick={(e) => handlePurchaseAll(e, order)}>
+                                    {order?.paid ? "Paid" : "Purchase all"}
+                                </Button>
+                            </div>
                         </div>
                         <div className='promocode-all'>
                             <Button
+                                disabled={order?.paid}
                                 onClick={() => { setCurrentOrder(order); setShowModalPromocode(true); }}
                                 variant="outline-success">
                                 Code

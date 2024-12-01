@@ -26,6 +26,7 @@ const SideBar = (props) => {
     const { colapseOnMobile, setColapseOnMobile } = props;
     const navigate = useNavigate();
     const listProductAddedToBasket = useSelector(state => state.listCartState.orderList);
+    const listOrderCount = useSelector(state => state.listOrderState.numberOrder);
 
     const handleUserLogout = async () => {
         await getLogOut();
@@ -108,17 +109,27 @@ const SideBar = (props) => {
                                                 <MenuItem icon={<BorderColorIcon />} component={<Link to="/login" />}> Signup </MenuItem>
                                             </> :
                                             <>
-                                                <MenuItem icon={<ShoppingBasketIcon />} onClick={handleClickCart}>
+                                                <MenuItem
+                                                    icon={
+                                                        <div className="basket-icon-wrapper">
+                                                            <ShoppingBasketIcon />
+                                                            {listProductAddedToBasket && listProductAddedToBasket.length > 0 && (
+                                                                <span className="basket-count">
+                                                                    {listProductAddedToBasket.length}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    }
+                                                    onClick={handleClickOrder}
+                                                >
                                                     Cart
                                                 </MenuItem>
                                                 <MenuItem
                                                     icon={
                                                         <div className="basket-icon-wrapper">
                                                             <CheckIcon />
-                                                            {listProductAddedToBasket && listProductAddedToBasket.length > 0 && (
-                                                                <span className="basket-count">
-                                                                    {listProductAddedToBasket.length}
-                                                                </span>
+                                                            {listOrderCount > 0 && (
+                                                                <span className='basket-count'>{listOrderCount}</span>
                                                             )}
                                                         </div>
                                                     }

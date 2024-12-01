@@ -1,4 +1,5 @@
 .promocode-table {
+    margin: 10px;
 
     .action-column {
         display: flex;
@@ -7,6 +8,10 @@
         button {
             width: 100%;
         }
+    }
+
+    .table_content {
+        margin-top: 10px;
     }
 }
 

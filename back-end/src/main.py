@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-
+from fastapi.middleware.cors import CORSMiddleware
 from src.database import create_tables, drop_tables
 from src.auth.router import router as auth_router
 from src.Users.router import router as user_router

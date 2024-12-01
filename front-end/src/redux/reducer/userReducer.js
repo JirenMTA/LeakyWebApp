@@ -6,6 +6,7 @@ const INITIAL_STATE = {
         role: '',
         username: '',
         id: '',
+        has2Fa: false,
         avatar: null
     },
     isAuthenticated: false

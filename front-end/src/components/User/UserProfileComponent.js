@@ -8,7 +8,7 @@ import defaultAvartar from '../../assets/avatar/default.jpg'
 import './UserProfileComponent.scss';
 
 const UserProfileComponent = (props) => {
-    const { collapse, user, maxWidth, isEdit } = props;
+    const { collapse, user, maxWidth, isEdit, fullWidth } = props;
     const navigate = useNavigate();
     const userState = useSelector(state => state?.userState);
     const [show, setShow] = useState(false);
@@ -32,7 +32,7 @@ const UserProfileComponent = (props) => {
     // }
 
     return (
-        <div className="user-profile">
+        <div className="user-profile" style={{ width: "100%" }}>
             <div className="avatar-container">
                 <img
                     src={avatar}
@@ -43,13 +43,13 @@ const UserProfileComponent = (props) => {
             </div>
             {!collapse && !isEdit &&
                 <div className="user-info">
-                    <h2 style={{ maxWidth: maxWidth }}>{userState?.account?.username}</h2>
+                    <h2 >{userState?.account?.username}</h2>
                 </div>
             }
 
             {isEdit && <>
-                <div className="user-info">
-                    <h2 style={{ maxWidth: maxWidth }}>{user?.username}</h2>
+                <div className="user-info" style={{ width: "1000px" }}>
+                    <h2>{user?.username}</h2>
                     <p>Email: <strong>{user?.email}</strong></p>
                     <p>Role: <strong>{user?.role}</strong></p>
                     <p>Balance: ₽{user?.balance}</p>
