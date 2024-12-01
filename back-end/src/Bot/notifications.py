@@ -5,7 +5,7 @@ from src.Promo.models import Promo
 
 
 async def notif_create_order(user_id: int, order: Orders):
-    text_message = (f'Вы успешно создали заказ <b>№{order.id}</b>!\nСумма к оплате: <b>{order.total_price}</b> у.е.')
+    text_message = (f'Вы успешно создали заказ <b>№{order.id}</b>!\nСумма к оплате: <b>{order.total_price}</b> руб.')
     try:
         chat_id = await BotRepository.get_chat_id(user_id)
         if chat_id:
@@ -25,7 +25,7 @@ async def notif_pay_order(user_id: int, order: Orders):
 
 
 async def notif_create_promo(promo: Promo):
-    text_message = (f'<b>Добавлен новый промокод</b>!\n{promo.code} на скидку в {promo.sale} у.е.\n'
+    text_message = (f'<b>Добавлен новый промокод</b>!\n{promo.code} на скидку в {promo.sale} руб.\n'
                     f'<b>Успейте им воспользоваться!</b>')
     try:
         chats_id = await BotRepository.get_all_chats_id()

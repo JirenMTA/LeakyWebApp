@@ -124,7 +124,7 @@ async def telegram_bot():
                 else:
                     answer_text = '<b>Ваши заказы:</b>\n'
                     for order in orders:
-                        answer_text += f'Заказ <b>№{order.id}</b>! Стоимость заказа: <b>{order.total_price}</b>\n'
+                        answer_text += f'Заказ <b>№{order.id}</b>! Стоимость заказа: <b>{order.total_price} руб.</b>\n'
                     await bot.send_message(chat_id, answer_text, parse_mode='html')
             except:
                 print(str(BaseException()))
@@ -157,7 +157,7 @@ async def telegram_bot():
                     for i in range(len(purchases) ):
                         product = await BotRepository.get_product_by_id(purchases[i].product_id)
                         order_content += f'\n{i+1}. Название товара: {product.name}, Количество: {purchases[i].amount}'
-                    answer_text = (f'Заказ <b>№{order.id}</b>!\nСтоимость заказа: <b>{order.total_price}</b>\n'
+                    answer_text = (f'Заказ <b>№{order.id}</b>!\nСтоимость заказа: <b>{order.total_price} руб.</b>\n'
                         f'Состав заказа: {order_content}')
                     await bot.send_message(chat_id, answer_text, parse_mode='html')
             except:
@@ -180,7 +180,7 @@ async def telegram_bot():
                 else:
                     answer_text = 'Активные промокоды:'
                     for p in promo:
-                        answer_text += f'\nСкидка {p.sale}: {p.code}'
+                        answer_text += f'\nСкидка {p.sale} руб.: {p.code}'
                     await bot.send_message(chat_id, answer_text, parse_mode='html')
         except:
             print(str(BaseException()))
