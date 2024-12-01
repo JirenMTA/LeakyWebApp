@@ -1,8 +1,6 @@
-import os
-
 from telebot.async_telebot import AsyncTeleBot
 from email_validator import validate_email, EmailNotValidError
-from telebot import types, TeleBot
+from telebot import types
 from src.repository.BotRepository import BotRepository
 
 try:
@@ -34,7 +32,7 @@ async def telegram_bot():
     @bot.message_handler(commands=['start'])
     async def start(message):
         markup = types.InlineKeyboardMarkup()
-        button = types.InlineKeyboardButton('Перейти на сайт', url='127.0.0.1:8080')
+        button = types.InlineKeyboardButton('Перейти на сайт', url='127.0.0.1:3000')
         markup.row(button)
         await bot.send_message(message.chat.id,
                                'Начните общение с ботом магазина прямо сейчас! Введите команду "/login" и '
@@ -72,7 +70,7 @@ async def telegram_bot():
     @bot.message_handler(commands=['site'])
     async def handler(message):
         markup = types.InlineKeyboardMarkup()
-        button = types.InlineKeyboardButton('Перейти на сайт', url='127.0.0.1:8080')
+        button = types.InlineKeyboardButton('Перейти на сайт', url='127.0.0.1:3000')
         markup.row(button)
         await bot.send_message(message.chat.id, 'Нажми на кнопку ниже!', reply_markup=markup)
 
