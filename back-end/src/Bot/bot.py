@@ -3,12 +3,7 @@ from email_validator import validate_email, EmailNotValidError
 from telebot import types
 from src.repository.BotRepository import BotRepository
 
-try:
-    with open('./back-end/src/Bot/telegram_token.txt', 'r') as file:
-        telegram_token = file.read()
-        bot = AsyncTeleBot(telegram_token)
-except:
-    print(str(BaseException()))
+bot = AsyncTeleBot('')
 
 async def telegram_bot():
 

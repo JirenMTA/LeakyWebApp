@@ -26,7 +26,6 @@ async def lifespan(app: FastAPI):
     print("Стандартные роли загружены")
     await create_default_admin()
     print("Добавлена стандартная учетка администратора")
-    # Start telegram bot
     asyncio.create_task(telegram_bot())
     print("Телеграм-бот запущен")
     yield

@@ -12,4 +12,4 @@ RUN adduser -S uvicorn
 RUN chown -R uvicorn ./
 
 USER uvicorn
-CMD ["uvicorn", "--app-dir", "./", "--host", "0.0.0.0", "--port", "8080", "src.main:app"]
+CMD ["uvicorn", "--app-dir", "./", "--host", "0.0.0.0", "--port", "8080", "--ssl-keyfile", "device.key", "--ssl-certfile", "leakywebapp.localhost.crt", "src.main:app"]
