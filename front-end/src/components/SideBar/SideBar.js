@@ -120,7 +120,7 @@ const SideBar = (props) => {
                                                             )}
                                                         </div>
                                                     }
-                                                    onClick={handleClickOrder}
+                                                    onClick={handleClickCart}
                                                 >
                                                     Cart
                                                 </MenuItem>
